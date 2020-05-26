@@ -1,0 +1,72 @@
+<mat-toolbar class="topbar">
+    <span>
+        <button mat-icon-button (click)="drawer.toggle()">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+    </span>
+    <span>PCN MapVis</span>
+</mat-toolbar>
+
+<mat-drawer-container>
+    <mat-drawer #drawer mode="side">       
+        <div class="title">Title </div>
+        <mat-divider></mat-divider>
+        <mat-form-field>
+            <mat-label>Select a Location</mat-label>
+            <mat-select id="form_location" [(value)]="selectedLocation" (selectionChange)="fetchLocationData();toggleLocationSelected();setTimeslot()">
+              <mat-option>None</mat-option>
+              <mat-option value={{location}} *ngFor="let location of panoLocations">{{location}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        
+        <mat-form-field>
+            <mat-label>Time of Week</mat-label>
+            <mat-select id="form_timeOfWeek" #selection [(value)]="selectedTimeOfWeek" (selectionChange)="renderLayers()">
+              <mat-option>None</mat-option>
+              <mat-option value={{timeOfWeek}} *ngFor="let timeOfWeek of panoTimeOfWeek">{{timeOfWeek}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field >
+            <mat-label>Time of Day</mat-label>
+            <mat-select id="form_timeOfDay" #selection [(value)]="selectedTimeOfDay" (selectionChange)="renderLayers();setTimeslot()">
+              <mat-option>None</mat-option>
+              <mat-option value={{timeOfDay}} *ngFor="let timeOfDay of panoTimeOfDay">{{timeOfDay}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Timeslot</mat-label>
+            <mat-select id="form_timeslot" [(value)]="selectedTimeslot" (selectionChange)="renderLayers();toggleTimeslot()">
+              <mat-option>None</mat-option>
+              <mat-option value={{timeslot}} *ngFor="let timeslot of panoTimeslot">{{timeslot}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Feature</mat-label>
+            <mat-select id="form_feature" #selection [(value)]="selectedFeature" (selectionChange)=renderLayers()>
+              <mat-option>None</mat-option>
+              <mat-option value={{feature}} *ngFor="let feature of panoFeatures">{{feature}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Activity</mat-label>
+            <mat-select id="form_activity" #selection [(value)]="selectedActivity" (selectionChange)=renderLayers()>
+              <mat-option>None</mat-option>
+              <mat-option value={{activity}} *ngFor="let activity of panoActivities">{{activity}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+    </mat-drawer>
+</mat-drawer-container>
+
+<div class="map" id="map" ></div>
+<canvas id="deck-canvas"></canvas>
+<div id="tooltip" 
+  style="position: absolute; 
+  z-index: 9;
+  color:antiquewhite;
+  background-color: rgba(46, 46, 46, 0.877);
+  pointer-events: none;"></div>

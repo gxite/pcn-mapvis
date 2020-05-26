@@ -1,0 +1,19 @@
+{
+  "hosting": [
+    {
+      "target": "pcn-mapvis",
+      "public": "dist/pcn-mapvis",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    }
+  ]
+}
