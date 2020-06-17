@@ -1,0 +1,52 @@
+#map{
+    min-height: 100vh;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba($color: #272727, $alpha: 1.0);
+}
+
+mat-drawer-container {
+    display: flex;
+    position: fixed;
+    height: 100%;
+    background: rgba($color: #272727, $alpha: 0.5);
+}
+
+mat-drawer {
+    width: 25vw; 
+    min-width: 200px;
+    max-width: 400px;
+    padding: 25px 25px;
+    top: 50px;
+    background: rgba($color: #272727, $alpha: 0.5);
+}
+
+mat-divider {
+    margin: 10px 10px 0 0;
+}
+
+mat-slider {
+    margin-left: 3px;
+}
+
+.topbar {
+    display: flex;
+    position:  fixed;
+    font-size: 16px;
+    align-items: center;
+    z-index: 10;
+}
+
+.topbar > span {
+    margin: 10px;
+}
+
+.title {
+    font-size: 20px;
+    margin: 20px 0 20px 0;
+}
+
+.deck-canvas {
+    height: 100%;
+}

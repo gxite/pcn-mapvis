@@ -71,4 +71,11 @@ export const timeslot2 :Object = {
 export const colors :Object = {
     "panoGreen": [3, 252, 119], 
     "panoRed"  : [224, 59, 47],
+    "panoBlue"  : [76, 229, 237],
+}
+
+
+export const layerTypes: Object = {
+    "activities":"parkActivities",
+    "features" : "parkFeatures"
 }

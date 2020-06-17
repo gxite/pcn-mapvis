@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 
 import * as mapboxgl from 'mapbox-gl';
 import { Deck } from '@deck.gl/core';
-import { GeoJsonLayer, LineLayer } from '@deck.gl/layers';
+import { LineLayer } from '@deck.gl/layers';
 
-import { MapService } from '../map.service';
+import { DatabaseService } from '../database.service';
 import * as pano from '../pano-settings';
 import { FeatureCollection, Line } from "../map";
 
@@ -57,14 +57,14 @@ export class MapBoxComponent implements OnInit {
   isTimeslotSelected :boolean = false;
   //interactiveState = {isHover : false};
 
-  constructor(private mapService: MapService) { }
+  constructor(private databaseService: DatabaseService) { }
 
   ngOnInit() {
     this.initializeMap();
   }
 
   private initializeMap(){
-    this.fb = this.mapService.firebase;
+    this.fb = this.databaseService.firebase;
     this.buildDeckgl();
     //this.fetchLocationData();
     //disabled. currently implementation fires from select location in template.

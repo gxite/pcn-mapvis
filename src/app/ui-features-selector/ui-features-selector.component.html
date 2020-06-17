@@ -1,0 +1,24 @@
+<mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>{{selectorID}}</mat-panel-title>
+     <mat-panel-description>
+     </mat-panel-description>
+   </mat-expansion-panel-header>
+   <div class="selectors">
+    <mat-form-field > 
+        <mat-label>Select a Location</mat-label>
+        <mat-select  [(value)]="selectedLocation" (selectionChange)="fetchLocationData();update()">
+          <mat-option>None</mat-option>
+          <mat-option value={{location}} *ngFor="let location of panoLocations">{{location}}</mat-option>
+        </mat-select>
+        </mat-form-field>  
+    <mat-form-field>
+        <mat-label>Feature</mat-label>
+        <mat-select [disabled]="feature_disabled" [(value)]="selectedFeature" (selectionChange)="fetchLocationData();update()">
+            <mat-option>None</mat-option>
+            <mat-option value={{feature}} *ngFor="let feature of panoFeatures">{{feature}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+   </div>
+</mat-expansion-panel>
+

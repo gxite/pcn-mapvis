@@ -1,0 +1,28 @@
+
+<mat-toolbar class="topbar">
+    <span>
+        <button mat-icon-button (click)="drawer.toggle()">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+    </span>
+    <span>PCN MapVis</span>
+</mat-toolbar>
+
+<mat-drawer-container>
+    <mat-drawer #drawer mode="side"> 
+        <mat-slider
+            [max]="maxFeatureNum"
+            [step]="step"
+            [(value)]="featureLayerNum">
+        </mat-slider> 
+        <app-ui-features-selector #selector 
+            [selectorID]="generateID(selector.type,index)" 
+            *ngFor="let index of array(featureLayerNum)" 
+            (selection)="setLocation($event)">
+        </app-ui-features-selector>
+        <button mat-button (click)="testReset()">Test Reset</button>
+    </mat-drawer>
+</mat-drawer-container>
+
+<div id="map" ></div>
+<canvas id="deck-canvas"></canvas>
