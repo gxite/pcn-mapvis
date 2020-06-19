@@ -1,5 +1,5 @@
 export const environment = {
-  production: false,
+  production: true,
   mapboxConfig: {
     accessToken: "pk.eyJ1IjoiZ3hpdGUiLCJhIjoiY2s1bmt2aXkxMG15NDNka2V0MnY4b3F2OSJ9.5QGgH6zF6kth58wWvWbe-g",
   },

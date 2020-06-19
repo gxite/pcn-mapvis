@@ -4,7 +4,8 @@ import * as mapboxgl from 'mapbox-gl';
 import { Deck } from '@deck.gl/core';
 import { LineLayer, GeoJsonLayer } from '@deck.gl/layers';
 import * as pano from './pano-settings';
-import { Line } from "./map";
+import { Line, FeatureCollection } from "./map";
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -24,12 +25,13 @@ export class MapService {
     pitch: 30
   };
 
-  layersToRender = [];
-  layersCount :number = 0;
+  layersState = {};
+  fc =new FeatureCollection;
 
-  
-
-  constructor() {}
+  constructor() {
+    //assigning the accessToken stored in environments to mapboxgl
+    mapboxgl.accessToken = environment.mapboxConfig.accessToken;
+  }
 
   public buildMap(containerID : string, deckID :string) {
     this.createMapbox(containerID);
@@ -67,33 +69,24 @@ export class MapService {
     });
   }
 
-  private createLineLayer(layerId :number, dataSrc :Object, color:number[], lineWidth:number,selectedFeature :string) {
+  private createLineLayer(layerId :string, dataSrc :Promise<Line[]>, color:number[], lineWidth:number,selected :string) {
     return  new LineLayer({
       id: layerId,
       data: dataSrc,
       opacity: 0.8,
       getSourcePosition: d => d.start,
       getTargetPosition: 
-        d => [d.start[0],d.start[1],d.properties[selectedFeature]*this.LineHeightMultiplier(selectedFeature)],
+        d => [d.start[0],d.start[1],d.properties[selected]*this.LineHeightMultiplier(selected)],
       getColor: color,
       getWidth: lineWidth,
       pickable: true,
       /* onHover: info => this.setTooltip(info.object,info.x,info.y), */
-/*       updateTriggers: {
-        getTargetPosition:[selectedFeature],
-        id: [layerId],
-        data: [dataSrc]
-      } */
+      updateTriggers: {
+        getTargetPosition: selected,
+        data: dataSrc
+      }
     }) 
   }
-
-  private createNullLayer(layerId :number) {
-    return  new LineLayer({
-      id: layerId,
-      data: [],
-    }) 
-  }
-
 
   private LineHeightMultiplier(feature: string) {
     if (feature === "people" || feature === "people_active" || feature === "people_static") {
@@ -102,25 +95,54 @@ export class MapService {
     return 1000;
   }
 
-  reset() {
-    this.layersCount = 0;
-    this.layersToRender = [];
+  addFeature(dataSrc: Promise<Line[]>, selectedFeature :string, selectorID :string) {
+    this.layersState[selectorID] = [selectorID, dataSrc, pano.colors["panoGreen"], 5,selectedFeature]
   }
 
-  addLocation(dataSrc: Promise<Line[]>, selectedFeature :string) {
-    console.log(selectedFeature);
-    console.log(dataSrc);
-    const newLayer = this.createLineLayer(this.layersCount, dataSrc, pano.colors["panoGreen"], 5,selectedFeature);
-    this.layersCount++;
-    this.layersToRender.push(newLayer);
-    console.log(this.layersToRender);
+  addActivity(
+    dataSrc: Promise<Line[]>, 
+    selectedActivity :string, 
+    selectorID :string,
+    timeOfWeek: string,
+    timeOfDay: string,
+    timeslot: string) {
+
+    if (timeOfWeek && timeOfDay && timeslot) {
+      dataSrc = dataSrc.then(data=>this.activityAtTimeslot(data,timeOfWeek,timeOfDay,timeslot));
+    }
+    //to implement aggregate layer
+    this.layersState[selectorID] = [selectorID, dataSrc, pano.colors["panoRed"], 3,selectedActivity]
   }
 
   render() {
-    this.deck.setProps({layers: this.layersToRender})
-    this.reset();
+    let newLayers=[];
+    Object.keys(this.layersState).forEach(key=> {
+      newLayers.push(this.createLineLayer(
+        this.layersState[key][0],
+        this.layersState[key][1],
+        this.layersState[key][2],
+        this.layersState[key][3],
+        this.layersState[key][4])) 
+    });
+    this.deck.setProps({layers: newLayers});
   }
 
+  activityAtTimeslot(data,timeOfWeek:string,timeOfDay:string,timeslot:string) {
+    let temp = this.fc.filterLine(data,timeOfWeek,timeOfDay,timeslot)
+    console.log(temp);
+    return temp;
+  }
 
+  updateLayerStates(type: string, featureLayerNum :number) {
+    const length = Object.keys(this.layersState).length;
+    for (let i=length; i>featureLayerNum; i--) {
+      delete this.layersState[type+"_"+i.toString()];
+    }
+  }
+
+  print() {
+    console.log(this.deck);
+    console.log(this.layersState);
+  }
 
 }

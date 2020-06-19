@@ -41,6 +41,28 @@ export class FeatureCollection {
     });
     return extract;
   } 
+
+  public filterLine(line :Line[],timeOfWeek:string,timeOfDay:string,timeslot:string) : Line[]{
+    return line.filter(l=>(
+      (l["period"] === this.getPeriod(timeOfDay,timeOfWeek)) &&
+      (l["timeslot"] === timeslot)
+    ))
+  }
+
+  private getPeriod(panoTimeOfDay :string, panoTimeOfWeek :string) :string{
+    if (panoTimeOfWeek == "Weekday" && panoTimeOfDay == "Morning") {
+      return "wdm";
+    }
+    else if (panoTimeOfWeek == "Weekday" && panoTimeOfDay == "Evening") {
+      return "wde";
+    }
+    else if (panoTimeOfWeek == "Weekend" && panoTimeOfDay == "Morning") {
+      return "wem";
+    }
+    else if (panoTimeOfWeek == "Weekend" && panoTimeOfDay == "Evening") {
+      return "wee";
+    }
+  }
 }
 
 export class Line {

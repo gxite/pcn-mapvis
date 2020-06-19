@@ -16,12 +16,8 @@ export class DatabaseService {
   firebase: any;
 
   constructor() {
-    //assigning the accessToken stored in environments to mapboxgl
-    mapboxgl.accessToken = environment.mapboxConfig.accessToken;
-    
     firebase.initializeApp(environment.firebaseConfig);
     this.firebase = firebase.database();
-
    }
 
   public getLocationData(locationSelection: string, layerType: string) :Promise<FeatureCollection> {

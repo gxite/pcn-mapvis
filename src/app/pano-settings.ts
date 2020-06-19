@@ -74,8 +74,7 @@ export const colors :Object = {
     "panoBlue"  : [76, 229, 237],
 }
 
-
 export const layerTypes: Object = {
-    "activities":"parkActivities",
-    "features" : "parkFeatures"
+    "Activity":"parkActivities",
+    "Feature" : "parkFeatures"
 }

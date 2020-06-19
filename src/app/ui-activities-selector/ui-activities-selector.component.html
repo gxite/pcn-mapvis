@@ -1,0 +1,44 @@
+<mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>{{getTitle()}}</mat-panel-title>
+     <mat-panel-description>
+     </mat-panel-description>
+   </mat-expansion-panel-header>
+   <div class="selectors">
+    <mat-form-field > 
+        <mat-label>Select a Location</mat-label>
+        <mat-select  [(value)]="selectedLocation" (selectionChange)="fetchLocationData();update()">
+          <mat-option>None</mat-option>
+          <mat-option value={{location}} *ngFor="let location of panoLocations">{{location}}</mat-option>
+        </mat-select>
+    </mat-form-field>  
+    <mat-form-field>
+        <mat-label>Activity</mat-label>
+        <mat-select [disabled]="activity_disabled" [(value)]="selectedActivity" (selectionChange)="fetchLocationData();update()">
+            <mat-option>None</mat-option>
+            <mat-option value={{activity}} *ngFor="let activity of panoActivities">{{activity}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Weekday or Weekdend</mat-label>
+        <mat-select [disabled]="activity_disabled" [(value)]="selectedTimeOfWeek" (selectionChange)="fetchLocationData();update()">
+            <mat-option>None</mat-option>
+            <mat-option value={{timeOfWeek}} *ngFor="let timeOfWeek of panoTimeOfWeek">{{timeOfWeek}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Moring or Evening</mat-label>
+        <mat-select [disabled]="activity_disabled" [(value)]="selectedTimeOfDay" (selectionChange)="fetchLocationData();update()">
+            <mat-option>None</mat-option>
+            <mat-option value={{timeOfDay}} *ngFor="let timeOfDay of panoTimeOfDay">{{timeOfDay}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Timeslot</mat-label>
+        <mat-select [disabled]="timeslot_disabled" [(value)]="selectedTimeslot" (selectionChange)="fetchLocationData();update()">
+            <mat-option>None</mat-option>
+            <mat-option value={{timeslot}} *ngFor="let timeslot of panoTimeslot">{{timeslot}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+   </div>
+</mat-expansion-panel>

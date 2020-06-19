@@ -10,17 +10,34 @@
 
 <mat-drawer-container>
     <mat-drawer #drawer mode="side"> 
-        <mat-slider
-            [max]="maxFeatureNum"
-            [step]="step"
-            [(value)]="featureLayerNum">
-        </mat-slider> 
-        <app-ui-features-selector #selector 
-            [selectorID]="generateID(selector.type,index)" 
-            *ngFor="let index of array(featureLayerNum)" 
-            (selection)="setLocation($event)">
-        </app-ui-features-selector>
-        <button mat-button (click)="testReset()">Test Reset</button>
+        <div>
+            <span>Feature Layers</span>
+            <mat-slider
+                [max]="maxFeatureNum"
+                [step]="step"
+                [(value)]="featureLayerNum"
+                (change)="onChangeFeatureLayersNum()">
+            </mat-slider> 
+            <app-ui-features-selector #selector1 
+                [selectorID]="generateID(selector1.type,index)" 
+                *ngFor="let index of array(featureLayerNum)" 
+                (selection)="setLocation(selector1.type,$event)">
+            </app-ui-features-selector>
+        </div>
+        <div>
+            <span>Activity Layers</span>
+            <mat-slider
+                [max]="maxActivityNum"
+                [step]="step"
+                [(value)]="activityLayerNum"
+                (change)="onChangeActivityLayersNum()">
+            </mat-slider>
+            <app-ui-activities-selector #selector2 
+                [selectorID]="generateID(selector2.type,index)" 
+                *ngFor="let index of array(activityLayerNum)" 
+                (selection)="setLocation(selector2.type,$event)">
+            </app-ui-activities-selector>
+        </div>
     </mat-drawer>
 </mat-drawer-container>
 

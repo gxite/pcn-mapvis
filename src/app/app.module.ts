@@ -16,9 +16,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSliderModule } from '@angular/material/slider';
-
-
-
+import { UIActivitiesSelectorComponent } from './ui-activities-selector/ui-activities-selector.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +24,7 @@ import { MatSliderModule } from '@angular/material/slider';
     MapBoxComponent,
     MapvisComponent,
     UIFeaturesSelectorComponent,
+    UIActivitiesSelectorComponent,
   ],
   imports: [
     BrowserModule,

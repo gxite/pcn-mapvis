@@ -35,15 +35,30 @@ export class UIFeaturesSelectorComponent implements OnInit {
 
   public fetchLocationData() {
     if (this.selectedLocation != undefined) {
-      this.data_line = this.databaseService.getLocationData(this.selectedLocation,this.panoLayerType["features"])
+      this.data_line = this.databaseService.getLocationData(this.selectedLocation,this.panoLayerType[this.type])
       .then(data=>this.fc.transformToLine(data));
-      this.feature_disabled = false;
     }
   }
 
   public update() {
+    if (this.selectedLocation) {
+      this.feature_disabled = false;
+    }
+    else {
+      this.feature_disabled = true;
+      this.selectedFeature = null;
+    }
     if (this.selectedLocation && this.selectedFeature) {
-      this.selection.emit([this.data_line,this.selectedFeature]); //emits [promise,string]
+      this.selection.emit([this.data_line,this.selectedFeature,this.selectorID]); //emits [promise,string,string]
+    }
+  }
+
+  public getTitle() {
+    if (this.selectedLocation) {
+      return this.selectedLocation;
+    }
+    else {
+      return this.selectorID;
     }
   }
 

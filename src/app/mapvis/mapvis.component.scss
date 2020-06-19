@@ -15,7 +15,7 @@ mat-drawer-container {
 
 mat-drawer {
     width: 25vw; 
-    min-width: 200px;
+    min-width: 300px;
     max-width: 400px;
     padding: 25px 25px;
     top: 50px;
@@ -27,8 +27,16 @@ mat-divider {
 }
 
 mat-slider {
-    margin-left: 3px;
+    margin-left : 10px;
 }
+
+/* .custom {
+    .mat-slider-track-fill {
+        background-color: red;
+    }
+} */ 
+//with      encapsulation: ViewEncapsulation.None, 
+//breaks the app
 
 .topbar {
     display: flex;

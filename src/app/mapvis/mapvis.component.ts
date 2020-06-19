@@ -1,36 +1,47 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MapService } from '../map.service';
-import { Line } from "../map";
 
-1
 @Component({
   selector: 'app-mapvis',
   templateUrl: './mapvis.component.html',
-  styleUrls: ['./mapvis.component.scss']
+  styleUrls: ['./mapvis.component.scss'],
+  
 })
 export class MapvisComponent implements OnInit {
 
   mapboxSelector :string = "map";
   deckSelector :string = "deck-canvas"; 
 
-  featureLayerNum :number = 2;
+  featureLayerNum :number = 1;
   maxFeatureNum :number = 7;
   step :number = 1;
 
-  activityLayerNum :number = 0;
+  activityLayerNum :number = 1;
   maxActivityNum :number = 7;
-    
-  constructor(private mapService: MapService) { }
 
-  ngOnInit() {
-    //this.mapService.buildMap(this.mapboxSelector,this.deckSelector);
+
+    
+  constructor(private mapService: MapService) { 
   }
 
-  setLocation($event) {
-    //event is an array. [Promise<Line[]>,string]
-    let selectedFeature = $event[1]
-    let linePromise = $event[0]
-    this.mapService.addLocation(linePromise,selectedFeature);
+  ngOnInit() {
+    this.mapService.buildMap(this.mapboxSelector,this.deckSelector);
+  }
+
+  setLocation(layerType:string,$event) {
+    //event is an array. [Promise<Line[]>,string,string]
+    let linePromise = $event[0];
+    let selected = $event[1];
+    let selectorID = $event[2];
+    if (layerType == "Feature") {
+      this.mapService.addFeature(linePromise,selected,selectorID);
+    }
+    else if (layerType == "Activity") { //emits [promise,string,string,string,string]
+      let timeOfWeek = $event[3];
+      let timeOfDay= $event[4];
+      let timeslot = $event[5];
+      this.mapService.addActivity(linePromise,selected,selectorID,timeOfWeek,timeOfDay,timeslot);
+    }
     this.mapService.render();
   }
 
@@ -46,7 +57,17 @@ export class MapvisComponent implements OnInit {
     return type + "_" +num.toString();
   }
 
-  testReset() {
-    this.mapService.reset();
+  onChangeFeatureLayersNum() {
+    this.mapService.updateLayerStates("Feature",this.featureLayerNum);
+    this.mapService.render();
+  }
+
+  onChangeActivityLayersNum() {
+    this.mapService.updateLayerStates("Activity",this.activityLayerNum);
+    this.mapService.render();
+  }
+
+  testShow() {
+    this.mapService.print();
   }
 }

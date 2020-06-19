@@ -5,6 +5,7 @@ import { Deck } from '@deck.gl/core';
 import { LineLayer } from '@deck.gl/layers';
 
 import { DatabaseService } from '../database.service';
+import { MapService } from '../map.service';
 import * as pano from '../pano-settings';
 import { FeatureCollection, Line } from "../map";
 
@@ -57,7 +58,7 @@ export class MapBoxComponent implements OnInit {
   isTimeslotSelected :boolean = false;
   //interactiveState = {isHover : false};
 
-  constructor(private databaseService: DatabaseService) { }
+  constructor(private databaseService: DatabaseService,private mapservice: MapService) { }
 
   ngOnInit() {
     this.initializeMap();
