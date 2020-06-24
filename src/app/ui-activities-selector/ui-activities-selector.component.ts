@@ -11,11 +11,11 @@ import { DatabaseService } from '../database.service';
 })
 export class UIActivitiesSelectorComponent implements OnInit {
 
-  panoLocations :string[] = pano.locations;
-  panoActivities :string[] = pano.activities;
+  panoLocations:string[] = pano.locations;
+  panoActivities: string[] = pano.activities;
   panoLayerType: Object = pano.layerTypes;
-  panoTimeOfWeek :Object = pano.timeOfWeek;
-  panoTimeOfDay :Object = pano.timeOfDay;
+  panoTimeOfWeek: Object = pano.timeOfWeek;
+  panoTimeOfDay: Object = pano.timeOfDay;
   panoTimeslot: string[];
   fc = new FeatureCollection;
 
@@ -24,6 +24,7 @@ export class UIActivitiesSelectorComponent implements OnInit {
   selectedTimeOfDay: string;
   selectedTimeOfWeek: string;
   selectedTimeslot: string;
+  selectedColor: string;
 
   activity_disabled: boolean = true;
   timeslot_disabled: boolean = true;
@@ -49,9 +50,13 @@ export class UIActivitiesSelectorComponent implements OnInit {
   public update() {
     if (this.selectedLocation) {
       this.activity_disabled = false;
+
       if (this.selectedTimeOfWeek && this.selectedTimeOfDay) {
         this.timeslot_disabled = false;
         this.setTimeslot();
+      }
+      if (this.selectedActivity) {
+        this.selectedColor= pano.colors[this.selectedActivity].hex;
       }
     }
     else {
@@ -60,18 +65,18 @@ export class UIActivitiesSelectorComponent implements OnInit {
       this.selectedActivity = null;
       this.selectedTimeOfWeek = null;
       this.selectedTimeOfDay = null;
+      this.selectedColor = null;
     }
 
-    if (this.selectedLocation && this.selectedActivity && this.selectedTimeOfWeek && this.selectedTimeOfDay  && this.selectedTimeslot) {
-      /* this.selection.emit([this.data_line,this.selectedActivity,this.selectorID]); //---for testing */
-      this.selection.emit([
-        this.data_line,
-        this.selectedActivity,
-        this.selectorID,
-        this.selectedTimeOfWeek,
-        this.selectedTimeOfDay,
-        this.selectedTimeslot
-        ]); //emits [promise,string,string,string,string]
+    if (this.selectedLocation && this.selectedActivity) {
+        this.selection.emit([
+          this.data_line,//promise
+          this.selectedActivity,
+          this.selectorID,
+          this.selectedTimeOfWeek,
+          this.selectedTimeOfDay,
+          this.selectedTimeslot
+          ]); 
     }
   }
 
@@ -88,5 +93,4 @@ export class UIActivitiesSelectorComponent implements OnInit {
       return this.selectorID;
     }
   }
-
 }

@@ -15,12 +15,12 @@ export class MapService {
   //map settings 
   map: mapboxgl.Map;   
   deck: Deck;
-  style :string = 'mapbox://styles/gxite/ck7t2v2d810oy1irrp09ni5ss';
-  message :string = 'Singapore';
+  style: string = 'mapbox://styles/gxite/ck7t2v2d810oy1irrp09ni5ss';
+  message: string = 'Singapore';
   INITIAL_VIEW_STATE = {
     latitude: 1.3580576343735706,
     longitude: 103.80844116210938,
-    zoom : window.innerWidth < 400 ? 9 : 11,
+    zoom: window.innerWidth < 400 ? 9 : 11,
     bearing: 0,
     pitch: 30
   };
@@ -95,23 +95,30 @@ export class MapService {
     return 1000;
   }
 
-  addFeature(dataSrc: Promise<Line[]>, selectedFeature :string, selectorID :string) {
-    this.layersState[selectorID] = [selectorID, dataSrc, pano.colors["panoGreen"], 5,selectedFeature]
+  private activityAtTimeslot(data: any,timeOfWeek: string,timeOfDay: string,timeslot: string): Line[] {
+    return this.fc.timeslot(data,timeOfWeek,timeOfDay,timeslot);
+  }
+  
+  //timeOfWeek selected
+  private activityAggregateTimeOfWeek(data: any, timeOfWeek: string) { 
+    return this.fc.week(data,timeOfWeek);
   }
 
-  addActivity(
-    dataSrc: Promise<Line[]>, 
-    selectedActivity :string, 
-    selectorID :string,
-    timeOfWeek: string,
-    timeOfDay: string,
-    timeslot: string) {
+  //timeOfDay selected
+  private activityAggregateTimeOfDay(data: any,timeOfDay: string) { 
+    return this.fc.day(data,timeOfDay);
+  }
 
-    if (timeOfWeek && timeOfDay && timeslot) {
-      dataSrc = dataSrc.then(data=>this.activityAtTimeslot(data,timeOfWeek,timeOfDay,timeslot));
+  //timeOfDay and timeOfWeek selected
+  private activityAtPeriod(data: any,timeOfWeek: string,timeOfDay: string) : Line[]{
+    return this.fc.period(data,timeOfWeek,timeOfDay);
+  }
+
+  updateLayerStates(type: string, featureLayerNum: number) {
+    const length = Object.keys(this.layersState).length;
+    for (let i=length; i>featureLayerNum; i--) {
+      delete this.layersState[type+"_"+i.toString()];
     }
-    //to implement aggregate layer
-    this.layersState[selectorID] = [selectorID, dataSrc, pano.colors["panoRed"], 3,selectedActivity]
   }
 
   render() {
@@ -127,22 +134,43 @@ export class MapService {
     this.deck.setProps({layers: newLayers});
   }
 
-  activityAtTimeslot(data,timeOfWeek:string,timeOfDay:string,timeslot:string) {
-    let temp = this.fc.filterLine(data,timeOfWeek,timeOfDay,timeslot)
-    console.log(temp);
-    return temp;
+  addFeature(dataSrc: Promise<Line[]>, selectedFeature :string, selectorID :string) {
+    this.layersState[selectorID] = [selectorID, dataSrc, pano.colors[selectedFeature].rgb, 10,selectedFeature]
   }
 
-  updateLayerStates(type: string, featureLayerNum :number) {
-    const length = Object.keys(this.layersState).length;
-    for (let i=length; i>featureLayerNum; i--) {
-      delete this.layersState[type+"_"+i.toString()];
+  addActivity(
+    dataSrc: Promise<Line[]>, 
+    selectedActivity: string, 
+    selectorID: string,
+    timeOfWeek: string,
+    timeOfDay: string,
+    timeslot: string) {
+
+    let toAdd: boolean = false;
+
+    if (timeOfWeek && timeOfDay && timeslot) {
+      dataSrc = dataSrc.then(data=>this.activityAtTimeslot(data,timeOfWeek,timeOfDay,timeslot));
+      toAdd=true;
+    }
+    else if (timeOfWeek && timeOfDay && !timeslot) {
+      dataSrc = dataSrc.then(data=>this.activityAtPeriod(data,timeOfWeek,timeOfDay));
+      toAdd=true;
+    }
+    else if (timeOfWeek && !timeOfDay && !timeslot) {
+      dataSrc = dataSrc.then(data=>this.activityAggregateTimeOfWeek(data,timeOfWeek));
+      toAdd=true; 
+    }
+    else if (!timeOfWeek && timeOfDay && !timeslot) {
+      dataSrc = dataSrc.then(data=>this.activityAggregateTimeOfDay(data,timeOfDay));
+      toAdd=true;
+    }
+    
+    if (toAdd) {
+      this.layersState[selectorID] = [selectorID, dataSrc, pano.colors[selectedActivity].rgb, 3,selectedActivity];
+      toAdd = false;
+    }
+    else {
+      this.layersState[selectorID] = [selectorID, dataSrc.then(data=>[]), [], 0,""];//dummy layer used for flushing
     }
   }
-
-  print() {
-    console.log(this.deck);
-    console.log(this.layersState);
-  }
-
 }

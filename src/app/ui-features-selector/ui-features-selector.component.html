@@ -1,7 +1,8 @@
 <mat-expansion-panel>
     <mat-expansion-panel-header>
       <mat-panel-title>{{getTitle()}}</mat-panel-title>
-     <mat-panel-description>
+     <mat-panel-description [ngStyle]="{'justify-content':'flex-end'}">
+      <mat-icon  [ngStyle]="{'color':selectedColor}">brightness_1</mat-icon>
      </mat-panel-description>
    </mat-expansion-panel-header>
    <div class="selectors">

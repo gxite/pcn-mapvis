@@ -19,6 +19,7 @@ export class UIFeaturesSelectorComponent implements OnInit {
 
   selectedLocation: string;
   selectedFeature: string;
+  selectedColor: string;
   feature_disabled: boolean = true;
 
   data_line : Promise<Line[]>;
@@ -43,10 +44,14 @@ export class UIFeaturesSelectorComponent implements OnInit {
   public update() {
     if (this.selectedLocation) {
       this.feature_disabled = false;
+      if (this.selectedFeature) {
+        this.selectedColor = pano.colors[this.selectedFeature].hex;
+      }
     }
     else {
       this.feature_disabled = true;
       this.selectedFeature = null;
+      this.selectedColor = null;
     }
     if (this.selectedLocation && this.selectedFeature) {
       this.selection.emit([this.data_line,this.selectedFeature,this.selectorID]); //emits [promise,string,string]

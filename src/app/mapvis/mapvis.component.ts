@@ -4,25 +4,21 @@ import { MapService } from '../map.service';
 @Component({
   selector: 'app-mapvis',
   templateUrl: './mapvis.component.html',
-  styleUrls: ['./mapvis.component.scss'],
-  
+  styleUrls: ['./mapvis.component.scss'],  
 })
 export class MapvisComponent implements OnInit {
 
-  mapboxSelector :string = "map";
-  deckSelector :string = "deck-canvas"; 
+  mapboxSelector: string = "map";
+  deckSelector: string = "deck-canvas"; 
 
-  featureLayerNum :number = 1;
-  maxFeatureNum :number = 7;
-  step :number = 1;
+  featureLayerNum: number = 1;
+  maxFeatureNum: number = 7;
+  step: number = 1;
 
-  activityLayerNum :number = 1;
-  maxActivityNum :number = 7;
+  activityLayerNum: number = 1;
+  maxActivityNum: number = 7;
 
-
-    
-  constructor(private mapService: MapService) { 
-  }
+  constructor(private mapService: MapService) {}
 
   ngOnInit() {
     this.mapService.buildMap(this.mapboxSelector,this.deckSelector);
@@ -47,15 +43,11 @@ export class MapvisComponent implements OnInit {
 
   array(n :number) {
     let array = [];
-    for(let i=1; i<=n; i++) {
-      array.push(i);
-    }
+    for(let i=1; i<=n; i++) { array.push(i);}
     return array;
   }
 
-  generateID(type :string,num : number) {
-    return type + "_" +num.toString();
-  }
+  generateID(type :string,num : number) {return type + "_" +num.toString();}
 
   onChangeFeatureLayersNum() {
     this.mapService.updateLayerStates("Feature",this.featureLayerNum);
@@ -65,9 +57,5 @@ export class MapvisComponent implements OnInit {
   onChangeActivityLayersNum() {
     this.mapService.updateLayerStates("Activity",this.activityLayerNum);
     this.mapService.render();
-  }
-
-  testShow() {
-    this.mapService.print();
   }
 }
