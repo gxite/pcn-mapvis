@@ -30,13 +30,14 @@ mat-slider {
     margin-left : 10px;
 }
 
-/* .custom {
-    .mat-slider-track-fill {
-        background-color: red;
+:host{
+    ::ng-deep .mat-slider-track-fill  {
+        background-color: rgba($color: #dddddd, $alpha: 1.0)
     }
-} */ 
-//with      encapsulation: ViewEncapsulation.None, 
-//breaks the app
+    ::ng-deep .mat-slider-thumb  {
+        background-color: rgba($color: #dddddd, $alpha: 1.0)
+    }  
+}
 
 .topbar {
     display: flex;

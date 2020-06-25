@@ -7,7 +7,7 @@ import { LineLayer } from '@deck.gl/layers';
 import { DatabaseService } from '../database.service';
 import { MapService } from '../map.service';
 import * as pano from '../pano-settings';
-import { FeatureCollection, Line } from "../map";
+import { FeatureCollection, Line } from "../pano-data";
 
 
 @Component({

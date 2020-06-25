@@ -1,45 +1,69 @@
 <mat-expansion-panel>
+
     <mat-expansion-panel-header>
-      <mat-panel-title>{{getTitle()}}</mat-panel-title>
-      <mat-panel-description [ngStyle]="{'justify-content':'flex-end'}">
+      <mat-panel-title>
         <mat-icon  [ngStyle]="{'color':selectedColor}">brightness_1</mat-icon>
-    </mat-panel-description>
-   </mat-expansion-panel-header>
-   <div class="selectors">
-    <mat-form-field > 
-        <mat-label>Select a Location</mat-label>
-        <mat-select  [(value)]="selectedLocation" (selectionChange)="fetchLocationData();update()">
-          <mat-option>None</mat-option>
-          <mat-option value={{location}} *ngFor="let location of panoLocations">{{location}}</mat-option>
-        </mat-select>
-    </mat-form-field>  
-    <mat-form-field>
-        <mat-label>Activity</mat-label>
-        <mat-select [disabled]="activity_disabled" [(value)]="selectedActivity" (selectionChange)="fetchLocationData();update()">
-            <mat-option>None</mat-option>
-            <mat-option value={{activity}} *ngFor="let activity of panoActivities">{{activity}}</mat-option>
-        </mat-select>
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>Weekday or Weekend</mat-label>
-        <mat-select [disabled]="activity_disabled" [(value)]="selectedTimeOfWeek" (selectionChange)="fetchLocationData();update()">
-            <mat-option>None</mat-option>
-            <mat-option value={{timeOfWeek}} *ngFor="let timeOfWeek of panoTimeOfWeek">{{timeOfWeek}}</mat-option>
-        </mat-select>
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>Moring or Evening</mat-label>
-        <mat-select [disabled]="activity_disabled" [(value)]="selectedTimeOfDay" (selectionChange)="fetchLocationData();update()">
-            <mat-option>None</mat-option>
-            <mat-option value={{timeOfDay}} *ngFor="let timeOfDay of panoTimeOfDay">{{timeOfDay}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field>
-        <mat-label>Timeslot</mat-label>
-        <mat-select [disabled]="timeslot_disabled" [(value)]="selectedTimeslot" (selectionChange)="fetchLocationData();update()">
-            <mat-option>None</mat-option>
-            <mat-option value={{timeslot}} *ngFor="let timeslot of panoTimeslot">{{timeslot}}</mat-option>
-        </mat-select>
-    </mat-form-field>
-   </div>
+        <span class="title_label">
+          <span>{{getLocation()}}</span>
+          <span style="margin-left: 20px;">{{getActivity()}}</span>
+        </span>
+      </mat-panel-title>
+      <mat-panel-description></mat-panel-description>
+    </mat-expansion-panel-header>
+    
+    <mat-tab-group mat-align-tabs="center" animationDuration="0ms" (selectedTabChange)="onTabChange()">
+        <mat-tab label="Select" >
+            <div class="tab_content">
+                <mat-form-field > 
+                    <mat-label>Select a Location</mat-label>
+                    <mat-select  [(value)]="selectedLocation" (selectionChange)="fetchLocationData();update()">
+                      <mat-option>None</mat-option>
+                      <mat-option value={{location}} *ngFor="let location of panoLocations">{{location}}</mat-option>
+                    </mat-select>
+                </mat-form-field>  
+                <mat-form-field>
+                    <mat-label>Activity</mat-label>
+                    <mat-select [disabled]="activity_disabled" [(value)]="selectedActivity" (selectionChange)="fetchLocationData();update()">
+                        <mat-option>None</mat-option>
+                        <mat-option value={{activity}} *ngFor="let activity of panoActivities">{{activity}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Weekday or Weekend</mat-label>
+                    <mat-select [disabled]="activity_disabled" [(value)]="selectedTimeOfWeek" (selectionChange)="fetchLocationData();update()">
+                        <mat-option>None</mat-option>
+                        <mat-option value={{timeOfWeek}} *ngFor="let timeOfWeek of panoTimeOfWeek">{{timeOfWeek}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Moring or Evening</mat-label>
+                    <mat-select [disabled]="activity_disabled" [(value)]="selectedTimeOfDay" (selectionChange)="fetchLocationData();update()">
+                        <mat-option>None</mat-option>
+                        <mat-option value={{timeOfDay}} *ngFor="let timeOfDay of panoTimeOfDay">{{timeOfDay}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Timeslot</mat-label>
+                    <mat-select [disabled]="timeslot_disabled" [(value)]="selectedTimeslot" (selectionChange)="fetchLocationData();update()">
+                        <mat-option>None</mat-option>
+                        <mat-option value={{timeslot}} *ngFor="let timeslot of panoTimeslot">{{timeslot}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+          </mat-tab>
+        
+        <mat-tab label="Statistics" >
+            <div class="tab_content">
+              <table>
+                <tr><td>Max:</td><td>{{max|async}}</td></tr>
+                <tr><td>Min:</td><td>{{min|async}}</td></tr>
+                <tr><td>Mean:</td><td>{{mean|async}}</td></tr>
+                <tr><td>Mode:</td><td>{{mode|async}}</td></tr>
+                <tr><td>Median:</td><td>{{median|async}}</td></tr>
+                <tr><td>Std'Dev:</td><td>{{stddev|async}}</td></tr>
+              </table>
+            </div>
+          </mat-tab>
+    </mat-tab-group> 
+
 </mat-expansion-panel>

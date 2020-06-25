@@ -1,8 +1,29 @@
-.selectors {
+.tab_content {
     display: flex;
     flex-direction: column;
+    margin-top: 20px;
 }
 
-mat-expansion-panel{
+:host ::ng-deep mat-expansion-panel-header{
     margin-bottom: 10px;
+}
+
+mat-panel-title {
+    align-items: center;
+}
+
+.title_label {
+    display:flex;
+    justify-content: space-evenly;
+    margin-left: 20px;
+}
+
+mat-expansion-panel {
+    margin-bottom:10px;
+}
+
+:host ::ng-deep .mat-tab-label {
+    min-width: 50%;
+    max-height: 20px;
+    font-size: 12px;
 }

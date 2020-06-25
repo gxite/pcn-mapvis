@@ -1,25 +1,50 @@
 <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <mat-panel-title>{{getTitle()}}</mat-panel-title>
-     <mat-panel-description [ngStyle]="{'justify-content':'flex-end'}">
+
+  <mat-expansion-panel-header>
+    <mat-panel-title>
       <mat-icon  [ngStyle]="{'color':selectedColor}">brightness_1</mat-icon>
-     </mat-panel-description>
-   </mat-expansion-panel-header>
-   <div class="selectors">
-    <mat-form-field > 
-        <mat-label>Select a Location</mat-label>
-        <mat-select  [(value)]="selectedLocation" (selectionChange)="fetchLocationData();update()">
-          <mat-option>None</mat-option>
-          <mat-option value={{location}} *ngFor="let location of panoLocations">{{location}}</mat-option>
-        </mat-select>
-        </mat-form-field>  
-    <mat-form-field>
-        <mat-label>Feature</mat-label>
-        <mat-select [disabled]="feature_disabled" [(value)]="selectedFeature" (selectionChange)="fetchLocationData();update()">
-            <mat-option>None</mat-option>
-            <mat-option value={{feature}} *ngFor="let feature of panoFeatures">{{feature}}</mat-option>
-        </mat-select>
-    </mat-form-field>
-   </div>
+      <span class="title_label">
+        <span>{{getLocation()}}</span>
+        <span style="margin-left: 20px;">{{getFeature()}}</span>
+      </span>
+    </mat-panel-title>
+    <mat-panel-description></mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <mat-tab-group mat-align-tabs="center" animationDuration="0ms" (selectedTabChange)="onTabChange()">
+
+    <mat-tab label="Select" >
+      <div class="tab_content">
+        <mat-form-field > 
+            <mat-label>Select a Location</mat-label>
+            <mat-select  [(value)]="selectedLocation" (selectionChange)="fetchLocationData();update()">
+              <mat-option>None</mat-option>
+              <mat-option value={{location}} *ngFor="let location of panoLocations">{{location}}</mat-option>
+            </mat-select>
+            </mat-form-field>  
+        <mat-form-field>
+            <mat-label>Feature</mat-label>
+            <mat-select [disabled]="feature_disabled" [(value)]="selectedFeature" (selectionChange)="fetchLocationData();update()">
+                <mat-option>None</mat-option>
+                <mat-option value={{feature}} *ngFor="let feature of panoFeatures">{{feature}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Statistics">
+      <div class="tab_content">
+        <table>
+          <tr><td>Max:</td><td>{{max|async}}</td></tr>
+          <tr><td>Min:</td><td>{{min|async}}</td></tr>
+          <tr><td>Mean:</td><td>{{mean|async}}</td></tr>
+          <tr><td>Mode:</td><td>{{mode|async}}</td></tr>
+          <tr><td>Median:</td><td>{{median|async}}</td></tr>
+          <tr><td>Std'Dev:</td><td>{{stddev|async}}</td></tr>
+        </table>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+  
 </mat-expansion-panel>
 

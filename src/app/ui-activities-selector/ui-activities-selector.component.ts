@@ -1,8 +1,9 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 
 import * as pano from '../pano-settings';
-import { FeatureCollection, Line } from "../map";
+import { FeatureCollection, Line } from "../pano-data";
 import { DatabaseService } from '../database.service';
+import * as ss from "simple-statistics";
 
 @Component({
   selector: 'app-ui-activities-selector',
@@ -32,8 +33,17 @@ export class UIActivitiesSelectorComponent implements OnInit {
   data_line : Promise<Line[]>;
 
   @Input() selectorID: string;
+  @Input() properties: Promise<number[]>;
   @Output() selection = new EventEmitter();
   @Output() type :string = "Activity";
+
+  //Descriptive stats
+  max: Promise<number>;
+  min: Promise<number>;
+  mean: Promise<number>;
+  mode: Promise<number>;
+  median: Promise<number>;
+  stddev: Promise<number>;
 
   constructor(private databaseService: DatabaseService) { }
 
@@ -85,12 +95,32 @@ export class UIActivitiesSelectorComponent implements OnInit {
       pano.timeslot1[this.selectedTimeOfDay] : pano.timeslot2[this.selectedTimeOfDay];
   }
 
-  public getTitle() {
+  public getLocation() {
     if (this.selectedLocation) {
-      return this.selectedLocation;
+      return this.selectedLocation.toUpperCase();
     }
     else {
-      return this.selectorID;
+      return "";
+    }
+  }
+
+  public getActivity() {
+    if (this.selectedActivity) {
+      return this.selectedActivity;
+    }
+    else {
+      return "";
+    }
+  }
+
+  public onTabChange() {
+    if (this.selectedLocation && this.selectedActivity && (this.selectedTimeOfWeek || this.selectedTimeOfDay)) {
+      this.max = this.properties.then(data=>ss.max(data));
+      this.min = this.properties.then(data=>ss.min(data));
+      this.mean = this.properties.then(data=>ss.mean(data));
+      this.mode = this.properties.then(data=>ss.mode(data));
+      this.median = this.properties.then(data=>ss.median(data));
+      this.stddev = this.properties.then(data=>ss.standardDeviation(data));
     }
   }
 }

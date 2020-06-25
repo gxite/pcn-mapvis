@@ -7,6 +7,8 @@ import { MapBoxComponent } from './map-box/map-box.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MapvisComponent } from './mapvis/mapvis.component';
 import { UIFeaturesSelectorComponent } from './ui-features-selector/ui-features-selector.component';
+import { UIActivitiesSelectorComponent } from './ui-activities-selector/ui-activities-selector.component';
+import { TooltipComponent } from './tooltip/tooltip.component';
 
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -16,7 +18,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSliderModule } from '@angular/material/slider';
-import { UIActivitiesSelectorComponent } from './ui-activities-selector/ui-activities-selector.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { CdkTableModule } from '@angular/cdk/table';
 
 @NgModule({
   declarations: [
@@ -25,6 +28,7 @@ import { UIActivitiesSelectorComponent } from './ui-activities-selector/ui-activ
     MapvisComponent,
     UIFeaturesSelectorComponent,
     UIActivitiesSelectorComponent,
+    TooltipComponent,
   ],
   imports: [
     BrowserModule,
@@ -37,7 +41,9 @@ import { UIActivitiesSelectorComponent } from './ui-activities-selector/ui-activ
     MatSelectModule,
     MatExpansionModule,
     MatDividerModule,
-    MatSliderModule
+    MatSliderModule,
+    MatTabsModule,
+    CdkTableModule
   ],
   providers: [],
   bootstrap: [AppComponent]

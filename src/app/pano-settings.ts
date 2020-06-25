@@ -30,9 +30,6 @@ export const features :string[] = [
     "carpark_lots_200m",
     "facilities_25m",
     "facilities_50m",
-    "residence_25m_gfa",
-    "residence_50m_gfa",
-    "residence_100m_gfa"
 ]
 
 export const activities :string[] = [

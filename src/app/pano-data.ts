@@ -23,6 +23,14 @@ export class GeoJson implements IGeoJson {
   }
 }
 
+export class Line {
+  start: number[]; //the start coordinates of a line [x,y,z] 
+  id: string;
+  properties: any;
+  period: string;
+  timeslot: string;
+}
+
 //deck.gl related constraints and data transformation methods.
 export class FeatureCollection {
 
@@ -76,9 +84,15 @@ export class FeatureCollection {
       return this.peopleSum(filtered,period,timeslot)
   }
 
-  private peopleSum(filteredData: Line[], period: string, timeslot: string): Line[] {
+  public extractPropertiesArray (line: Line[],selectedProperty: string) {
+    let arrayOut = []
+    line.forEach(data=>{arrayOut.push(data.properties[selectedProperty])});
+    return arrayOut;
+  }
+
+  private peopleSum(line: Line[], period: string, timeslot: string): Line[] {
     let aggregate = {}; //id:[start,properties,period,timeslot]
-    filteredData.forEach(data=> {
+    line.forEach(data=> {
       if (!aggregate[data.id]) {
         aggregate[data.id] = {
         "start": data.start,
@@ -110,11 +124,5 @@ export class FeatureCollection {
   }
 }
 
-export class Line {
-  start: number[]; //the start coordinates of a line [x,y,z] 
-  id: string;
-  properties: any;
-  period: string;
-  timeslot: string;
-}
+
 

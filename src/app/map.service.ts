@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 
+
 import * as mapboxgl from 'mapbox-gl';
 import { Deck } from '@deck.gl/core';
-import { LineLayer, GeoJsonLayer } from '@deck.gl/layers';
+import { LineLayer } from '@deck.gl/layers';
 import * as pano from './pano-settings';
-import { Line, FeatureCollection } from "./map";
+import { Line, FeatureCollection } from "./pano-data";
 import { environment } from '../environments/environment';
+import { TooltipComponent } from './tooltip/tooltip.component'
 
 @Injectable({
   providedIn: 'root'
@@ -33,12 +35,12 @@ export class MapService {
     mapboxgl.accessToken = environment.mapboxConfig.accessToken;
   }
 
-  public buildMap(containerID : string, deckID :string) {
+  public buildMap(containerID : string, deckID :string): void {
     this.createMapbox(containerID);
     this.createDeckGl(deckID);
   }
 
-  private createMapbox(containerID : string) {
+  private createMapbox(containerID : string): void {
     this.map = new mapboxgl.Map({
       container: containerID,
       style: this.style,
@@ -50,7 +52,7 @@ export class MapService {
     });
   }
 
-  private createDeckGl(deckID :string) {
+  private createDeckGl(deckID :string): void {
     this.deck = new Deck({
       canvas: deckID,
       width: '100%',
@@ -69,18 +71,18 @@ export class MapService {
     });
   }
 
-  private createLineLayer(layerId :string, dataSrc :Promise<Line[]>, color:number[], lineWidth:number,selected :string) {
+  private createLineLayer(layerId :string, dataSrc :Promise<Line[]>, color:number[], lineWidth:number,selected :string): LineLayer {
     return  new LineLayer({
       id: layerId,
       data: dataSrc,
-      opacity: 0.8,
+      opacity: 0.5,
       getSourcePosition: d => d.start,
       getTargetPosition: 
         d => [d.start[0],d.start[1],d.properties[selected]*this.LineHeightMultiplier(selected)],
       getColor: color,
       getWidth: lineWidth,
       pickable: true,
-      /* onHover: info => this.setTooltip(info.object,info.x,info.y), */
+      onHover: info => TooltipComponent.setTooltip(info.object,info.x,info.y,selected),
       updateTriggers: {
         getTargetPosition: selected,
         data: dataSrc
@@ -88,40 +90,48 @@ export class MapService {
     }) 
   }
 
-  private LineHeightMultiplier(feature: string) {
+  private LineHeightMultiplier(feature: string): number {
     if (feature === "people" || feature === "people_active" || feature === "people_static") {
       return 50;
     }
-    return 1000;
+    else if (feature === "facilities_25m" || feature === "facilities_50m") {
+      return 50;
+    }
+    else if (feature === "carpark_lots_100m" || feature === "carpark_lots_200m") {
+      return 1;
+    }
+    else {
+      return 1000;
+    }   
   }
 
-  private activityAtTimeslot(data: any,timeOfWeek: string,timeOfDay: string,timeslot: string): Line[] {
+  private activityAtTimeslot(data: Line[],timeOfWeek: string,timeOfDay: string,timeslot: string): Line[] {
     return this.fc.timeslot(data,timeOfWeek,timeOfDay,timeslot);
   }
   
   //timeOfWeek selected
-  private activityAggregateTimeOfWeek(data: any, timeOfWeek: string) { 
+  private activityAggregateTimeOfWeek(data: Line[], timeOfWeek: string): Line[] { 
     return this.fc.week(data,timeOfWeek);
   }
 
   //timeOfDay selected
-  private activityAggregateTimeOfDay(data: any,timeOfDay: string) { 
+  private activityAggregateTimeOfDay(data: Line[],timeOfDay: string): Line[] { 
     return this.fc.day(data,timeOfDay);
   }
 
   //timeOfDay and timeOfWeek selected
-  private activityAtPeriod(data: any,timeOfWeek: string,timeOfDay: string) : Line[]{
+  private activityAtPeriod(data: Line[],timeOfWeek: string,timeOfDay: string): Line[] {
     return this.fc.period(data,timeOfWeek,timeOfDay);
   }
 
-  updateLayerStates(type: string, featureLayerNum: number) {
+  public updateLayerStates(type: string, featureLayerNum: number): void {
     const length = Object.keys(this.layersState).length;
     for (let i=length; i>featureLayerNum; i--) {
       delete this.layersState[type+"_"+i.toString()];
     }
   }
 
-  render() {
+  public render(): void {
     let newLayers=[];
     Object.keys(this.layersState).forEach(key=> {
       newLayers.push(this.createLineLayer(
@@ -134,17 +144,23 @@ export class MapService {
     this.deck.setProps({layers: newLayers});
   }
 
-  addFeature(dataSrc: Promise<Line[]>, selectedFeature :string, selectorID :string) {
+  public getLayerPromise(selectorID :string, selectedProperties :string): Promise<number[]> {
+    if (this.layersState[selectorID]) {
+      return this.layersState[selectorID][1].then(data=>this.fc.extractPropertiesArray(data,selectedProperties));
+    }
+  }
+
+  public addFeature(dataSrc: Promise<Line[]>, selectedFeature :string, selectorID :string): void {
     this.layersState[selectorID] = [selectorID, dataSrc, pano.colors[selectedFeature].rgb, 10,selectedFeature]
   }
 
-  addActivity(
+  public addActivity(
     dataSrc: Promise<Line[]>, 
     selectedActivity: string, 
     selectorID: string,
     timeOfWeek: string,
     timeOfDay: string,
-    timeslot: string) {
+    timeslot: string): void {
 
     let toAdd: boolean = false;
 
@@ -173,4 +189,6 @@ export class MapService {
       this.layersState[selectorID] = [selectorID, dataSrc.then(data=>[]), [], 0,""];//dummy layer used for flushing
     }
   }
+
+
 }

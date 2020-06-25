@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit,} from '@angular/core';
 import { MapService } from '../map.service';
 
 @Component({
@@ -18,6 +18,11 @@ export class MapvisComponent implements OnInit {
   activityLayerNum: number = 1;
   maxActivityNum: number = 7;
 
+  //Note this approach for all layers to share a common binding variable might pose a problem in the future
+  //Redesign and reimplement
+  featureProperties: Promise<number[]>;
+  activityProperties: Promise<number[]>;
+
   constructor(private mapService: MapService) {}
 
   ngOnInit() {
@@ -31,12 +36,14 @@ export class MapvisComponent implements OnInit {
     let selectorID = $event[2];
     if (layerType == "Feature") {
       this.mapService.addFeature(linePromise,selected,selectorID);
+      this.featureProperties = this.mapService.getLayerPromise(selectorID,selected);
     }
     else if (layerType == "Activity") { //emits [promise,string,string,string,string]
       let timeOfWeek = $event[3];
       let timeOfDay= $event[4];
       let timeslot = $event[5];
       this.mapService.addActivity(linePromise,selected,selectorID,timeOfWeek,timeOfDay,timeslot);
+      this.activityProperties = this.mapService.getLayerPromise(selectorID,selected);
     }
     this.mapService.render();
   }
@@ -58,4 +65,5 @@ export class MapvisComponent implements OnInit {
     this.mapService.updateLayerStates("Activity",this.activityLayerNum);
     this.mapService.render();
   }
+
 }

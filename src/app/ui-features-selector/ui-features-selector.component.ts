@@ -1,9 +1,10 @@
 import { Component, OnInit, Output, Input, EventEmitter  } from '@angular/core';
 
 import * as pano from '../pano-settings';
-import { FeatureCollection, Line } from "../map";
+import { FeatureCollection, Line } from "../pano-data";
 import { DatabaseService } from '../database.service';
-
+import { from } from 'rxjs';
+import * as ss from "simple-statistics";
 
 @Component({
   selector: 'app-ui-features-selector',
@@ -25,9 +26,17 @@ export class UIFeaturesSelectorComponent implements OnInit {
   data_line : Promise<Line[]>;
 
   @Input() selectorID: string;
+  @Input() properties: Promise<number[]>;
   @Output() selection = new EventEmitter();
   @Output() type :string = "Feature";
 
+  //Descriptive stats
+  max: Promise<number>;
+  min: Promise<number>;
+  mean: Promise<number>;
+  mode: Promise<number>;
+  median: Promise<number>;
+  stddev: Promise<number>;
 
   constructor(private databaseService: DatabaseService) {}
 
@@ -58,13 +67,32 @@ export class UIFeaturesSelectorComponent implements OnInit {
     }
   }
 
-  public getTitle() {
+  public getLocation() {
     if (this.selectedLocation) {
-      return this.selectedLocation;
+      return this.selectedLocation.toUpperCase();
     }
     else {
-      return this.selectorID;
+      return "";
     }
   }
 
+  public getFeature() {
+    if (this.selectedFeature) {
+      return this.selectedFeature;
+    }
+    else {
+      return "";
+    }
+  }
+
+  public onTabChange() {
+    if (this.selectedLocation && this.selectedFeature) {
+      this.max = this.properties.then(data=>ss.max(data));
+      this.min = this.properties.then(data=>ss.min(data));
+      this.mean = this.properties.then(data=>ss.mean(data));
+      this.mode = this.properties.then(data=>ss.mode(data));
+      this.median = this.properties.then(data=>ss.median(data));
+      this.stddev = this.properties.then(data=>ss.standardDeviation(data));
+    }
+  }
 }

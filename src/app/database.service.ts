@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { environment } from '../environments/environment';
-import * as mapboxgl from 'mapbox-gl';
-import { FeatureCollection } from "./map";
+import { FeatureCollection } from "./pano-data";
 
 // Firebase App (the core Firebase SDK) is always required and must be listed first
 import * as firebase from "firebase/app";
