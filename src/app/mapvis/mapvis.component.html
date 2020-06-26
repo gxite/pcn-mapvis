@@ -1,4 +1,3 @@
-
 <mat-toolbar class="topbar">
     <span>
         <button mat-icon-button (click)="drawer.toggle()">
@@ -10,36 +9,43 @@
 
 <mat-drawer-container>
     <mat-drawer #drawer mode="side"> 
-        <div>
-            <span>Feature Layers</span>
-            <mat-slider id="ths"
-                [max]="maxFeatureNum"
-                [step]="step"
-                [(value)]="featureLayerNum"
-                (change)="onChangeFeatureLayersNum()">
-            </mat-slider> 
-            <app-ui-features-selector #selector1 
-                [selectorID]="generateID(selector1.type,index)" 
-                *ngFor="let index of array(featureLayerNum)" 
-                (selection)="setLocation(selector1.type,$event)"
-                [properties]="featureProperties">
-            </app-ui-features-selector>
-        </div>
-        <div>
-            <span>Activity Layers</span>
-            <mat-slider
-                [max]="maxActivityNum"
-                [step]="step"
-                [(value)]="activityLayerNum"
-                (change)="onChangeActivityLayersNum()">
-            </mat-slider>
-            <app-ui-activities-selector #selector2 
-                [selectorID]="generateID(selector2.type,index)" 
-                *ngFor="let index of array(activityLayerNum)" 
-                (selection)="setLocation(selector2.type,$event)"
-                [properties]="activityProperties">
-            </app-ui-activities-selector>
-        </div>
+        <mat-tab-group  mat-align-tabs="center" animationDuration="0ms" >
+            <mat-tab label="Action" >
+                <div>
+                    <span>Feature Layers</span>
+                    <mat-slider id="ths"
+                        [max]="maxFeatureNum"
+                        [step]="step"
+                        [(value)]="featureLayerNum"
+                        (change)="onChangeFeatureLayersNum()">
+                    </mat-slider> 
+                    <app-ui-features-selector #selector1 
+                        [selectorID]="generateID(selector1.type,index)" 
+                        *ngFor="let index of array(featureLayerNum)" 
+                        (selection)="setLocation(selector1.type,$event)"
+                        [properties]="featureProperties">
+                    </app-ui-features-selector>
+                </div>
+                <div>
+                    <span>Activity Layers</span>
+                    <mat-slider
+                        [max]="maxActivityNum"
+                        [step]="step"
+                        [(value)]="activityLayerNum"
+                        (change)="onChangeActivityLayersNum()">
+                    </mat-slider>
+                    <app-ui-activities-selector #selector2 
+                        [selectorID]="generateID(selector2.type,index)" 
+                        *ngFor="let index of array(activityLayerNum)" 
+                        (selection)="setLocation(selector2.type,$event)"
+                        [properties]="activityProperties">
+                    </app-ui-activities-selector>
+                </div>
+            </mat-tab>
+            <mat-tab label="Object" >
+                
+            </mat-tab>
+        </mat-tab-group>
     </mat-drawer>
 </mat-drawer-container>
 

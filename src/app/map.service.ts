@@ -71,7 +71,7 @@ export class MapService {
     });
   }
 
-  private createLineLayer(layerId :string, dataSrc :Promise<Line[]>, color:number[], lineWidth:number,selected :string): LineLayer {
+  private createLineLayer(layerId: string, dataSrc: Promise<Line[]>, color: number[], lineWidth: number,selected: string,isVisible: boolean): LineLayer {
     return  new LineLayer({
       id: layerId,
       data: dataSrc,
@@ -82,6 +82,8 @@ export class MapService {
       getColor: color,
       getWidth: lineWidth,
       pickable: true,
+      autoHighlight: true,
+      visible:isVisible,
       onHover: info => TooltipComponent.setTooltip(info.object,info.x,info.y,selected),
       updateTriggers: {
         getTargetPosition: selected,
@@ -139,19 +141,20 @@ export class MapService {
         this.layersState[key][1],
         this.layersState[key][2],
         this.layersState[key][3],
-        this.layersState[key][4])) 
+        this.layersState[key][4],
+        this.layersState[key][5])) 
     });
     this.deck.setProps({layers: newLayers});
   }
 
-  public getLayerPromise(selectorID :string, selectedProperties :string): Promise<number[]> {
+  public getLayerPromise(selectorID: string, selectedProperties:string): Promise<number[]> {
     if (this.layersState[selectorID]) {
       return this.layersState[selectorID][1].then(data=>this.fc.extractPropertiesArray(data,selectedProperties));
     }
   }
 
-  public addFeature(dataSrc: Promise<Line[]>, selectedFeature :string, selectorID :string): void {
-    this.layersState[selectorID] = [selectorID, dataSrc, pano.colors[selectedFeature].rgb, 10,selectedFeature]
+  public addFeature(dataSrc: Promise<Line[]>, selectedFeature: string, selectorID: string, isVisible: boolean): void {
+    this.layersState[selectorID] = [selectorID, dataSrc, pano.colors[selectedFeature].rgb, 10,selectedFeature,isVisible]
   }
 
   public addActivity(
@@ -160,7 +163,8 @@ export class MapService {
     selectorID: string,
     timeOfWeek: string,
     timeOfDay: string,
-    timeslot: string): void {
+    timeslot: string,
+    isVisible: boolean): void {
 
     let toAdd: boolean = false;
 
@@ -182,11 +186,11 @@ export class MapService {
     }
     
     if (toAdd) {
-      this.layersState[selectorID] = [selectorID, dataSrc, pano.colors[selectedActivity].rgb, 3,selectedActivity];
+      this.layersState[selectorID] = [selectorID, dataSrc, pano.colors[selectedActivity].rgb, 3,selectedActivity,isVisible];
       toAdd = false;
     }
     else {
-      this.layersState[selectorID] = [selectorID, dataSrc.then(data=>[]), [], 0,""];//dummy layer used for flushing
+      this.layersState[selectorID] = [selectorID, dataSrc.then(data=>[]), [], 0,"",false];//dummy layer used for flushing
     }
   }
 

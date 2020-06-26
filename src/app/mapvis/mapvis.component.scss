@@ -30,6 +30,16 @@ mat-slider {
     margin-left : 10px;
 }
 
+mat-tab-group {
+    margin-top: 25px;
+}
+
+:host ::ng-deep .mat-tab-label {
+    min-width: 50%;
+    max-height: 50px;
+    font-size: 16px;
+}
+
 :host{
     ::ng-deep .mat-slider-track-fill  {
         background-color: rgba($color: #dddddd, $alpha: 1.0)

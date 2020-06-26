@@ -29,6 +29,7 @@ export class UIActivitiesSelectorComponent implements OnInit {
 
   activity_disabled: boolean = true;
   timeslot_disabled: boolean = true;
+  visible: boolean = true;
 
   data_line : Promise<Line[]>;
 
@@ -122,5 +123,18 @@ export class UIActivitiesSelectorComponent implements OnInit {
       this.median = this.properties.then(data=>ss.median(data));
       this.stddev = this.properties.then(data=>ss.standardDeviation(data));
     }
+  }
+
+  public isVisible() {
+    if (this.visible) {
+      return "visibility";
+    }
+    else {
+      return "visibility_off"
+    }
+  }
+
+  public toggleVisibility() {
+    this.visible = !this.visible;
   }
 }

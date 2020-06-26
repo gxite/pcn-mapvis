@@ -1,8 +1,10 @@
-<mat-expansion-panel>
-
+<mat-expansion-panel hideToggle=true>
   <mat-expansion-panel-header>
     <mat-panel-title>
-      <mat-icon  [ngStyle]="{'color':selectedColor}">brightness_1</mat-icon>
+      <mat-icon [ngStyle]="{'color':selectedColor,'transform':'scale(0.9)'}">brightness_1</mat-icon>
+      <button mat-icon-button [ngStyle]="{'margin-left': '5px'}" disableRipple=true (click)="toggleVisibility();$event.stopPropagation();update()">
+        <mat-icon>{{isVisible()}}</mat-icon>
+      </button>
       <span class="title_label">
         <span>{{getLocation()}}</span>
         <span style="margin-left: 20px;">{{getFeature()}}</span>

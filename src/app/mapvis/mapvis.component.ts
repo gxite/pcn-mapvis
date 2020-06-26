@@ -34,15 +34,16 @@ export class MapvisComponent implements OnInit {
     let linePromise = $event[0];
     let selected = $event[1];
     let selectorID = $event[2];
+    let isVisible = $event[3];
     if (layerType == "Feature") {
-      this.mapService.addFeature(linePromise,selected,selectorID);
+      this.mapService.addFeature(linePromise,selected,selectorID,isVisible);
       this.featureProperties = this.mapService.getLayerPromise(selectorID,selected);
     }
     else if (layerType == "Activity") { //emits [promise,string,string,string,string]
       let timeOfWeek = $event[3];
       let timeOfDay= $event[4];
       let timeslot = $event[5];
-      this.mapService.addActivity(linePromise,selected,selectorID,timeOfWeek,timeOfDay,timeslot);
+      this.mapService.addActivity(linePromise,selected,selectorID,timeOfWeek,timeOfDay,timeslot,isVisible);
       this.activityProperties = this.mapService.getLayerPromise(selectorID,selected);
     }
     this.mapService.render();

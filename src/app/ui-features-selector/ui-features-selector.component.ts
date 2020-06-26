@@ -3,7 +3,6 @@ import { Component, OnInit, Output, Input, EventEmitter  } from '@angular/core';
 import * as pano from '../pano-settings';
 import { FeatureCollection, Line } from "../pano-data";
 import { DatabaseService } from '../database.service';
-import { from } from 'rxjs';
 import * as ss from "simple-statistics";
 
 @Component({
@@ -22,6 +21,8 @@ export class UIFeaturesSelectorComponent implements OnInit {
   selectedFeature: string;
   selectedColor: string;
   feature_disabled: boolean = true;
+  visible: boolean = true;
+
 
   data_line : Promise<Line[]>;
 
@@ -63,7 +64,7 @@ export class UIFeaturesSelectorComponent implements OnInit {
       this.selectedColor = null;
     }
     if (this.selectedLocation && this.selectedFeature) {
-      this.selection.emit([this.data_line,this.selectedFeature,this.selectorID]); //emits [promise,string,string]
+      this.selection.emit([this.data_line,this.selectedFeature,this.selectorID,this.visible]); //emits [promise,string,string,boolean]
     }
   }
 
@@ -94,5 +95,18 @@ export class UIFeaturesSelectorComponent implements OnInit {
       this.median = this.properties.then(data=>ss.median(data));
       this.stddev = this.properties.then(data=>ss.standardDeviation(data));
     }
+  }
+
+  public isVisible() {
+    if (this.visible) {
+      return "visibility";
+    }
+    else {
+      return "visibility_off"
+    }
+  }
+
+  public toggleVisibility() {
+    this.visible = !this.visible;
   }
 }
