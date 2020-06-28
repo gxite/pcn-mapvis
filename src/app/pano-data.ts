@@ -62,26 +62,21 @@ export class FeatureCollection {
   }
 
   public period(line: Line[], timeOfWeek: string, timeOfDay: string): Line[]{
-    let timeslot = null;
     let period = this.getPeriod(timeOfDay,timeOfWeek);
     let filtered = line.filter(l=>l["period"] === period);
-    return this.peopleSum(filtered,period,timeslot);
+    return this.peopleSum(filtered,period,null);
   }
 
   public week(line: Line[],timeOfWeek: string): Line[]{
-    let timeslot = null;
-    let period = null;
     let filtered = line.filter(l=>
       l["period"] === this.getPeriod("Morning",timeOfWeek) || l["period"] === this.getPeriod("Evening",timeOfWeek));
-      return this.peopleSum(filtered,period,timeslot)
+      return this.peopleSum(filtered,null,null)
   }
 
   public day(line: Line[],timeOfDay: string): Line[]{
-    let timeslot = null;
-    let period = null;
     let filtered = line.filter(l=>
       l["period"] === this.getPeriod(timeOfDay,"Weekday") || l["period"] === this.getPeriod(timeOfDay,"Weekend"));
-      return this.peopleSum(filtered,period,timeslot)
+      return this.peopleSum(filtered,null,null)
   }
 
   public extractPropertiesArray (line: Line[],selectedProperty: string) {
@@ -92,6 +87,7 @@ export class FeatureCollection {
 
   private peopleSum(line: Line[], period: string, timeslot: string): Line[] {
     let aggregate = {}; //id:[start,properties,period,timeslot]
+    console.log(Object.values(aggregate));
     line.forEach(data=> {
       if (!aggregate[data.id]) {
         aggregate[data.id] = {
@@ -105,6 +101,7 @@ export class FeatureCollection {
         aggregate[data.id].properties.people_static += data.properties.people_static;
         aggregate[data.id].properties.people_active += data.properties.people_active;
       }});
+      console.log(Object.values(aggregate));
     return Object.values(aggregate);
   }
 

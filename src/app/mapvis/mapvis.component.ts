@@ -31,19 +31,24 @@ export class MapvisComponent implements OnInit {
 
   setLocation(layerType:string,$event) {
     //event is an array. [Promise<Line[]>,string,string]
-    let linePromise = $event[0];
-    let selected = $event[1];
-    let selectorID = $event[2];
-    let isVisible = $event[3];
     if (layerType == "Feature") {
+      let linePromise = $event[0];
+      let selected = $event[1];
+      let selectorID = $event[2];
+      let isVisible = $event[3];
       this.mapService.addFeature(linePromise,selected,selectorID,isVisible);
       this.featureProperties = this.mapService.getLayerPromise(selectorID,selected);
     }
     else if (layerType == "Activity") { //emits [promise,string,string,string,string]
+      let linePromise = $event[0];
+      let selected = $event[1];
+      let selectorID = $event[2];
       let timeOfWeek = $event[3];
       let timeOfDay= $event[4];
       let timeslot = $event[5];
-      this.mapService.addActivity(linePromise,selected,selectorID,timeOfWeek,timeOfDay,timeslot,isVisible);
+      let isVisible = $event[6];
+      let newFetch = $event[7];
+      this.mapService.addActivity(linePromise,selected,selectorID,timeOfWeek,timeOfDay,timeslot,isVisible,newFetch);
       this.activityProperties = this.mapService.getLayerPromise(selectorID,selected);
     }
     this.mapService.render();

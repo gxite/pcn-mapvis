@@ -30,6 +30,7 @@ export class UIActivitiesSelectorComponent implements OnInit {
   activity_disabled: boolean = true;
   timeslot_disabled: boolean = true;
   visible: boolean = true;
+  newFetch: boolean = false;
 
   data_line : Promise<Line[]>;
 
@@ -56,6 +57,7 @@ export class UIActivitiesSelectorComponent implements OnInit {
       this.data_line = this.databaseService.getLocationData(this.selectedLocation,this.panoLayerType[this.type])
       .then(data=>this.fc.transformToLine(data));
     }
+    this.newFetch = true;
   }
 
   public update() {
@@ -86,8 +88,11 @@ export class UIActivitiesSelectorComponent implements OnInit {
           this.selectorID,
           this.selectedTimeOfWeek,
           this.selectedTimeOfDay,
-          this.selectedTimeslot
+          this.selectedTimeslot,
+          this.visible,
+          this.newFetch
           ]); 
+        this.newFetch = false;
     }
   }
 

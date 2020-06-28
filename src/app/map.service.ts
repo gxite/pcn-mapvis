@@ -164,24 +164,33 @@ export class MapService {
     timeOfWeek: string,
     timeOfDay: string,
     timeslot: string,
-    isVisible: boolean): void {
+    isVisible: boolean,
+    newFetch: boolean): void {
 
     let toAdd: boolean = false;
 
     if (timeOfWeek && timeOfDay && timeslot) {
-      dataSrc = dataSrc.then(data=>this.activityAtTimeslot(data,timeOfWeek,timeOfDay,timeslot));
+      if (newFetch) {
+        dataSrc = dataSrc.then(data=>this.activityAtTimeslot(data,timeOfWeek,timeOfDay,timeslot));
+      }
       toAdd=true;
     }
     else if (timeOfWeek && timeOfDay && !timeslot) {
-      dataSrc = dataSrc.then(data=>this.activityAtPeriod(data,timeOfWeek,timeOfDay));
+      if (newFetch) {
+        dataSrc = dataSrc.then(data=>this.activityAtPeriod(data,timeOfWeek,timeOfDay));
+      }
       toAdd=true;
     }
     else if (timeOfWeek && !timeOfDay && !timeslot) {
-      dataSrc = dataSrc.then(data=>this.activityAggregateTimeOfWeek(data,timeOfWeek));
+      if (newFetch) {
+        dataSrc = dataSrc.then(data=>this.activityAggregateTimeOfWeek(data,timeOfWeek));
+      }
       toAdd=true; 
     }
     else if (!timeOfWeek && timeOfDay && !timeslot) {
-      dataSrc = dataSrc.then(data=>this.activityAggregateTimeOfDay(data,timeOfDay));
+      if (newFetch) {
+        dataSrc = dataSrc.then(data=>this.activityAggregateTimeOfDay(data,timeOfDay));
+      }
       toAdd=true;
     }
     
