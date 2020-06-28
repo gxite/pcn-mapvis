@@ -80,7 +80,7 @@ export const colors :Object = {
     "Tree_Palm"  : {"rgb":[9, 232, 94], "hex":"#09e85e"}, //malachite
     "Plants_Flower"  : {"rgb":[22, 193, 114],"hex":"#16c171"}, //emerald
     "Sky" : {"rgb":[45,225,252], "hex":"#2de0fc"}, //skyBlueCrayola
-    "Path_Floor" : {"rgb":[193,188,172],"hex":"#c112ad"},//paleSilver
+    "Path_Floor" : {"rgb":[193,188,172],"hex":"#C1BCAC"},//paleSilver
     "Built-up_Area" : {"rgb":[151,155,141],"hex":"#979b8d"}, //artichoke
     "people" : {"rgb":[255,56,242],"hex":"#ff38f2"},
     "people_static" :{"rgb":[143,33,207],"hex":"#8f21cf"},
