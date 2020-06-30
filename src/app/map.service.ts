@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 
-
 import * as mapboxgl from 'mapbox-gl';
 import { Deck } from '@deck.gl/core';
 import { LineLayer } from '@deck.gl/layers';
-import * as pano from './pano-settings';
-import { Line, FeatureCollection } from "./pano-data";
+import * as pano from './panoSettings';
+import { Line, FeatureCollection } from "./panoFeatureCollection";
 import { environment } from '../environments/environment';
 import { TooltipComponent } from './tooltip/tooltip.component'
+
 
 @Injectable({
   providedIn: 'root'
@@ -17,22 +17,14 @@ export class MapService {
   //map settings 
   map: mapboxgl.Map;   
   deck: Deck;
-  style: string = 'mapbox://styles/gxite/ck7t2v2d810oy1irrp09ni5ss';
-  message: string = 'Singapore';
-  INITIAL_VIEW_STATE = {
-    latitude: 1.3580576343735706,
-    longitude: 103.80844116210938,
-    zoom: window.innerWidth < 400 ? 9 : 11,
-    bearing: 0,
-    pitch: 30
-  };
+  env; 
 
   layersState = {};
   fc =new FeatureCollection;
 
   constructor() {
-    //assigning the accessToken stored in environments to mapboxgl
-    mapboxgl.accessToken = environment.mapboxConfig.accessToken;
+    this.env = environment;
+    mapboxgl.accessToken = this.env.mapboxConfig.accessToken;
   }
 
   public buildMap(containerID : string, deckID :string): void {
@@ -43,12 +35,12 @@ export class MapService {
   private createMapbox(containerID : string): void {
     this.map = new mapboxgl.Map({
       container: containerID,
-      style: this.style,
-      interactive: false,// Note: deck.gl will be in charge of interaction and event handling
-      center: [this.INITIAL_VIEW_STATE.longitude, this.INITIAL_VIEW_STATE.latitude],
-      zoom: this.INITIAL_VIEW_STATE.zoom,
-      bearing: this.INITIAL_VIEW_STATE.bearing,
-      pitch: this. INITIAL_VIEW_STATE.pitch
+      style: this.env.mapboxConfig.style,
+      interactive: false,//deck.gl in charge of interaction and event handling
+      center: [this.env.viewState.longitude, this.env.viewState.latitude],
+      zoom: this.env.viewState.zoom,
+      bearing: this.env.viewState.bearing,
+      pitch: this.env.viewState.pitch
     });
   }
 
@@ -57,7 +49,7 @@ export class MapService {
       canvas: deckID,
       width: '100%',
       height: '100%',
-      initialViewState: this.INITIAL_VIEW_STATE,
+      initialViewState: this.env.viewState,
       controller: true,
       getCursor: (interactiveState) => interactiveState ? "crosshair":"grab", // buggy
       onViewStateChange: ({viewState}) => {

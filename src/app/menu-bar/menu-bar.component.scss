@@ -1,0 +1,18 @@
+mat-toolbar {
+    display: flex;
+    position:  absolute;
+    font-size: 16px;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+    box-shadow: 0px 3px 10px 2px #202020;
+}
+
+mat-toolbar  > span {
+    margin: 10px;
+}
+
+#logo {
+    display: flex;
+    align-items: center;
+}

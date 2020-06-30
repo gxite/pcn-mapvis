@@ -1,0 +1,53 @@
+#topbar {
+    display: flex;
+    justify-content: flex-start;
+    background-color: rgba($color: #303030, $alpha: 1.0);
+    position: relative;
+    padding-left: 40px;
+    padding-top: 70px;
+    top:0px;
+    min-height:120px;
+}
+
+#view-title {
+    display: flex;
+    font-size: 20px;
+    font-weight: 100;
+}
+
+#drawer-toggles {
+    margin-left:20px;
+}
+
+#left-container {
+    position: fixed;
+    height: 100%;
+    background: rgba($color: #272727, $alpha: 0.5);
+}
+
+#right-container {
+    position: fixed;
+    right: 0px;
+    height: 100%;
+    background: rgba($color: #272727, $alpha: 0.5);
+}
+
+mat-drawer {
+    width: 25vw; 
+    min-width: 300px;
+    max-width: 400px;
+    padding: 25px 25px;
+    background: rgba($color: #272727, $alpha: 0.5);
+}
+
+#map{
+    min-height: 100vh;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba($color: #272727, $alpha: 1.0);
+}
+
+.deck-canvas {
+    height: 100%;
+}

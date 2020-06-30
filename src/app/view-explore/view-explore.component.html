@@ -1,0 +1,28 @@
+
+<mat-toolbar id="topbar">
+    <span id="view-title">Explore</span>
+    <span id="drawer-toggles">
+        <button mat-icon-button (click)="leftDrawer.toggle()">
+            <mat-icon>build</mat-icon>
+        </button>
+        <button mat-icon-button (click)="rightDrawer.toggle()">
+            <mat-icon>poll</mat-icon>
+        </button>
+    </span>
+</mat-toolbar>
+
+<mat-drawer-container id="left-container">
+    <mat-drawer #leftDrawer opened mode="side" position="start">
+        <p>Auto-resizing </p>
+    </mat-drawer>
+</mat-drawer-container>
+
+<mat-drawer-container id="right-container">
+    <mat-drawer #rightDrawer opened mode="side" position="end">
+        <p>Auto-resizing </p>
+    </mat-drawer>
+</mat-drawer-container>
+
+<div id="map"></div>
+<canvas id="deck-canvas"></canvas>
+<app-tooltip></app-tooltip>

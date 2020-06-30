@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { environment } from '../environments/environment';
-import { FeatureCollection } from "./pano-data";
+import { FeatureCollection } from "./panoFeatureCollection";
 
 // Firebase App (the core Firebase SDK) is always required and must be listed first
 import * as firebase from "firebase/app";
