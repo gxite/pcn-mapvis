@@ -11,7 +11,7 @@ export const environment = {
   viewState: {
     latitude: 1.3580576343735706,
     longitude: 103.80844116210938,
-    zoom: window.innerWidth < 400 ? 9 : 11,
+    zoom: window.innerWidth < 420 ? 9 : 11,
     bearing: 0,
     pitch: 30
   },

@@ -2,10 +2,13 @@ export interface NameAlias { var_name: string; var_alias: string;}
 export interface ColorPair { rgb: number[]; hex: string;}
 export interface NameColor { var_name: string; var_color: ColorPair;}
 
-export class HeartlandSettings {
+export class MasterSettings {
     layerTypes: NameAlias[] = [
         {var_name:"parkActivities",var_alias:"Activity"},
         {var_name:"parkFeatures",var_alias:"Feature"}];
+}
+
+export class HeartlandSettings extends MasterSettings{
     locations: NameAlias[] = [
         {var_name:"ecp1",var_alias:"East Coast Park 1"},
         {var_name:"ecp2",var_alias:"East Coast Park 2"},
@@ -53,17 +56,14 @@ export class HeartlandSettings {
         "Evening" : ["1530-1630","1630-1730","1730-1830","1830-1930",]};
 }
 
-export class islandSettings{
-    layerTypes: NameAlias[] = [
-        {var_name:"parkActivities",var_alias:"Activity"},
-        {var_name:"parkFeatures",var_alias:"Feature"}];
+export class IslandSettings extends MasterSettings{
     locations: NameAlias[] = [
-        {var_name:"central_urban",var_alias:"Central Urban Loop"},
-        {var_name:"eastern_coastal",var_alias:"Eastern Coastal Loop"},
-        {var_name:"northern_explorer",var_alias:"Northern Explorer Loop"},
-        {var_name:"northEastern_riverine",var_alias:"North Eastern Riverine Loop"},
-        {var_name:"southern_ridges",var_alias:"Southerb Ridges Loop"},
-        {var_name:"western_adventure",var_alias:"Western Adventure Loop"}];
+        {var_name:"central_urban",var_alias:"Central Urban"},
+        {var_name:"eastern_coastal",var_alias:"Eastern Coastal"},
+        {var_name:"northern_explorer",var_alias:"Northern Explorer"},
+        {var_name:"northEastern_riverine",var_alias:"N.Eastern Riverine"},
+        {var_name:"southern_ridges",var_alias:"Southern Ridges"},
+        {var_name:"western_adventure",var_alias:"Western Adventure"}];
     features: NameAlias[] = [
         {var_name:"Tree_Palm",var_alias:"Tree & Palm"},
         {var_name:"Grass_Field",var_alias:"Grassfields"},

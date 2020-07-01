@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -11,6 +10,7 @@ import { UIActivitiesSelectorComponent } from './ui-activities-selector/ui-activ
 import { TooltipComponent } from './tooltip/tooltip.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
@@ -18,10 +18,15 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatGridListModule } from '@angular/material/grid-list';
 import { CdkTableModule } from '@angular/cdk/table';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+
 import { MenuBarComponent } from './menu-bar/menu-bar.component';
 import { ViewExploreComponent } from './view-explore/view-explore.component';
 import { ViewAboutComponent } from './view-about/view-about.component';
+import { ViewExploreVisControlsComponent } from './view-explore-vis-controls/view-explore-vis-controls.component';
+import { SelectorTilesComponent } from './selector-tiles/selector-tiles.component';
 
 const appRoutes: Routes = [
   { path: 'view-about', component: ViewAboutComponent },
@@ -39,6 +44,8 @@ const appRoutes: Routes = [
     MenuBarComponent,
     ViewExploreComponent,
     ViewAboutComponent,
+    ViewExploreVisControlsComponent,
+    SelectorTilesComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,6 +61,9 @@ const appRoutes: Routes = [
     MatSliderModule,
     MatTabsModule,
     CdkTableModule,
+    MatGridListModule,
+    MatButtonToggleModule,
+    MatCheckboxModule,
     RouterModule.forRoot(appRoutes)
   ],
   providers: [],

@@ -1,0 +1,9 @@
+:host ::ng-deep .mat-tab-label {
+    min-width: 50%;
+    max-height: 30px;
+    font-size: 14px;
+}
+
+:host ::ng-deep .mat-tab-body {
+    min-height: 210px;
+}
