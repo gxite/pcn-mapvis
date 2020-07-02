@@ -1,6 +1,20 @@
 <mat-tab-group  mat-align-tabs="center" animationDuration="0ms" >
-    <mat-tab label="Island" >
-        <app-selector-tiles [tileList]=locations></app-selector-tiles>
+    <mat-tab #island label="Island">
+        <app-selector-tiles (selected)="test(island.textLabel,$event)" [tileList]="islandLocations"></app-selector-tiles>
+        <mat-divider></mat-divider>
+        <div class="subtitle">Pick a Feature</div> 
+        <app-selector-exp-panel 
+            [formFields]="islandFeatureFormFields"
+            [colors]="islandColors">
+        </app-selector-exp-panel>
+        <div class="subtitle">Pick an Activity</div> 
+        <app-selector-exp-panel 
+            [formFields]="islandActivityFormFields"
+            [colors]="islandColors">
+        </app-selector-exp-panel>
     </mat-tab>
-    <mat-tab label="Heartlands" ></mat-tab>
+    <mat-tab #heartland label="Heartland">
+        <app-selector-tiles (selected)="test(heartland.textLabel,$event)" [tileList]="heartlandLocations"></app-selector-tiles>
+        <mat-divider></mat-divider>
+    </mat-tab>
 </mat-tab-group>

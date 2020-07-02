@@ -2,6 +2,6 @@
     <mat-grid-tile *ngFor="let tile of tileList">
         <mat-button-toggle (change)="cb.checked = false" value={{tile.var_name}}>{{tile.var_alias}}</mat-button-toggle>
     </mat-grid-tile>
-    <mat-button-toggle-group #group="matButtonToggleGroup" (change)="test(group.value)" multiple=true></mat-button-toggle-group>
+    <mat-button-toggle-group #group="matButtonToggleGroup" (change)="update(group.value)" multiple=true></mat-button-toggle-group>
 </mat-grid-list>
-<mat-checkbox #cb (change)="isChecked()" class="checkbox-all">All</mat-checkbox>
+<mat-checkbox #cb (change)="isChecked(cb.checked)" class="checkbox-all">All</mat-checkbox>

@@ -1,12 +1,12 @@
 <mat-toolbar id="topbar">
     <span id="view-title">Explore</span>
     <span id="drawer-toggles">
-        <button mat-icon-button (click)="leftDrawer.toggle()"><mat-icon>build</mat-icon></button>
-        <button mat-icon-button (click)="rightDrawer.toggle()"><mat-icon>poll</mat-icon></button>
+        <button mat-icon-button (click)="leftDrawer.toggle(); (toHide() && rightDrawer.opened)? rightDrawer.toggle(): false "><mat-icon>build</mat-icon></button>
+        <button mat-icon-button (click)="rightDrawer.toggle(); (toHide() && leftDrawer.opened)? leftDrawer.toggle(): false "><mat-icon>poll</mat-icon></button>
     </span>
 </mat-toolbar>
 <mat-drawer-container id="left-container">
-    <button class="drawer-toggle" mat-icon-button (click)="leftDrawer.toggle()">
+    <button class="drawer-toggle" *ngIf="!toHide()" mat-icon-button (click)="leftDrawer.toggle()">
         <mat-icon *ngIf="leftDrawer.opened==false" >chevron_right</mat-icon>
         <mat-icon *ngIf="leftDrawer.opened==true">chevron_left</mat-icon>
     </button>
@@ -15,7 +15,7 @@
     </mat-drawer>
 </mat-drawer-container>
 <mat-drawer-container id="right-container">
-    <button class="drawer-toggle" mat-icon-button (click)="rightDrawer.toggle()">
+    <button class="drawer-toggle" *ngIf="!toHide()" mat-icon-button (click)="rightDrawer.toggle()">
         <mat-icon *ngIf="rightDrawer.opened==true" >chevron_right</mat-icon>
         <mat-icon *ngIf="rightDrawer.opened==false">chevron_left</mat-icon>
     </button>

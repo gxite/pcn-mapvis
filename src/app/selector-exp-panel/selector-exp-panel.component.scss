@@ -1,0 +1,23 @@
+@import '~@angular/material/theming';
+@include mat-core();
+
+$app-primary: mat-palette($mat-purple);
+$app-accent:  mat-palette($mat-pink, A200, A100, A400);
+
+$app-theme: mat-light-theme($app-primary, $app-accent);
+
+@mixin mix-app-theme($app-theme) {
+  $primary: map-get($app-theme, primary);
+
+  :host ::ng-deep .mat-expansion-panel {
+    background-color: rgba($color: #303030, $alpha: 1.0);
+  }
+}
+
+// Include the mixin
+@include mix-app-theme($app-theme);
+
+mat-panel-title {
+    display:flex;
+    align-items: center;
+}

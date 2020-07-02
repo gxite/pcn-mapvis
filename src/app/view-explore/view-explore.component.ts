@@ -16,7 +16,11 @@ export class ViewExploreComponent implements OnInit {
   constructor(private mapService: MapService,private databaseService: DatabaseService) { }
 
   ngOnInit() {
-    //this.mapService.buildMap(this.mapboxSelector,this.deckSelector);
+    //this.mapService.buildMap(this.mapboxSelector,this.deckSelector);  //to pass mapbox selector and deckselector to view-explore-vis-controls 
     //this.databaseService.fetchData("panoAction","parkFeatures","ecp1").then(data=>console.log(data));
+  }
+
+  toHide() {
+    return window.innerWidth < 420 ? true : false;
   }
 }

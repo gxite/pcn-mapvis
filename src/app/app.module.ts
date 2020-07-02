@@ -27,6 +27,7 @@ import { ViewExploreComponent } from './view-explore/view-explore.component';
 import { ViewAboutComponent } from './view-about/view-about.component';
 import { ViewExploreVisControlsComponent } from './view-explore-vis-controls/view-explore-vis-controls.component';
 import { SelectorTilesComponent } from './selector-tiles/selector-tiles.component';
+import { SelectorExpPanelComponent } from './selector-exp-panel/selector-exp-panel.component';
 
 const appRoutes: Routes = [
   { path: 'view-about', component: ViewAboutComponent },
@@ -46,6 +47,7 @@ const appRoutes: Routes = [
     ViewAboutComponent,
     ViewExploreVisControlsComponent,
     SelectorTilesComponent,
+    SelectorExpPanelComponent,
   ],
   imports: [
     BrowserModule,

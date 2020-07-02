@@ -1,6 +1,5 @@
 export interface NameAlias { var_name: string; var_alias: string;}
 export interface ColorPair { rgb: number[]; hex: string;}
-export interface NameColor { var_name: string; var_color: ColorPair;}
 
 export class MasterSettings {
     layerTypes: NameAlias[] = [
@@ -16,7 +15,8 @@ export class HeartlandSettings extends MasterSettings{
         {var_name:"mbs1",var_alias:"Marina Bay Sands"},
         {var_name:"gardens",var_alias:"Gardens by the Bay"},
         {var_name:"alexandra",var_alias:"Alexandra Canal"},
-        {var_name:"punggol",var_alias:"Punggol Canal"}];
+        {var_name:"punggol",var_alias:"Punggol Canal"}
+    ];
     features: NameAlias[] = [
         {var_name:"Tree_Palm",var_alias:"Tree & Palm"},
         {var_name:"Grass_Field",var_alias:"Grassfields"},
@@ -27,33 +27,51 @@ export class HeartlandSettings extends MasterSettings{
         {var_name:"carpark_lots_100m",var_alias:"Carpark lots within 100m"},
         {var_name:"carpark_lots_200m",var_alias:"Carpark lots within 200m"},
         {var_name:"facilities_25m",var_alias:"Facilities within 25m"},
-        {var_name:"facilities_50m",var_alias:"Facilities within 50m"}];
+        {var_name:"facilities_50m",var_alias:"Facilities within 50m"}
+    ];
     activities: NameAlias[] = [
         {var_name:"people",var_alias:"People"},
         {var_name:"people_active",var_alias:"People Active"},
-        {var_name:"people_static",var_alias:"People Static"}];
-    color: NameColor[] = [
-        {var_name:"Tree_Palm",var_color: {"rgb":[9, 232, 94], "hex":"#09e85e"}},
-        {var_name:"Grass_Field",var_color: {"rgb":[42, 252, 152],"hex":"#2aff98"}},
-        {var_name:"Plants_Flower",var_color: {"rgb":[22, 193, 114],"hex":"#16c171"}},
-        {var_name:"Sky",var_color: {"rgb":[45,225,252], "hex":"#2de0fc"}},
-        {var_name:"Path_Floor",var_color: {"rgb":[193,188,172],"hex":"#C1BCAC"}},
-        {var_name:"Built-up_Area",var_color: {"rgb":[151,155,141],"hex":"#979b8d"}},
-        {var_name:"carpark_lots_100m",var_color: {"rgb":[122,136,255], "hex":"#7a87ff"}},
-        {var_name:"carpark_lots_200m",var_color: {"rgb":[68,87,252],"hex":"#4457fc"}},
-        {var_name:"facilities_25m",var_color: {"rgb":[114,165,247],"hex":"#72a5f7"}},
-        {var_name:"acilities_50m",var_color: {"rgb":[68,139,252],"hex":"#450dfc"}},
-        {var_name:"people",var_color: {"rgb":[255,56,242],"hex":"#ff38f2"}},
-        {var_name:"people_active",var_color: {"rgb":[207,33,88], "hex":"#cf2158"}},
-        {var_name:"people_static",var_color: {"rgb":[143,33,207],"hex":"#8f21cf"}}];
-    timeOfWeek: string[] = ["Weekday","Weekend"];
-    timeOfDay: string[] = ["Morning","Evening"];
-    timeslot1 = {
+        {var_name:"people_static",var_alias:"People Static"}
+    ];
+    color = {
+        "Tree_Palm": {"rgb":[9, 232, 94], "hex":"#09e85e"},
+        "Grass_Field": {"rgb":[42, 252, 152],"hex":"#2aff98"},
+        "Plants_Flower": {"rgb":[22, 193, 114],"hex":"#16c171"},
+        "Sky": {"rgb":[45,225,252], "hex":"#2de0fc"},
+        "Path_Floor": {"rgb":[193,188,172],"hex":"#C1BCAC"},
+        "Built-up_Area": {"rgb":[151,155,141],"hex":"#979b8d"},
+        "carpark_lots_100m": {"rgb":[122,136,255], "hex":"#7a87ff"},
+        "carpark_lots_200m": {"rgb":[68,87,252],"hex":"#4457fc"},
+        "facilities_25m": {"rgb":[114,165,247],"hex":"#72a5f7"},
+        "acilities_50m": {"rgb":[68,139,252],"hex":"#450dfc"},
+        "people": {"rgb":[255,56,242],"hex":"#ff38f2"},
+        "people_active": {"rgb":[207,33,88], "hex":"#cf2158"},
+        "people_static": {"rgb":[143,33,207],"hex":"#8f21cf"}
+    };
+    activityFormFields: NameAlias[] = [
+        {var_name:"activities",var_alias:"Activity"},
+        {var_name:"timeOfWeek",var_alias:"Time of Week"},
+        {var_name:"timeOfDay",var_alias:"Time of Day"},
+        /* {var_name:"timeslot",var_alias:"Timeslot"} */  
+    ];
+    featureFormFields: NameAlias[] = [
+        {var_name:"features",var_alias:"Features"}
+    ];
+    timeOfWeek: NameAlias[] = [
+        {var_name:"wd",var_alias:"Weekday"},
+        {var_name:"we",var_alias:"Weekend"}
+    ];
+    timeOfDay: NameAlias[] = [
+        {var_name:"m",var_alias:"Morning"},
+        {var_name:"e",var_alias:"Evening"},
+    ];
+/*     timeslot1 = {
         "Morning" : ["0700-0745","0745-0830","0830-0915","0915-1000","1000-1045"],
         "Evening" : ["1530-1620","1620-1710","1710-1800","1800-1850","1850-1940","1940-2030"]}; 
     timeslot2 = { //for punggol & alexandra
         "Morning" : ["0700-0800","0800-0900","0900-1000","1000-1100",],
-        "Evening" : ["1530-1630","1630-1730","1730-1830","1830-1930",]};
+        "Evening" : ["1530-1630","1630-1730","1730-1830","1830-1930",]}; */ //flatten all timeslots into a single NameAlias[]
 }
 
 export class IslandSettings extends MasterSettings{
@@ -63,30 +81,41 @@ export class IslandSettings extends MasterSettings{
         {var_name:"northern_explorer",var_alias:"Northern Explorer"},
         {var_name:"northEastern_riverine",var_alias:"N.Eastern Riverine"},
         {var_name:"southern_ridges",var_alias:"Southern Ridges"},
-        {var_name:"western_adventure",var_alias:"Western Adventure"}];
+        {var_name:"western_adventure",var_alias:"Western Adventure"}
+    ];
     features: NameAlias[] = [
         {var_name:"Tree_Palm",var_alias:"Tree & Palm"},
         {var_name:"Grass_Field",var_alias:"Grassfields"},
         {var_name:"Plants_Flower",var_alias:"Plants & Hedges"},
         {var_name:"Sky",var_alias:"Sky"},
         {var_name:"Path_Floor",var_alias:"Path & Open Spaces"},
-        {var_name:"Built-up_Area",var_alias:"Built-up Area"}];
+        {var_name:"Built-up_Area",var_alias:"Built-up Area"}
+    ];
     activities: NameAlias[] = [
         {var_name:"people",var_alias:"People"},
-        {var_name:"bicycles",var_alias:"Bicycles"},
-        {var_name:"vehicles",var_alias:"Vehicles"}];  
-    color: NameColor[] = [
-        {var_name:"Tree_Palm",var_color: {"rgb":[9, 232, 94], "hex":"#09e85e"}},
-        {var_name:"Grass_Field",var_color: {"rgb":[42, 252, 152],"hex":"#2aff98"}},
-        {var_name:"Plants_Flower",var_color: {"rgb":[22, 193, 114],"hex":"#16c171"}},
-        {var_name:"Sky",var_color: {"rgb":[45,225,252], "hex":"#2de0fc"}},
-        {var_name:"Path_Floor",var_color: {"rgb":[193,188,172],"hex":"#C1BCAC"}},
-        {var_name:"Built-up_Area",var_color: {"rgb":[151,155,141],"hex":"#979b8d"}},
-        {var_name:"people",var_color: {"rgb":[255,56,242],"hex":"#ff38f2"}},
-        {var_name:"bicycles",var_color: {"rgb":[207,33,88], "hex":"#cf2158"}},
-        {var_name:"vehicles",var_color: {"rgb":[143,33,207],"hex":"#8f21cf"}}];
+        //{var_name:"bicycles",var_alias:"Bicycles"},
+        //{var_name:"vehicles",var_alias:"Vehicles"}
+    ];  
+    color = {
+        "Tree_Palm": {"rgb":[9, 232, 94], "hex":"#09e85e"},
+        "Grass_Field": {"rgb":[42, 252, 152],"hex":"#2aff98"},
+        "Plants_Flower": {"rgb":[22, 193, 114],"hex":"#16c171"},
+        "Sky": {"rgb":[45,225,252], "hex":"#2de0fc"},
+        "Path_Floor": {"rgb":[193,188,172],"hex":"#C1BCAC"},
+        "Built-up_Area": {"rgb":[151,155,141],"hex":"#979b8d"},
+        "people": {"rgb":[255,56,242],"hex":"#ff38f2"},
+        "bicycles": {"rgb":[207,33,88], "hex":"#cf2158"},
+        "vehicles": {"rgb":[143,33,207],"hex":"#8f21cf"}
+    };
+    activityFormFields: NameAlias[] = [
+        {var_name:"activities",var_alias:"Activity"}
+    ];
+    featureFormFields: NameAlias[] = [
+        {var_name:"features",var_alias:"Features"}
+    ];       
 }
 
+export const featureSelectorSettings = []
 
 //legacy code for old implementation. retained to facilitate transition.
 export const locations :string[] = [

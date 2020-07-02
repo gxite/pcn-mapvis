@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, Input, Output, ViewChild, ViewChildren, QueryList, EventEmitter } from '@angular/core';
 import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material';
 
 @Component({
@@ -11,7 +11,7 @@ export class SelectorTilesComponent implements OnInit {
   @ViewChildren(MatButtonToggle) toggles: QueryList<MatButtonToggle>;
 
   @Input() tileList: [];
-  checkAll: boolean = false;
+  @Output() selected = new EventEmitter();
 
   constructor() { }
 
@@ -24,16 +24,16 @@ export class SelectorTilesComponent implements OnInit {
     });
   }
 
-  test(a) {
-    console.log(a);
+  isChecked(checked: boolean) {
+    if (checked) {
+      this.toggles.forEach(toggle => {toggle.checked = toggle.checked ? true : true});
+    }
+    else {
+      this.toggles.forEach(toggle => {toggle.checked = toggle.checked ? false : false});
+    }
   }
 
-  isChecked() {
-      this.toggles.forEach(toggle => {toggle.checked = !toggle.checked});
+  update(selection: string[]) {
+    this.selected.emit(selection);
   }
-
-  resetCheckAll() {
-    console.log(this.checkAll)
-  }
-
 }

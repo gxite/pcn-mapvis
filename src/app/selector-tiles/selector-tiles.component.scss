@@ -18,15 +18,22 @@ $app-theme: mat-light-theme($app-primary, $app-accent);
     background-color: rgba($color: #303030, $alpha: 1.0);
   }
 
+  :host ::ng-deep .mat-button-toggle-button {
+    height:100%;
+  }
+
   .mat-button-toggle-checked {
     background-color: mat-color($primary);
     font-weight: bold;
-
+    
     .mat-button-toggle-label-content{
+        display: flex;
         color: $light-primary-text;
+        text-align: justify;
+        align-items: center;
+
     }
   }
-
   :host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
     background-color: mat-color($primary);
   }

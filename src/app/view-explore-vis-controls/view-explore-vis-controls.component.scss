@@ -5,5 +5,23 @@
 }
 
 :host ::ng-deep .mat-tab-body {
-    min-height: 210px;
+    min-height: 350px;
+    height:100%;
+}
+
+.title {
+    margin-top: 20px;
+    font-size: 16px;
+    font-weight: 100;
+}
+
+mat-divider {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-weight: 100;
 }
