@@ -1,3 +1,4 @@
+export const INNER_WIDTH_THRESHOLD = 420;
 export interface NameAlias { var_name: string; var_alias: string;}
 export interface ColorPair { rgb: number[]; hex: string;}
 
@@ -44,7 +45,7 @@ export class HeartlandSettings extends MasterSettings{
         "carpark_lots_100m": {"rgb":[122,136,255], "hex":"#7a87ff"},
         "carpark_lots_200m": {"rgb":[68,87,252],"hex":"#4457fc"},
         "facilities_25m": {"rgb":[114,165,247],"hex":"#72a5f7"},
-        "acilities_50m": {"rgb":[68,139,252],"hex":"#450dfc"},
+        "facilities_50m": {"rgb":[68,139,252],"hex":"#450dfc"},
         "people": {"rgb":[255,56,242],"hex":"#ff38f2"},
         "people_active": {"rgb":[207,33,88], "hex":"#cf2158"},
         "people_static": {"rgb":[143,33,207],"hex":"#8f21cf"}
@@ -79,9 +80,10 @@ export class IslandSettings extends MasterSettings{
         {var_name:"central_urban",var_alias:"Central Urban"},
         {var_name:"eastern_coastal",var_alias:"Eastern Coastal"},
         {var_name:"northern_explorer",var_alias:"Northern Explorer"},
-        {var_name:"northEastern_riverine",var_alias:"N.Eastern Riverine"},
+        {var_name:"north_eastern_riverine",var_alias:"N.Eastern Riverine"},
         {var_name:"southern_ridges",var_alias:"Southern Ridges"},
-        {var_name:"western_adventure",var_alias:"Western Adventure"}
+        {var_name:"western_adventure",var_alias:"Western Adventure"},
+        {var_name:"downtown",var_alias:"Downtown"}
     ];
     features: NameAlias[] = [
         {var_name:"Tree_Palm",var_alias:"Tree & Palm"},

@@ -1,6 +1,7 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
+import {INNER_WIDTH_THRESHOLD} from "../app/panoSettings"
 
 export const environment = {
   production: false,
@@ -11,7 +12,7 @@ export const environment = {
   viewState: {
     latitude: 1.3580576343735706,
     longitude: 103.80844116210938,
-    zoom: window.innerWidth < 420 ? 9 : 11,
+    zoom: window.innerWidth < INNER_WIDTH_THRESHOLD ? 9 : 11,
     bearing: 0,
     pitch: 30
   },

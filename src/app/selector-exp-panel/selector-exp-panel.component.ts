@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-selector-exp-panel',
@@ -14,6 +14,7 @@ export class SelectorExpPanelComponent implements OnInit {
 
   @Input() formFields;
   @Input() colors;
+  @Output() selected = new EventEmitter();
 
   constructor() { }
 
@@ -30,12 +31,27 @@ export class SelectorExpPanelComponent implements OnInit {
   }
 
   setColor() {
-    if (this.colors[this.selectedValue.var_name]) {
-      this.selectedColor = this.colors[this.selectedValue.var_name].hex;
+    if(this.selectedValue!=undefined) { 
+      if (this.colors[this.selectedValue.var_name]) {
+        this.selectedColor = this.colors[this.selectedValue.var_name].hex;
+      }
+    } else {
+      this.selectedColor="";
+      this.selectedValueAlias="";
     }
   }
 
   setAlias() {
-    this.selectedValueAlias = this.selectedValue.var_alias;
+    if(this.selectedValue!=undefined) {
+      this.selectedValueAlias = this.selectedValue.var_alias;
+    }
+  }
+
+  update() {
+    if(this.selectedValue!=undefined) {
+      this.selected.emit(this.selectedValue.var_name);
+    }else {
+      this.selected.emit(null);
+    }
   }
 }

@@ -1,3 +1,9 @@
+#window {
+    width: 100%;
+    height: 87%;
+    position: relative;
+}
+
 #topbar {
     display: flex;
     justify-content: space-between;
@@ -6,8 +12,8 @@
     padding-left: 18px;
     padding-right: 8px;
     padding-top: 70px;
-    top:0px;
     min-height:120px;
+    height: 13%;
 }
 
 #view-title {
@@ -42,14 +48,14 @@ mat-drawer {
 }
 
 #map{
-    min-height: 100vh;
-    position: fixed;
-    width: 100%;
     height: 100%;
+    position: absolute;
+    width: 100%;
     background-color: rgba($color: #272727, $alpha: 1.0);
 }
 
 .deck-canvas {
+    position: absolute;
     height: 100%;
 }
 

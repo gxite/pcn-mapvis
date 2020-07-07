@@ -3,11 +3,12 @@ import { Injectable } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 import { Deck } from '@deck.gl/core';
 import { LineLayer } from '@deck.gl/layers';
-import * as pano from './panoSettings';
+import { ColorPair } from './panoSettings';
 import { Line, FeatureCollection } from "./panoFeatureCollection";
 import { environment } from '../environments/environment';
-import { TooltipComponent } from './tooltip/tooltip.component'
+import { TooltipComponent } from './tooltip/tooltip.component';
 
+import * as pano from './panoSettings';
 
 @Injectable({
   providedIn: 'root'
@@ -99,10 +100,42 @@ export class MapService {
     }   
   }
 
+  public render(): void {
+    let newLayers=[];
+    Object.keys(this.layersState).forEach(key=> {
+      newLayers.push(this.createLineLayer(
+        this.layersState[key][0],
+        this.layersState[key][1],
+        this.layersState[key][2],
+        this.layersState[key][3],
+        this.layersState[key][4],
+        this.layersState[key][5])) 
+    });
+    this.deck.setProps({layers: newLayers});
+  }
+
+  public clearLayerState() {
+    this.layersState = {};
+  }
+
+  public updateLayerStates(type: string, featureLayerNum: number): void {
+    const length = Object.keys(this.layersState).length;
+    for (let i=length; i>featureLayerNum; i--) {
+      delete this.layersState[type+"_"+i.toString()];
+    }
+  }
+
   private activityAtTimeslot(data: Line[],timeOfWeek: string,timeOfDay: string,timeslot: string): Line[] {
     return this.fc.timeslot(data,timeOfWeek,timeOfDay,timeslot);
   }
   
+  public addToRender(dataSrc: Promise<Line[]>, selected: string, color: ColorPair, selectorID: string, isVisible: boolean): void {
+    this.layersState[selectorID] = [selectorID, dataSrc, color.rgb, 5,selected,isVisible]
+  }
+
+
+  //-----------------------------------------------Legacy-------
+
   //timeOfWeek selected
   private activityAggregateTimeOfWeek(data: Line[], timeOfWeek: string): Line[] { 
     return this.fc.week(data,timeOfWeek);
@@ -116,27 +149,6 @@ export class MapService {
   //timeOfDay and timeOfWeek selected
   private activityAtPeriod(data: Line[],timeOfWeek: string,timeOfDay: string): Line[] {
     return this.fc.period(data,timeOfWeek,timeOfDay);
-  }
-
-  public updateLayerStates(type: string, featureLayerNum: number): void {
-    const length = Object.keys(this.layersState).length;
-    for (let i=length; i>featureLayerNum; i--) {
-      delete this.layersState[type+"_"+i.toString()];
-    }
-  }
-
-  public render(): void {
-    let newLayers=[];
-    Object.keys(this.layersState).forEach(key=> {
-      newLayers.push(this.createLineLayer(
-        this.layersState[key][0],
-        this.layersState[key][1],
-        this.layersState[key][2],
-        this.layersState[key][3],
-        this.layersState[key][4],
-        this.layersState[key][5])) 
-    });
-    this.deck.setProps({layers: newLayers});
   }
 
   public getLayerPromise(selectorID: string, selectedProperties:string): Promise<number[]> {

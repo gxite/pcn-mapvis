@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MapService } from '../map.service';
-import { DatabaseService } from '../database.service';
-
+import { INNER_WIDTH_THRESHOLD } from '../panoSettings';
 
 @Component({
   selector: 'app-view-explore',
@@ -12,15 +11,16 @@ export class ViewExploreComponent implements OnInit {
 
   mapboxSelector: string = "map";
   deckSelector: string = "deck-canvas";
+  mapService; 
 
-  constructor(private mapService: MapService,private databaseService: DatabaseService) { }
+  constructor(private ms: MapService) { }
 
   ngOnInit() {
-    //this.mapService.buildMap(this.mapboxSelector,this.deckSelector);  //to pass mapbox selector and deckselector to view-explore-vis-controls 
-    //this.databaseService.fetchData("panoAction","parkFeatures","ecp1").then(data=>console.log(data));
+    this.mapService = this.ms;
+    this.mapService.buildMap(this.mapboxSelector,this.deckSelector);  //to pass mapbox selector and deckselector to view-explore-vis-controls 
   }
 
   toHide() {
-    return window.innerWidth < 420 ? true : false;
+    return window.innerWidth < INNER_WIDTH_THRESHOLD ? true : false;
   }
 }

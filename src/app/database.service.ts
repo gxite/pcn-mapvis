@@ -47,5 +47,5 @@ export class DatabaseService {
   }
 }
 
-type panoCategory = "panoAction" | "panoObject";
-type panoType = "parkActivities" | "parkFeatures";
+export type panoCategory = "panoAction" | "panoObject";
+export type panoType = "parkActivities" | "parkFeatures";

@@ -1,3 +1,4 @@
+
 <mat-toolbar id="topbar">
     <span id="view-title">Explore</span>
     <span id="drawer-toggles">
@@ -5,13 +6,14 @@
         <button mat-icon-button (click)="rightDrawer.toggle(); (toHide() && leftDrawer.opened)? leftDrawer.toggle(): false "><mat-icon>poll</mat-icon></button>
     </span>
 </mat-toolbar>
+
 <mat-drawer-container id="left-container">
     <button class="drawer-toggle" *ngIf="!toHide()" mat-icon-button (click)="leftDrawer.toggle()">
         <mat-icon *ngIf="leftDrawer.opened==false" >chevron_right</mat-icon>
         <mat-icon *ngIf="leftDrawer.opened==true">chevron_left</mat-icon>
     </button>
     <mat-drawer #leftDrawer mode="side" position="start">
-        <app-view-explore-vis-controls></app-view-explore-vis-controls>
+        <app-view-explore-vis-controls [mapService]="mapService"></app-view-explore-vis-controls>
     </mat-drawer>
 </mat-drawer-container>
 <mat-drawer-container id="right-container">
@@ -22,6 +24,9 @@
     <mat-drawer #rightDrawer mode="side" position="end">
     </mat-drawer>
 </mat-drawer-container>
-<div id="map"></div>
-<canvas id="deck-canvas"></canvas>
+
+<div id="window">
+    <div id="map"></div>
+    <canvas id="deck-canvas"></canvas>
+</div>
 <app-tooltip></app-tooltip>

@@ -2,7 +2,10 @@
     <mat-expansion-panel-header>
         <mat-panel-title>
             <mat-icon  [ngStyle]="{'color':selectedColor,'transform':'scale(0.9)'}">brightness_1</mat-icon>
-            <button mat-icon-button [ngStyle]="{'color':selectedColor,'margin-left': '5px'}" disableRipple=true (click)="toggleVisibility();$event.stopPropagation()">
+            <button mat-icon-button 
+                [ngStyle]="{'color':selectedColor,'margin-left': '5px'}" 
+                disableRipple=true 
+                (click)="toggleVisibility();$event.stopPropagation()">
                 <mat-icon>{{isVisible()}}</mat-icon>
               </button>
             {{selectedValueAlias}}
@@ -10,7 +13,7 @@
     </mat-expansion-panel-header>
     <mat-form-field *ngFor="let field of formFields">
         <mat-label>{{field.var_alias}}</mat-label>
-        <mat-select #selection [(value)]="selectedValue" (selectionChange)="setColor();setAlias()">
+        <mat-select #selection [(value)]="selectedValue" (selectionChange)="setColor();setAlias();update()">
             <mat-option>None</mat-option>
             <mat-option [value]="option" *ngFor="let option of field.var_options">{{option.var_alias}}</mat-option>
         </mat-select>

@@ -4,4 +4,4 @@
     </mat-grid-tile>
     <mat-button-toggle-group #group="matButtonToggleGroup" (change)="update(group.value)" multiple=true></mat-button-toggle-group>
 </mat-grid-list>
-<mat-checkbox #cb (change)="isChecked(cb.checked)" class="checkbox-all">All</mat-checkbox>
+<mat-checkbox #cb (change)="isChecked(cb.checked);update(group.value)" class="checkbox-all">All</mat-checkbox>
