@@ -16,6 +16,7 @@
         <app-view-explore-vis-controls [mapService]="mapService"></app-view-explore-vis-controls>
     </mat-drawer>
 </mat-drawer-container>
+
 <mat-drawer-container id="right-container">
     <button class="drawer-toggle" *ngIf="!toHide()" mat-icon-button (click)="rightDrawer.toggle()">
         <mat-icon *ngIf="rightDrawer.opened==true" >chevron_right</mat-icon>

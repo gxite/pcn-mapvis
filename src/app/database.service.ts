@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 
 import { environment } from '../environments/environment';
 import { FeatureCollection } from "./panoFeatureCollection";
-import { NameAlias } from "./panoSettings";
 
 // Firebase App (the core Firebase SDK) is always required and must be listed first
 import * as firebase from "firebase/app";
@@ -25,16 +24,43 @@ export class DatabaseService {
   }
   
   public fetchData(category: panoCategory, type: panoType, location: string): Promise<FeatureCollection> {
-    if (!this.cache[category][type][location]) {
-      return this.cache[category][type][location] = new Promise<FeatureCollection>((resolve,reject) => {
-        this.firebase.ref(category+"/"+type+"/"+location).on('value',(snapshot)=> {
-          resolve(snapshot.val());
-          console.log("Fetched Successful.");
-        })
-      });
+    let id = this.generateCacheId(category,type,location);
+    
+    if (!this.isCached(id)) {
+      this.setCache(id);
+      return this.getCache(id);
     }
-    return this.cache[category][type][location];
-}
+    return this.getCache(id);
+  }
+
+  private isCached(id: cacheId) {
+    return this.cache[id.category][id.type][id.location]; 
+  }
+
+  private setCache(id: cacheId) {
+    this.cache[id.category][id.type][id.location] = this.firebaseFetch(id);
+  }
+
+  private getCache(id: cacheId) {
+    return this.cache[id.category][id.type][id.location];
+  }
+
+  private firebaseFetch(id: cacheId): Promise<FeatureCollection> {
+    return new Promise<FeatureCollection>((resolve,reject) => {
+      this.firebase.ref(this.getDatabaseAddress(id)).on('value',(snapshot)=> {
+        resolve(snapshot.val());
+        console.log("Fetched Successful.");
+      })
+    });
+  }
+
+  private getDatabaseAddress(id: cacheId): string {
+    return id.category+"/"+id.type+"/"+id.location;
+  }
+
+  private generateCacheId(category: panoCategory, type: panoType, location: string): cacheId{
+    return {category,type,location};
+  }
 
   //legacy code for old implementation. retained to facilitate transition.
   public getLocationData(locationSelection: string, layerType: string): Promise<FeatureCollection> {
@@ -49,3 +75,9 @@ export class DatabaseService {
 
 export type panoCategory = "panoAction" | "panoObject";
 export type panoType = "parkActivities" | "parkFeatures";
+
+interface cacheId {
+  category: panoCategory;
+  type: panoType;
+  location: string
+}
