@@ -10,11 +10,12 @@ export class SelectorExpPanelComponent implements OnInit {
   selectedColor;
   selectedValue;
   selectedValueAlias;
-  visible: boolean = true;
+  visibility: boolean = true;
 
   @Input() formFields;
   @Input() colors;
   @Output() selected = new EventEmitter();
+  @Output() visible = new EventEmitter();
 
   constructor() { }
 
@@ -22,12 +23,13 @@ export class SelectorExpPanelComponent implements OnInit {
   }
 
   isVisible() {
-    if (this.visible) {return "visibility";}
+    if (this.visibility) {return "visibility";}
     else {return "visibility_off";}
   }
 
   toggleVisibility() {
-    this.visible = !this.visible;
+    this.visibility = !this.visibility;
+    this.update();
   }
 
   setColor() {
@@ -50,6 +52,7 @@ export class SelectorExpPanelComponent implements OnInit {
   update() {
     if(this.selectedValue!=undefined) {
       this.selected.emit(this.selectedValue.var_name);
+      this.visible.emit(this.visibility);
     }else {
       this.selected.emit(null);
     }

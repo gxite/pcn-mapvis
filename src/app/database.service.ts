@@ -8,6 +8,11 @@ import * as firebase from "firebase/app";
 import "firebase/database";
 import "firebase/firestore";
 
+export type panoCategory = "panoAction" | "panoObject";
+export type panoType = "parkActivities" | "parkFeatures";
+
+interface cacheId {category: panoCategory;type: panoType;location: string}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -71,13 +76,4 @@ export class DatabaseService {
         })
       });
   }
-}
-
-export type panoCategory = "panoAction" | "panoObject";
-export type panoType = "parkActivities" | "parkFeatures";
-
-interface cacheId {
-  category: panoCategory;
-  type: panoType;
-  location: string
 }

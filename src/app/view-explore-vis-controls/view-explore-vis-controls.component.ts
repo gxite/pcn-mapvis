@@ -4,6 +4,10 @@ import { DatabaseService, panoCategory, panoType } from '../database.service';
 
 import { FeatureCollection, Line } from "../panoFeatureCollection";
 
+type Tab = "Island" | "Heartland";
+type SelectorType = "feature" | "activity";
+interface Selector { value: string; visibility: boolean};
+
 @Component({
   selector: 'app-view-explore-vis-controls',
   templateUrl: './view-explore-vis-controls.component.html',
@@ -28,15 +32,14 @@ export class ViewExploreVisControlsComponent implements OnInit {
   heartlandColors= this.heartland.color;
 
   selectedLocations = [];
-  selectedFeature;
-  selectedActivity;
+  selectedFeature: Selector = { value:null, visibility: null};
+  selectedActivity: Selector = { value:null, visibility: null};
 
   currentTab: Tab = "Island"; //default
 
   fc = new FeatureCollection;
 
-  constructor(
-    private databaseService: DatabaseService) {}
+  constructor(private databaseService: DatabaseService) {}
 
   ngOnInit(){}
 
@@ -47,17 +50,33 @@ export class ViewExploreVisControlsComponent implements OnInit {
   
   setLocations(selection: string[]) {this.selectedLocations = selection;}
 
-  setFeature(selection: string) {
-    this.selectedFeature = selection;
-    if (this.selectedFeature == null) {
+  setSelector(type: SelectorType, value: string) {
+    let selected;
+    switch(type) {
+      case "feature": selected=this.selectedFeature;break;
+      case "activity": selected=this.selectedActivity;break;
+    }
+
+    if (selected != null) {
+      selected.value = value;
+    }
+    else {
       this.mapService.clearLayerState();
       this.mapService.render();
     }
   }
 
-  setActivity(selection: string) {
-    this.selectedActivity = selection;
-    if (this.selectedActivity == null) {
+  setVisibility(type: SelectorType, visibility: boolean) {
+    let selected;
+    switch(type) {
+      case "feature": selected=this.selectedFeature;break;
+      case "activity": selected=this.selectedActivity;break;
+    }
+
+    if (selected != null) {
+      selected.visibility = visibility;
+    }
+    else {
       this.mapService.clearLayerState();
       this.mapService.render();
     }
@@ -86,13 +105,13 @@ export class ViewExploreVisControlsComponent implements OnInit {
     //runs every user interaction to check and update state
     if (this.selectedLocations) {
       this.mapService.clearLayerState();
-      if (this.selectedFeature) {this.selectedLocations.map(location=>this.addToMap(this.currentTab,"parkFeatures",location));}
-      if (this.selectedActivity) {this.selectedLocations.map(location=>this.addToMap(this.currentTab,"parkActivities",location));}
+      if (this.selectedFeature.value != null) {this.selectedLocations.map(location=>this.addToMap(this.currentTab,"parkFeatures",location));}
+      if (this.selectedActivity.value != null) {this.selectedLocations.map(location=>this.addToMap(this.currentTab,"parkActivities",location));}
       this.mapService.render();
     } 
   }
 
-  addToMap(tab: Tab, type: panoType, location) {
+  private addToMap(tab: Tab, type: panoType, location) {
 
     let category =this.getDatabaseCategory(tab);
     let dataSrc = this.databaseService.fetchData(category,type,location).then(data =>this.fc.transformToLine(data));
@@ -107,19 +126,16 @@ export class ViewExploreVisControlsComponent implements OnInit {
     switch(type){
       case "parkFeatures":
         id = this.generateID(location,"feature");
-        this.mapService.addToRender(dataSrc,this.selectedFeature,color[this.selectedFeature],id,true);
+        this.mapService.addToRender(dataSrc,this.selectedFeature.value,color[this.selectedFeature.value],id,this.selectedFeature.visibility);
         break;
       case "parkActivities":
-        id = this.generateID(location,"activities");
-        this.mapService.addToRender(dataSrc,this.selectedActivity,color[this.selectedActivity],id,true);
+        id = this.generateID(location,"activity");
+        this.mapService.addToRender(dataSrc,this.selectedActivity.value,color[this.selectedActivity.value],id,this.selectedActivity.visibility);
         break;
     }
   }
 
-  private generateID(location: string,selection: string) {  //implement a more robust id gen
+  private generateID(location: string,selection: string) {
     return location+selection;
   }
-
 }
-
-type Tab = "Island" | "Heartland";

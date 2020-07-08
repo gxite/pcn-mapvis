@@ -8,13 +8,15 @@
         <div class="subtitle">Pick a Feature</div> 
         <app-selector-exp-panel 
             [formFields]="islandFeatureFormFields"
-            (selected)="setFeature($event);update()"
+            (selected)="setSelector('feature',$event);update()"
+            (visible)="setVisibility('feature',$event);update()"
             [colors]="islandColors">
         </app-selector-exp-panel>
         <div class="subtitle">Pick an Activity</div> 
         <app-selector-exp-panel 
             [formFields]="islandActivityFormFields"
-            (selected)="setActivity($event);update()"
+            (selected)="setSelector('activity',$event);update()"
+            (visible)="setVisibility('activity',$event);update()"
             [colors]="islandColors">
         </app-selector-exp-panel>
     </mat-tab>
