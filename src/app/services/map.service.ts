@@ -3,12 +3,12 @@ import { Injectable } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 import { Deck } from '@deck.gl/core';
 import { LineLayer } from '@deck.gl/layers';
-import { ColorPair } from './panoSettings';
-import { Line, FeatureCollection } from "./panoFeatureCollection";
-import { environment } from '../environments/environment';
-import { TooltipComponent } from './tooltip/tooltip.component';
+import { ColorPair } from 'src/app/panoSettings';
+import { Line, FeatureCollection } from "src/app/panoFeatureCollection";
+import { environment } from 'src/environments/environment';
+import { TooltipComponent } from 'src/app/tooltip/tooltip.component';
 
-import * as pano from './panoSettings';
+import * as pano from 'src/app/panoSettings';//--legacy
 
 @Injectable({
   providedIn: 'root'

@@ -4,7 +4,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MapvisComponent } from './mapvis/mapvis.component';
 import { UIFeaturesSelectorComponent } from './ui-features-selector/ui-features-selector.component';
 import { UIActivitiesSelectorComponent } from './ui-activities-selector/ui-activities-selector.component';
 import { TooltipComponent } from './tooltip/tooltip.component';
@@ -23,11 +22,11 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { MenuBarComponent } from './menu-bar/menu-bar.component';
-import { ViewExploreComponent } from './view-explore/view-explore.component';
-import { ViewAboutComponent } from './view-about/view-about.component';
-import { ViewExploreVisControlsComponent } from './view-explore-vis-controls/view-explore-vis-controls.component';
-import { SelectorTilesComponent } from './selector-tiles/selector-tiles.component';
-import { SelectorExpPanelComponent } from './selector-exp-panel/selector-exp-panel.component';
+import { ViewExploreComponent } from './views/view-explore/view-explore.component';
+import { ViewAboutComponent } from './views/view-about/view-about.component';
+import { ViewExploreVisControlsComponent } from './views/view-explore-vis-controls/view-explore-vis-controls.component';
+import { SelectorTilesComponent } from 'src/app/selectors/selector-tiles/selector-tiles.component';
+import { SelectorExpPanelComponent } from 'src/app/selectors/selector-exp-panel/selector-exp-panel.component';
 
 const appRoutes: Routes = [
   { path: 'view-about', component: ViewAboutComponent },
@@ -38,7 +37,6 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    MapvisComponent,
     UIFeaturesSelectorComponent,
     UIActivitiesSelectorComponent,
     TooltipComponent,

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { environment } from '../environments/environment';
-import { FeatureCollection } from "./panoFeatureCollection";
+import { environment } from '../../environments/environment';
+import { FeatureCollection } from "../panoFeatureCollection";
 
 // Firebase App (the core Firebase SDK) is always required and must be listed first
 import * as firebase from "firebase/app";
@@ -67,6 +67,9 @@ export class DatabaseService {
     return {category,type,location};
   }
 
+
+
+  
   //legacy code for old implementation. retained to facilitate transition.
   public getLocationData(locationSelection: string, layerType: string): Promise<FeatureCollection> {
       return new Promise((resolve,reject) => {

@@ -1,8 +1,8 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 
-import * as pano from '../panoSettings';
+import * as pano from 'src/app/panoSettings';
 import { FeatureCollection, Line } from "../panoFeatureCollection";
-import { DatabaseService } from '../database.service';
+import { DatabaseService } from 'src/app/services/database.service';
 import * as ss from "simple-statistics";
 
 @Component({

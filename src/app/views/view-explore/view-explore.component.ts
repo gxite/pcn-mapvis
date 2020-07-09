@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MapService } from '../map.service';
-import { INNER_WIDTH_THRESHOLD } from '../panoSettings';
+import { MapService } from 'src/app/services/map.service';
+import { INNER_WIDTH_THRESHOLD } from 'src/app/panoSettings';
 
 @Component({
   selector: 'app-view-explore',

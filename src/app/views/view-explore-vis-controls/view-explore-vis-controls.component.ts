@@ -1,8 +1,8 @@
 import { Component, OnInit, Input} from '@angular/core';
-import { IslandSettings, HeartlandSettings, NameAlias } from '../panoSettings';
-import { DatabaseService, panoCategory, panoType } from '../database.service';
+import { IslandSettings, HeartlandSettings, NameAlias } from 'src/app/panoSettings';
+import { DatabaseService, panoCategory, panoType } from 'src/app/services/database.service';
 
-import { FeatureCollection, Line } from "../panoFeatureCollection";
+import { FeatureCollection} from "src/app/panoFeatureCollection";
 
 type Tab = "Island" | "Heartland";
 type SelectorType = "feature" | "activity";
