@@ -1,13 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ViewExploreStatisticsViewerComponent } from './view-explore-statistics-viewer/view-explore-statistics-viewer.component';
-
-
+import { HistogramComponent } from './histogram/histogram.component'
 
 @NgModule({
-  declarations: [ViewExploreStatisticsViewerComponent],
+  declarations: [
+    HistogramComponent,
+  ],
   imports: [
     CommonModule
+  ],
+  exports: [
+    HistogramComponent
   ]
 })
 export class StatisticsModule { }

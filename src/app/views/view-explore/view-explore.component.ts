@@ -11,13 +11,13 @@ export class ViewExploreComponent implements OnInit {
 
   mapboxSelector: string = "map";
   deckSelector: string = "deck-canvas";
-  mapService; 
+  mapService: MapService; //variable to allow the mapService instance to be bounded and passed to child 
 
   constructor(private ms: MapService) { }
 
   ngOnInit() {
     this.mapService = this.ms;
-    this.mapService.buildMap(this.mapboxSelector,this.deckSelector);  //to pass mapbox selector and deckselector to view-explore-vis-controls 
+    this.mapService.buildMap(this.mapboxSelector,this.deckSelector); 
   }
 
   toHide() {

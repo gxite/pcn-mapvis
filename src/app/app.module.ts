@@ -28,6 +28,10 @@ import { ViewExploreVisControlsComponent } from './views/view-explore-vis-contro
 import { SelectorTilesComponent } from 'src/app/selectors/selector-tiles/selector-tiles.component';
 import { SelectorExpPanelComponent } from 'src/app/selectors/selector-exp-panel/selector-exp-panel.component';
 
+import { StatisticsModule } from 'src/app/statistics/statistics.module';
+import { ViewExploreStatisticViewerComponent } from './views/view-explore-statistic-viewer/view-explore-statistic-viewer.component';
+import { DisplayHistogramExpPanelComponent } from './display-histogram-exp-panel/display-histogram-exp-panel.component';
+
 const appRoutes: Routes = [
   { path: 'view-about', component: ViewAboutComponent },
   { path: 'view-explore', component: ViewExploreComponent },
@@ -46,6 +50,8 @@ const appRoutes: Routes = [
     ViewExploreVisControlsComponent,
     SelectorTilesComponent,
     SelectorExpPanelComponent,
+    ViewExploreStatisticViewerComponent,
+    DisplayHistogramExpPanelComponent,
   ],
   imports: [
     BrowserModule,
@@ -64,6 +70,7 @@ const appRoutes: Routes = [
     MatGridListModule,
     MatButtonToggleModule,
     MatCheckboxModule,
+    StatisticsModule,
     RouterModule.forRoot(appRoutes)
   ],
   providers: [],
