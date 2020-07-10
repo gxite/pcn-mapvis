@@ -134,7 +134,7 @@ export class MapService {
   }
 
 
-  //-----------------------------------------------Legacy-------
+  /* //-----------------------------------------------Legacy-------
 
   //timeOfWeek selected
   private activityAggregateTimeOfWeek(data: Line[], timeOfWeek: string): Line[] { 
@@ -207,5 +207,5 @@ export class MapService {
     }
   }
 
-
+ */
 }

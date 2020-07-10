@@ -44,6 +44,7 @@ export class FeatureCollection {
     line.forEach(data=>{arrayOut.push(data.properties[selectedProperty])});
     return arrayOut;
   }
+  
   private peopleSum(line: Line[], period: string, timeslot: string): Line[] {
     let aggregate = {}; //id:[start,properties,period,timeslot]
     line.forEach(data=> {
