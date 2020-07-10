@@ -1,19 +1,23 @@
-<mat-tab-group #matTabGroup  mat-align-tabs="center" animationDuration="0ms" (selectedTabChange)="clearSelectedLocations();toggleMode(matTabGroup.selectedIndex)">
+<mat-tab-group #matTabGroup  
+    mat-align-tabs="center" 
+    animationDuration="0ms" 
+    (selectedTabChange)="clearSelectedLocations();toggleMode(matTabGroup.selectedIndex);update()">
+
     <mat-tab #island label="Island">
-        <app-selector-tiles 
+        <app-selector-tiles #selectorTiles
             (selected)="setLocations($event);update()" 
             [tileList]="islandLocations">
         </app-selector-tiles>
         <mat-divider></mat-divider>
         <div class="subtitle">Pick a Feature</div> 
-        <app-selector-exp-panel 
+        <app-selector-exp-panel #selectorExpPanel
             [formFields]="islandFeatureFormFields"
             (selected)="setSelector('feature',$event);update()"
             (visible)="setVisibility('feature',$event);update()"
             [colors]="islandColors">
         </app-selector-exp-panel>
         <div class="subtitle">Pick an Activity</div> 
-        <app-selector-exp-panel 
+        <app-selector-exp-panel #selectorExpPanel
             [formFields]="islandActivityFormFields"
             (selected)="setSelector('activity',$event);update()"
             (visible)="setVisibility('activity',$event);update()"
@@ -22,10 +26,11 @@
     </mat-tab>
 
     <mat-tab #heartland label="Heartland">
-        <app-selector-tiles 
+        <app-selector-tiles #selectorTiles
             (selected)="setLocations($event);update()" 
             [tileList]="heartlandLocations">
         </app-selector-tiles>
         <mat-divider></mat-divider>
     </mat-tab>
+
 </mat-tab-group>

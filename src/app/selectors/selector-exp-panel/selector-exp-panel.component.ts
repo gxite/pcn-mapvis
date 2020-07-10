@@ -8,9 +8,11 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 export class SelectorExpPanelComponent implements OnInit {
 
   selectedColor;
-  selectedValue;
+  selectedValues = {};
+
   selectedValueAlias;
   visibility: boolean = true;
+  expanded;
 
   @Input() formFields;
   @Input() colors;
@@ -32,10 +34,10 @@ export class SelectorExpPanelComponent implements OnInit {
     this.update();
   }
 
-  setColor() {
-    if(this.selectedValue!=undefined) { 
-      if (this.colors[this.selectedValue.var_name]) {
-        this.selectedColor = this.colors[this.selectedValue.var_name].hex;
+  setColor(value: string) {
+    if(this.selectedValues[value]!=undefined) { 
+      if (this.colors[this.selectedValues[value].var_name]) {
+        this.selectedColor = this.colors[this.selectedValues[value].var_name].hex;
       }
     } else {
       this.selectedColor="";
@@ -43,18 +45,30 @@ export class SelectorExpPanelComponent implements OnInit {
     }
   }
 
-  setAlias() {
-    if(this.selectedValue!=undefined) {
-      this.selectedValueAlias = this.selectedValue.var_alias;
+  setAlias(value: string) {
+    if(this.selectedValues[value]!=undefined) {
+      this.selectedValueAlias = this.selectedValues[value].var_alias;
     }
   }
 
+  private flushUndefinedValues() {
+    Object.keys(this.selectedValues).forEach(key=> {if(this.selectedValues[key] == undefined){delete this.selectedValues[key]}});
+  }
+
   update() {
-    if(this.selectedValue!=undefined) {
-      this.selected.emit(this.selectedValue.var_name);
+    this.flushUndefinedValues();
+    if(Object.keys(this.selectedValues).length !== 0 && this.selectedValues.constructor === Object) {
+      this.selected.emit(this.selectedValues);
       this.visible.emit(this.visibility);
     }else {
       this.selected.emit(null);
     }
+  }
+
+  reset() {
+    this.selectedValues ={};
+    this.selectedValueAlias="";
+    this.selectedColor="";
+    this.expanded = false;
   }
 }

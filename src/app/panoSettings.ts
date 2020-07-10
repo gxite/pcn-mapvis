@@ -95,8 +95,8 @@ export class IslandSettings extends MasterSettings{
     ];
     activities: NameAlias[] = [
         {var_name:"people",var_alias:"People"},
-        //{var_name:"bicycles",var_alias:"Bicycles"},
-        //{var_name:"vehicles",var_alias:"Vehicles"}
+        {var_name:"bicycles",var_alias:"Bicycles"},
+        {var_name:"vehicles",var_alias:"Vehicles"}
     ];  
     color = {
         "Tree_Palm": {"rgb":[9, 232, 94], "hex":"#09e85e"},
@@ -110,14 +110,28 @@ export class IslandSettings extends MasterSettings{
         "vehicles": {"rgb":[143,33,207],"hex":"#8f21cf"}
     };
     activityFormFields: NameAlias[] = [
-        {var_name:"activities",var_alias:"Activity"}
+        {var_name:"activities",var_alias:"Activity"},
+        {var_name:"timeOfWeek",var_alias:"Time of Week"},
+        {var_name:"timeOfDay",var_alias:"Time of Day"},
     ];
     featureFormFields: NameAlias[] = [
         {var_name:"features",var_alias:"Features"}
-    ];       
+    ]; 
+    timeOfWeek: NameAlias[] = [
+        {var_name:"wd",var_alias:"Weekday"},
+        {var_name:"we",var_alias:"Weekend"}
+    ];
+    timeOfDay: NameAlias[] = [
+        {var_name:"m",var_alias:"Morning"},
+        {var_name:"e",var_alias:"Evening"},
+    ];     
 }
 
 export const featureSelectorSettings = []
+
+
+
+
 
 //legacy code for old implementation. retained to facilitate transition.
 export const locations :string[] = [

@@ -1,4 +1,4 @@
-<mat-expansion-panel hideToggle=true>
+<mat-expansion-panel hideToggle=true [(expanded)]="expanded">
     <mat-expansion-panel-header>
         <mat-panel-title>
             <mat-icon  [ngStyle]="{'color':selectedColor,'transform':'scale(0.9)'}">brightness_1</mat-icon>
@@ -13,7 +13,7 @@
     </mat-expansion-panel-header>
     <mat-form-field *ngFor="let field of formFields">
         <mat-label>{{field.var_alias}}</mat-label>
-        <mat-select #selection [(value)]="selectedValue" (selectionChange)="setColor();setAlias();update()">
+        <mat-select #selection [(value)]="selectedValues[field.var_name]" (selectionChange)="setColor(field.var_name);setAlias(field.var_name);update()">
             <mat-option>None</mat-option>
             <mat-option [value]="option" *ngFor="let option of field.var_options">{{option.var_alias}}</mat-option>
         </mat-select>

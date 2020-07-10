@@ -12,6 +12,8 @@ export class HistogramComponent implements OnInit {
   @Input() displayWidth;
   @Input() displayHeight;
 
+  hostElement;
+
   svg;
   margin;
   width;
@@ -19,7 +21,9 @@ export class HistogramComponent implements OnInit {
 
   //data = [110,120,130,130,15,16,1,230,160,350,230];
 
-  constructor(private elRef: ElementRef) {}
+  constructor(private elRef: ElementRef) {
+    this.hostElement = this.elRef.nativeElement;
+  }
 
   ngOnInit() {
 
@@ -27,7 +31,7 @@ export class HistogramComponent implements OnInit {
     this.width = this.displayWidth - this.margin.left - this.margin.right;
     this.height = this.displayHeight - this.margin.top - this.margin.bottom;
     
-    this.svg = d3.select(this.elRef.nativeElement).append("svg")
+    this.svg = d3.select(this.hostElement).append("svg")
       .attr("width", this.width + this.margin.left + this.margin.right)
       .attr("height", this.height + this.margin.top + this.margin.bottom)
     .append("g")

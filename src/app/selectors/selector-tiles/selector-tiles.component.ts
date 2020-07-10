@@ -7,10 +7,12 @@ import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material';
   styleUrls: ['./selector-tiles.component.scss']
 })
 export class SelectorTilesComponent implements OnInit {
+
   @ViewChild(MatButtonToggleGroup,null) group: MatButtonToggleGroup;
   @ViewChildren(MatButtonToggle) toggles: QueryList<MatButtonToggle>;
 
   @Input() tileList: [];
+
   @Output() selected = new EventEmitter();
 
   constructor() { }
@@ -35,5 +37,9 @@ export class SelectorTilesComponent implements OnInit {
 
   update(selection: string[]) {
     this.selected.emit(selection);
+  }
+
+  reset() {
+    this.toggles.forEach(toggle => {toggle.checked = toggle.checked ? false : false});
   }
 }
