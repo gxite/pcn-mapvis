@@ -18,7 +18,7 @@ export class FeatureCollection {
       return out;
     });
   } 
-  public timeslot(line :Line[],timeOfWeek:string,timeOfDay:string,timeslot:string) : Line[]{
+/*   public timeslot(line :Line[],timeOfWeek:string,timeOfDay:string,timeslot:string) : Line[]{
     return line.filter(l=>(
       (l["period"] === this.getPeriod(timeOfDay,timeOfWeek)) &&
       (l["timeslot"] === timeslot)
@@ -43,7 +43,7 @@ export class FeatureCollection {
     let arrayOut = []
     line.forEach(data=>{arrayOut.push(data.properties[selectedProperty])});
     return arrayOut;
-  }
+  } */
   
   private peopleSum(line: Line[], period: string, timeslot: string): Line[] {
     let aggregate = {}; //id:[start,properties,period,timeslot]
@@ -62,7 +62,7 @@ export class FeatureCollection {
       }});
     return Object.values(aggregate);
   }
-  private getPeriod(panoTimeOfDay :string, panoTimeOfWeek :string) :string{
+/*   private getPeriod(panoTimeOfDay :string, panoTimeOfWeek :string) :string{
     if (panoTimeOfWeek == "Weekday" && panoTimeOfDay == "Morning") {
       return "wdm";
     }
@@ -75,7 +75,7 @@ export class FeatureCollection {
     else if (panoTimeOfWeek == "Weekend" && panoTimeOfDay == "Evening") {
       return "wee";
     }
-  }
+  } */
 }
 
 export interface Line {

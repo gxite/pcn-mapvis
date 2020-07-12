@@ -8,8 +8,6 @@ import { Line, FeatureCollection } from "src/app/panoFeatureCollection";
 import { environment } from 'src/environments/environment';
 import { TooltipComponent } from 'src/app/tooltip/tooltip.component';
 
-import * as pano from 'src/app/panoSettings';//--legacy
-
 @Injectable({
   providedIn: 'root'
 })
@@ -124,88 +122,8 @@ export class MapService {
       delete this.layersState[type+"_"+i.toString()];
     }
   }
-
-  private activityAtTimeslot(data: Line[],timeOfWeek: string,timeOfDay: string,timeslot: string): Line[] {
-    return this.fc.timeslot(data,timeOfWeek,timeOfDay,timeslot);
-  }
   
   public addToRender(dataSrc: Promise<Line[]>, selected: string, color: ColorPair, selectorID: string, isVisible: boolean): void {
     this.layersState[selectorID] = [selectorID, dataSrc, color.rgb, 5,selected,isVisible]
   }
-
-
-  /* //-----------------------------------------------Legacy-------
-
-  //timeOfWeek selected
-  private activityAggregateTimeOfWeek(data: Line[], timeOfWeek: string): Line[] { 
-    return this.fc.week(data,timeOfWeek);
-  }
-
-  //timeOfDay selected
-  private activityAggregateTimeOfDay(data: Line[],timeOfDay: string): Line[] { 
-    return this.fc.day(data,timeOfDay);
-  }
-
-  //timeOfDay and timeOfWeek selected
-  private activityAtPeriod(data: Line[],timeOfWeek: string,timeOfDay: string): Line[] {
-    return this.fc.period(data,timeOfWeek,timeOfDay);
-  }
-
-  public getLayerPromise(selectorID: string, selectedProperties:string): Promise<number[]> {
-    if (this.layersState[selectorID]) {
-      return this.layersState[selectorID][1].then(data=>this.fc.extractPropertiesArray(data,selectedProperties));
-    }
-  }
-
-  public addFeature(dataSrc: Promise<Line[]>, selectedFeature: string, selectorID: string, isVisible: boolean): void {
-    this.layersState[selectorID] = [selectorID, dataSrc, pano.colors[selectedFeature].rgb, 10,selectedFeature,isVisible]
-  }
-
-  public addActivity(
-    dataSrc: Promise<Line[]>, 
-    selectedActivity: string, 
-    selectorID: string,
-    timeOfWeek: string,
-    timeOfDay: string,
-    timeslot: string,
-    isVisible: boolean,
-    newFetch: boolean): void {
-
-    let toAdd: boolean = false;
-
-    if (timeOfWeek && timeOfDay && timeslot) {
-      if (newFetch) {
-        dataSrc = dataSrc.then(data=>this.activityAtTimeslot(data,timeOfWeek,timeOfDay,timeslot));
-      }
-      toAdd=true;
-    }
-    else if (timeOfWeek && timeOfDay && !timeslot) {
-      if (newFetch) {
-        dataSrc = dataSrc.then(data=>this.activityAtPeriod(data,timeOfWeek,timeOfDay));
-      }
-      toAdd=true;
-    }
-    else if (timeOfWeek && !timeOfDay && !timeslot) {
-      if (newFetch) {
-        dataSrc = dataSrc.then(data=>this.activityAggregateTimeOfWeek(data,timeOfWeek));
-      }
-      toAdd=true; 
-    }
-    else if (!timeOfWeek && timeOfDay && !timeslot) {
-      if (newFetch) {
-        dataSrc = dataSrc.then(data=>this.activityAggregateTimeOfDay(data,timeOfDay));
-      }
-      toAdd=true;
-    }
-    
-    if (toAdd) {
-      this.layersState[selectorID] = [selectorID, dataSrc, pano.colors[selectedActivity].rgb, 3,selectedActivity,isVisible];
-      toAdd = false;
-    }
-    else {
-      this.layersState[selectorID] = [selectorID, dataSrc.then(data=>[]), [], 0,"",false];//dummy layer used for flushing
-    }
-  }
-
- */
 }
