@@ -47,7 +47,6 @@ export class ViewExploreVisControlsComponent implements OnInit {
 
   ngOnInit(){}
 
-  
   setLocations(selection: string[]) {this.selectedLocations = selection;}
 
   setSelector(type: SelectorType, value: Object) {
@@ -101,6 +100,7 @@ export class ViewExploreVisControlsComponent implements OnInit {
   }
 
   update() {
+    console.log("here");
     //runs every user interaction to check and update state
     this.mapService.clearLayerState();
     if (this.selectedFeature.value != null) {this.selectedLocations.map(location=>this.addToMap(this.currentTab,"parkFeatures",location));}

@@ -78,6 +78,10 @@ export class FeatureCollection {
   } */
 }
 
+export type Period = "wde" | "wdm" | "wem" | "wee";
+export type Week = "wd" | "we";
+export type Day = "m" | "e";
+
 export interface Line {
   start: number[]; //the start coordinates of a line [x,y,z] 
   id: string;

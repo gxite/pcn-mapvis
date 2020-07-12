@@ -5,7 +5,7 @@
             <button mat-icon-button 
                 [ngStyle]="{'color':selectedColor,'margin-left': '5px'}" 
                 disableRipple=true 
-                (click)="toggleVisibility();$event.stopPropagation()">
+                (click)="toggleVisibility();$event.stopPropagation();update()">
                 <mat-icon>{{isVisible()}}</mat-icon>
               </button>
             {{selectedValueAlias}}
@@ -13,7 +13,7 @@
     </mat-expansion-panel-header>
     <mat-form-field *ngFor="let field of formFields">
         <mat-label>{{field.var_alias}}</mat-label>
-        <mat-select #selection [(value)]="selectedValues[field.var_name]" (selectionChange)="setColor(field.var_name);setAlias(field.var_name);update()">
+        <mat-select #selection [(value)]="selectedValues[field.var_name]" (selectionChange)="setSelectedChanged();setColor(field.var_name);setAlias(field.var_name);update()">
             <mat-option>None</mat-option>
             <mat-option [value]="option" *ngFor="let option of field.var_options">{{option.var_alias}}</mat-option>
         </mat-select>

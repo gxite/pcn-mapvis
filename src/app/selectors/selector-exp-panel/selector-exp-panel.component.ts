@@ -12,6 +12,8 @@ export class SelectorExpPanelComponent implements OnInit {
 
   selectedValueAlias;
   visibility: boolean = true;
+  visibilityChanged = true; //starter case
+  selectedChanged = true;
   expanded;
 
   @Input() formFields;
@@ -31,9 +33,13 @@ export class SelectorExpPanelComponent implements OnInit {
 
   toggleVisibility() {
     this.visibility = !this.visibility;
-    this.update();
+    this.visibilityChanged = true;
   }
 
+  setSelectedChanged() {
+    this.selectedChanged = true;
+  }
+  
   setColor(value: string) {
     if(this.selectedValues[value]!=undefined) { 
       if (this.colors[this.selectedValues[value].var_name]) {
@@ -46,8 +52,10 @@ export class SelectorExpPanelComponent implements OnInit {
   }
 
   setAlias(value: string) {
-    if(this.selectedValues[value]!=undefined) {
-      this.selectedValueAlias = this.selectedValues[value].var_alias;
+    if (value == "activities" || value == "features") {
+      if(this.selectedValues[value]!=undefined) {
+        this.selectedValueAlias = this.selectedValues[value].var_alias;
+      }
     }
   }
 
@@ -58,8 +66,15 @@ export class SelectorExpPanelComponent implements OnInit {
   update() {
     this.flushUndefinedValues();
     if(Object.keys(this.selectedValues).length !== 0 && this.selectedValues.constructor === Object) {
-      this.selected.emit(this.selectedValues);
-      this.visible.emit(this.visibility);
+      if (this.selectedChanged) {
+        this.selected.emit(this.selectedValues);
+        this.selectedChanged = false;
+      }
+      if (this.visibilityChanged) {
+        this.visible.emit(this.visibility);
+        this.visibilityChanged = false;
+      }
+
     }else {
       this.selected.emit(null);
     }
