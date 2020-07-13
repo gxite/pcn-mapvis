@@ -21,3 +21,7 @@ mat-panel-title {
     display:flex;
     align-items: center;
 }
+
+.mat-expansion-panel:not([class*='mat-elevation-z']) {
+  box-shadow: none;
+}

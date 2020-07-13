@@ -1,8 +1,8 @@
-import { Component, OnInit, Input,  ViewChildren, QueryList} from '@angular/core';
+import { Component, OnInit, Input,  ViewChildren, QueryList, ɵConsole} from '@angular/core';
 import { IslandSettings, HeartlandSettings, NameAlias } from 'src/app/panoSettings';
 import { DatabaseService, panoCategory, panoType } from 'src/app/services/database.service';
 
-import { FeatureCollection} from "src/app/panoFeatureCollection";
+import { FeatureCollection, Line, Week, Day, Period} from "src/app/panoFeatureCollection";
 import { SelectorTilesComponent } from 'src/app/selectors/selector-tiles/selector-tiles.component';
 import { SelectorExpPanelComponent } from 'src/app/selectors/selector-exp-panel/selector-exp-panel.component';
 
@@ -47,7 +47,7 @@ export class ViewExploreVisControlsComponent implements OnInit {
 
   ngOnInit(){}
 
-  setLocations(selection: string[]) {this.selectedLocations = selection;}
+  setLocations(selection: string[]) {this.selectedLocations = selection;this.update();}
 
   setSelector(type: SelectorType, value: Object) {
     let selected;
@@ -63,6 +63,7 @@ export class ViewExploreVisControlsComponent implements OnInit {
       this.mapService.clearLayerState();
       this.mapService.render();
     }
+    this.update();
   }
 
   setVisibility(type: SelectorType, visibility: boolean) {
@@ -79,6 +80,7 @@ export class ViewExploreVisControlsComponent implements OnInit {
       this.mapService.clearLayerState();
       this.mapService.render();
     }
+    this.update();
   }
 
   toggleMode(selectedIndex: number) {
@@ -100,7 +102,6 @@ export class ViewExploreVisControlsComponent implements OnInit {
   }
 
   update() {
-    console.log("here");
     //runs every user interaction to check and update state
     this.mapService.clearLayerState();
     if (this.selectedFeature.value != null) {this.selectedLocations.map(location=>this.addToMap(this.currentTab,"parkFeatures",location));}
@@ -121,7 +122,7 @@ export class ViewExploreVisControlsComponent implements OnInit {
   }
 
   private addToMap(tab: Tab, type: panoType, location) {
-
+    
     let category =this.getDatabaseCategory(tab);
     let dataSrc = this.databaseService.fetchData(category,type,location).then(data =>this.fc.transformToLine(data));
     let color;
@@ -141,6 +142,9 @@ export class ViewExploreVisControlsComponent implements OnInit {
           this.selectedFeature.visibility);
         break;
       case "parkActivities":
+        //additional datasrc transformation for activity selection
+        dataSrc = this.activityDataModifier(dataSrc);
+
         this.mapService.addToRender(
           dataSrc,
           this.selectedActivity.value['activities'].var_name,
@@ -154,4 +158,21 @@ export class ViewExploreVisControlsComponent implements OnInit {
   private generateID(location: string,selection: string) {
     return location+selection;
   }
+
+  private activityDataModifier(data: Promise<Line[]>): Promise<Line[]>  {
+    let value = this.selectedActivity.value;
+
+    if (value.timeOfWeek == undefined && value.timeOfDay == undefined) 
+      return data.then(d=>this.fc.filterByActivity(d));
+    else if (value.timeOfWeek != undefined && value.timeOfDay != undefined){
+      let period = value.timeOfWeek.var_name+value.timeOfDay.var_name;
+      return data.then(d=>this.fc.filterByPeriod(d,period));
+    }
+    else if (value.timeOfWeek != undefined && value.timeOfDay == undefined) 
+      return data.then(d=>this.fc.filterByWeek(d,value.timeOfWeek.var_name));
+    else if (value.timeOfWeek == undefined && value.timeOfDay != undefined)
+      return data.then(d=>this.fc.filterByDay(d,value.timeOfDay.var_name));
+      
+  }
+
 }

@@ -30,6 +30,7 @@ export class DatabaseService {
   
   public fetchData(category: panoCategory, type: panoType, location: string): Promise<FeatureCollection> {
     let id = this.generateCacheId(category,type,location);
+    return this.firebaseFetch(id);
     
     if (!this.isCached(id)) {
       this.setCache(id);
@@ -65,18 +66,5 @@ export class DatabaseService {
 
   private generateCacheId(category: panoCategory, type: panoType, location: string): cacheId{
     return {category,type,location};
-  }
-
-
-
-  
-  //legacy code for old implementation. retained to facilitate transition.
-  public getLocationData(locationSelection: string, layerType: string): Promise<FeatureCollection> {
-      return new Promise((resolve,reject) => {
-        this.firebase.ref("panoAction/" + layerType + "/"+ locationSelection).on('value',(snapshot)=> {
-          resolve(snapshot.val());
-          console.log("Fetched Successful.");
-        })
-      });
   }
 }

@@ -5,22 +5,22 @@
 
     <mat-tab #island label="Island">
         <app-selector-tiles #selectorTiles
-            (selected)="setLocations($event);update()" 
+            (selected)="setLocations($event)" 
             [tileList]="islandLocations">
         </app-selector-tiles>
         <mat-divider></mat-divider>
         <div class="subtitle">Pick a Feature</div> 
         <app-selector-exp-panel #selectorExpPanel
             [formFields]="islandFeatureFormFields"
-            (selected)="setSelector('feature',$event);update()"
-            (visible)="setVisibility('feature',$event);update()"
+            (selected)="setSelector('feature',$event)"
+            (visible)="setVisibility('feature',$event)"
             [colors]="islandColors">
         </app-selector-exp-panel>
         <div class="subtitle">Pick an Activity</div> 
         <app-selector-exp-panel #selectorExpPanel
             [formFields]="islandActivityFormFields"
-            (selected)="setSelector('activity',$event);update()"
-            (visible)="setVisibility('activity',$event);update()"
+            (selected)="setSelector('activity',$event)"
+            (visible)="setVisibility('activity',$event)"
             [colors]="islandColors">
         </app-selector-exp-panel>
     </mat-tab>
