@@ -20,12 +20,19 @@ export class HistogramComponent implements OnInit {
   height;
 
   //data = [110,120,130,130,15,16,1,230,160,350,230];
+  //@Input() data;
 
   constructor(private elRef: ElementRef) {
     this.hostElement = this.elRef.nativeElement;
   }
 
   ngOnInit() {
+
+    //d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/1_OneNum.csv").then(data=>this.build(data))
+    //this.build(this.data);
+  }
+
+  build(data) {
 
     this.margin = {top: 10, right: 30, bottom: 30, left: 40};
     this.width = this.displayWidth - this.margin.left - this.margin.right;
@@ -37,17 +44,11 @@ export class HistogramComponent implements OnInit {
     .append("g")
       .attr("transform",
         "translate(" + this.margin.left + "," + this.margin.top + ")");
-    
-    d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/1_OneNum.csv").then(data=>this.build(data))
-    //this.build(this.data);
-  }
 
-  build(data) {
-    
-    data.forEach(d=>d.price = +d.price);
+    data.forEach(d=>d = +d);
     
     let x = d3.scaleLinear()
-      .domain([0, 1000])    
+      .domain([0, 10])    
       .range([0, this.width]);
 
     this.svg.append("g")
@@ -55,7 +56,7 @@ export class HistogramComponent implements OnInit {
       .call(d3.axisBottom(x));
 
     let histogram = d3.histogram()
-      .value(function(d) { return d.price; })   // I need to give the vector of value
+      .value(function(d) { return d; })   // I need to give the vector of value
       .domain(x.domain())  // then the domain of the graphic
       .thresholds(x.ticks(91)); // then the numbers of bins
 
@@ -76,6 +77,10 @@ export class HistogramComponent implements OnInit {
         .attr("width", d=>x(d.x1) - x(d.x0) -1 )
         .attr("height", d=>this.height - y(d.length))
         .style("fill", "#69b3a2")
+  }
+
+  clear() {
+    d3.select(this.hostElement).select("svg").remove();
   }
 
 

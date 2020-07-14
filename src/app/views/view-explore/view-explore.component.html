@@ -13,7 +13,7 @@
         <mat-icon *ngIf="leftDrawer.opened==true">chevron_left</mat-icon>
     </button>
     <mat-drawer #leftDrawer mode="side" position="start">
-        <app-view-explore-vis-controls [mapService]="mapService"></app-view-explore-vis-controls>
+        <app-view-explore-vis-controls (stats)="onSelection($event)" [mapService]="mapService"></app-view-explore-vis-controls>
     </mat-drawer>
 </mat-drawer-container>
 

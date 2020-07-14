@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, } from '@angular/core';
+import { DisplayHistogramExpPanelComponent } from 'src/app/display-histogram-exp-panel/display-histogram-exp-panel.component';
 
 @Component({
   selector: 'app-view-explore-statistic-viewer',
@@ -6,10 +7,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./view-explore-statistic-viewer.component.scss']
 })
 export class ViewExploreStatisticViewerComponent implements OnInit {
+  @ViewChild(DisplayHistogramExpPanelComponent,null) histPanel: DisplayHistogramExpPanelComponent;
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  setHistPanel(data) {
+    this.histPanel.buildHistogram(data);
   }
 
 }

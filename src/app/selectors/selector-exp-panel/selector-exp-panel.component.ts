@@ -85,5 +85,6 @@ export class SelectorExpPanelComponent implements OnInit {
     this.selectedValueAlias="";
     this.selectedColor="";
     this.expanded = false;
+    this.visibilityChanged = true;
   }
 }

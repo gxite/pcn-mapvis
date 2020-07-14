@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { HistogramComponent } from '../statistics/histogram/histogram.component';
 
 @Component({
   selector: 'app-display-histogram-exp-panel',
@@ -7,9 +8,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DisplayHistogramExpPanelComponent implements OnInit {
 
-  constructor() { }
+  @ViewChild(HistogramComponent,null) histComp: HistogramComponent; 
+  first;
 
+  constructor() { }
+  
   ngOnInit() {
+    this.first=true;
   }
 
+  buildHistogram(data) {
+    if (this.first){
+      this.histComp.build(data);
+      this.first = false;
+    }
+    else {
+      this.histComp.clear();
+      this.histComp.build(data);
+    }
+  }
 }

@@ -1,8 +1,8 @@
-import { Component, OnInit, Input,  ViewChildren, QueryList, ɵConsole} from '@angular/core';
+import { Component, OnInit, Input,  ViewChildren, QueryList, Output, EventEmitter} from '@angular/core';
 import { IslandSettings, HeartlandSettings, NameAlias } from 'src/app/panoSettings';
 import { DatabaseService, panoCategory, panoType } from 'src/app/services/database.service';
 
-import { FeatureCollection, Line, Week, Day, Period} from "src/app/panoFeatureCollection";
+import { FeatureCollection, Line} from "src/app/panoFeatureCollection";
 import { SelectorTilesComponent } from 'src/app/selectors/selector-tiles/selector-tiles.component';
 import { SelectorExpPanelComponent } from 'src/app/selectors/selector-exp-panel/selector-exp-panel.component';
 
@@ -21,6 +21,7 @@ export class ViewExploreVisControlsComponent implements OnInit {
   @ViewChildren('selectorExpPanel') children_selectorExpPanel: QueryList<SelectorExpPanelComponent>;
 
   @Input() mapService; 
+  @Output() stats = new EventEmitter();
 
   //modes
   island = new IslandSettings();
@@ -47,7 +48,10 @@ export class ViewExploreVisControlsComponent implements OnInit {
 
   ngOnInit(){}
 
-  setLocations(selection: string[]) {this.selectedLocations = selection;this.update();}
+  setLocations(selection: string[]) {
+    this.selectedLocations = selection;
+    this.update();
+  }
 
   setSelector(type: SelectorType, value: Object) {
     let selected;
@@ -124,7 +128,11 @@ export class ViewExploreVisControlsComponent implements OnInit {
   private addToMap(tab: Tab, type: panoType, location) {
     
     let category =this.getDatabaseCategory(tab);
-    let dataSrc = this.databaseService.fetchData(category,type,location).then(data =>this.fc.transformToLine(data));
+    let dataSrc = this.databaseService.fetchData(category,type,location).then(data =>{
+      let out =this.fc.transformToLine(data);
+      if (this.selectedActivity.value != null)
+        this.stats.emit([out,this.selectedActivity.value.activities.var_name]);/////////////////////////////////////////////////
+      return out;});
     let color;
 
     switch(tab){

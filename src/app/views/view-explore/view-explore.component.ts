@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MapService } from 'src/app/services/map.service';
 import { INNER_WIDTH_THRESHOLD } from 'src/app/panoSettings';
+import { DisplayHistogramExpPanelComponent } from 'src/app/display-histogram-exp-panel/display-histogram-exp-panel.component';
+import { ViewExploreStatisticViewerComponent } from '../view-explore-statistic-viewer/view-explore-statistic-viewer.component';
 
 @Component({
   selector: 'app-view-explore',
@@ -12,6 +14,8 @@ export class ViewExploreComponent implements OnInit {
   mapboxSelector: string = "map";
   deckSelector: string = "deck-canvas";
   mapService: MapService; //variable to allow the mapService instance to be bounded and passed to child 
+  
+  @ViewChild(ViewExploreStatisticViewerComponent,null) statsViewer: ViewExploreStatisticViewerComponent;
 
   constructor(private ms: MapService) { }
 
@@ -22,5 +26,12 @@ export class ViewExploreComponent implements OnInit {
 
   toHide() {
     return window.innerWidth < INNER_WIDTH_THRESHOLD ? true : false;
+  }
+
+  onSelection($event) {
+    let line =$event[0]; 
+    let selection = $event[1];
+    let data = line.map(d=>d.properties[selection]);
+    this.statsViewer.setHistPanel(data);
   }
 }
