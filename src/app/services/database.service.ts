@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { environment } from '../../environments/environment';
-import { FeatureCollection } from "../panoFeatureCollection";
+import { FeatureCollection, Line } from "../panoFeatureCollection";
 
 // Firebase App (the core Firebase SDK) is always required and must be listed first
 import * as firebase from "firebase/app";
@@ -18,6 +18,7 @@ interface cacheId {category: panoCategory;type: panoType;location: string}
 })
 export class DatabaseService {
   firebase: any;
+  fc: FeatureCollection;
 
   cache= {
     panoAction:{parkActivities:{},parkFeatures:{}},
@@ -26,11 +27,12 @@ export class DatabaseService {
   constructor() {
     firebase.initializeApp(environment.firebaseConfig);
     this.firebase = firebase.database();
+    this.fc = new FeatureCollection;
   }
   
-  public fetchData(category: panoCategory, type: panoType, location: string): Promise<FeatureCollection> {
+  public fetchData(category: panoCategory, type: panoType, location: string): Promise<Line[]> {
     let id = this.generateCacheId(category,type,location);
-    return this.firebaseFetch(id);
+    //return this.firebaseFetch(id).then(d=>this.fc.transformToLine(d));
     
     if (!this.isCached(id)) {
       this.setCache(id);
@@ -44,7 +46,7 @@ export class DatabaseService {
   }
 
   private setCache(id: cacheId) {
-    this.cache[id.category][id.type][id.location] = this.firebaseFetch(id);
+    this.cache[id.category][id.type][id.location] = this.firebaseFetch(id).then(d=>this.fc.transformToLine(d));
   }
 
   private getCache(id: cacheId) {

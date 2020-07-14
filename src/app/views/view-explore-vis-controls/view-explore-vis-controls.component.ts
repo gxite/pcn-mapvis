@@ -8,7 +8,7 @@ import { SelectorExpPanelComponent } from 'src/app/selectors/selector-exp-panel/
 
 type Tab = "Island" | "Heartland";
 type SelectorType = "feature" | "activity";
-interface Selector { value: any; visibility: boolean};
+interface Selector { value: any; visibility: boolean; loading:boolean};
 
 @Component({
   selector: 'app-view-explore-vis-controls',
@@ -37,8 +37,8 @@ export class ViewExploreVisControlsComponent implements OnInit {
   heartlandColors= this.heartland.color;
 
   selectedLocations = [];
-  selectedFeature: Selector = { value:null, visibility: null};
-  selectedActivity: Selector = { value:null, visibility: null};
+  selectedFeature: Selector = { value:null, visibility: null, loading:false};
+  selectedActivity: Selector = { value:null, visibility: null, loading:false};
 
   currentTab: Tab = "Island"; //default
 
@@ -96,8 +96,8 @@ export class ViewExploreVisControlsComponent implements OnInit {
     //resets all children components & selections
     this.children_selectorTiles.forEach(c=>c.reset());
     this.children_selectorExpPanel.forEach(c=>c.reset());
-    this.selectedFeature = { value:null, visibility: null};
-    this.selectedActivity = { value:null, visibility: null};
+    this.selectedFeature = { value:null, visibility: null, loading:false};
+    this.selectedActivity = { value:null, visibility: null, loading:false};
   }
 
   clearSelectedLocations() {
@@ -108,10 +108,18 @@ export class ViewExploreVisControlsComponent implements OnInit {
   update() {
     //runs every user interaction to check and update state
     this.mapService.clearLayerState();
-    if (this.selectedFeature.value != null) {this.selectedLocations.map(location=>this.addToMap(this.currentTab,"parkFeatures",location));}
-    if (this.selectedActivity.value != null) {this.selectedLocations.map(location=>this.addToMap(this.currentTab,"parkActivities",location));}
+    if (this.selectedFeature.value != null) {
+      this.selectedLocations.map(location=>this.addToMap(this.currentTab,"parkFeatures",location));
+    }
+    if (this.selectedActivity.value != null) {
+      this.selectedLocations.map(location=>this.addToMap(this.currentTab,"parkActivities",location));
+    }
     this.mapService.render();
   }
+
+  getActivitySelectorLoading() {return this.selectedActivity.loading;}
+
+  getFeatureSelectorLoading() {return this.selectedFeature.loading;}
 
   private getDatabaseCategory(currentTab: string): panoCategory{
     switch (currentTab) {
@@ -128,11 +136,20 @@ export class ViewExploreVisControlsComponent implements OnInit {
   private addToMap(tab: Tab, type: panoType, location) {
     
     let category =this.getDatabaseCategory(tab);
-    let dataSrc = this.databaseService.fetchData(category,type,location).then(data =>{
-      let out =this.fc.transformToLine(data);
+
+    if(type=="parkActivities"){this.selectedActivity.loading=true;}
+    if(type=="parkFeatures"){this.selectedFeature.loading=true;}
+
+    let dataSrc: Promise<Line[]> = this.databaseService.fetchData(category,type,location).then(data =>{
+
+      if(type=="parkFeatures"){this.selectedFeature.loading=false;}
+      if(type=="parkActivities"){this.selectedActivity.loading=false;}
+
       if (this.selectedActivity.value != null)
-        this.stats.emit([out,this.selectedActivity.value.activities.var_name]);/////////////////////////////////////////////////
-      return out;});
+        this.stats.emit([data,this.selectedActivity.value.activities.var_name]);//emit to stats viewer test
+
+      return data;});
+
     let color;
 
     switch(tab){
@@ -170,17 +187,19 @@ export class ViewExploreVisControlsComponent implements OnInit {
   private activityDataModifier(data: Promise<Line[]>): Promise<Line[]>  {
     let value = this.selectedActivity.value;
 
-    if (value.timeOfWeek == undefined && value.timeOfDay == undefined) 
+    if (value.timeOfWeek == undefined && value.timeOfDay == undefined) {
       return data.then(d=>this.fc.filterByActivity(d));
-    else if (value.timeOfWeek != undefined && value.timeOfDay != undefined){
+    }
+    else if (value.timeOfWeek != undefined && value.timeOfDay != undefined) {
       let period = value.timeOfWeek.var_name+value.timeOfDay.var_name;
       return data.then(d=>this.fc.filterByPeriod(d,period));
     }
-    else if (value.timeOfWeek != undefined && value.timeOfDay == undefined) 
+    else if (value.timeOfWeek != undefined && value.timeOfDay == undefined) {
       return data.then(d=>this.fc.filterByWeek(d,value.timeOfWeek.var_name));
-    else if (value.timeOfWeek == undefined && value.timeOfDay != undefined)
+    }
+    else if (value.timeOfWeek == undefined && value.timeOfDay != undefined) {
       return data.then(d=>this.fc.filterByDay(d,value.timeOfDay.var_name));
-      
+    }
   }
 
 }

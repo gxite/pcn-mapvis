@@ -38,12 +38,12 @@ export class FeatureCollection {
   }
   
   private peopleSum(line: Line[], period: string, timeslot: string): Line[] {
-    let aggregate = {}; //id:[start,properties,period,timeslot]
+    let aggregate = new Object; //id:[start,properties,period,timeslot]
     line.forEach(data=> {
       if (!aggregate[data.id]) {
         aggregate[data.id] = {
         "start": data.start,
-        "properties": data.properties, 
+        "properties": this.returnNewObject(data.properties),
         "period": period,
         "timeslot": timeslot};
       }
@@ -53,6 +53,12 @@ export class FeatureCollection {
         aggregate[data.id].properties.people_active += data.properties.people_active;
       }});
     return Object.values(aggregate);
+  }
+
+  private returnNewObject(obj: Object): Object {
+    let out = {};
+    Object.keys(obj).forEach(key=>out[key]=obj[key]);
+    return out;
   }
 }
 

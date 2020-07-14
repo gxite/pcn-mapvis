@@ -19,6 +19,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { CdkTableModule } from '@angular/cdk/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { MenuBarComponent } from './menu-bar/menu-bar.component';
 import { ViewExploreComponent } from './views/view-explore/view-explore.component';
@@ -68,6 +69,7 @@ const appRoutes: Routes = [
     MatButtonToggleModule,
     MatCheckboxModule,
     StatisticsModule,
+    MatProgressBarModule,
     RouterModule.forRoot(appRoutes)
   ],
   providers: [],

@@ -5,3 +5,22 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+/* Track */
+::-webkit-scrollbar-track {
+    background: rgba($color: #2c2c2c, $alpha: 1.0);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgba($color: #3f3f3f, $alpha: 1.0); 
+  }
+  
+/* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}

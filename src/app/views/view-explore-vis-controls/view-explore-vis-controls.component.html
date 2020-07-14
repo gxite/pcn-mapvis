@@ -2,14 +2,18 @@
     mat-align-tabs="center" 
     animationDuration="0ms" 
     (selectedTabChange)="clearSelectedLocations();toggleMode(matTabGroup.selectedIndex);update()">
-
+    
     <mat-tab #island label="Island">
+        <div class="subtitle">Select Locations</div> 
         <app-selector-tiles #selectorTiles
             (selected)="setLocations($event)" 
             [tileList]="islandLocations">
         </app-selector-tiles>
         <mat-divider></mat-divider>
         <div class="subtitle">Pick a Feature</div> 
+        <mat-progress-bar 
+            [ngStyle]="{'visibility':getFeatureSelectorLoading()?'visible':'hidden'}"
+            mode="indeterminate" ></mat-progress-bar>
         <app-selector-exp-panel #selectorExpPanel
             [formFields]="islandFeatureFormFields"
             (selected)="setSelector('feature',$event)"
@@ -17,6 +21,9 @@
             [colors]="islandColors">
         </app-selector-exp-panel>
         <div class="subtitle">Pick an Activity</div> 
+        <mat-progress-bar 
+            [ngStyle]="{'visibility':getActivitySelectorLoading()?'visible':'hidden'}"
+            mode="indeterminate" ></mat-progress-bar>
         <app-selector-exp-panel #selectorExpPanel
             [formFields]="islandActivityFormFields"
             (selected)="setSelector('activity',$event)"
