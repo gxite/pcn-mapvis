@@ -23,26 +23,28 @@ export class ViewExploreVisControlsComponent implements OnInit {
   @Input() mapService; 
   @Output() stats = new EventEmitter();
 
-  //modes
+  fc = new FeatureCollection;
+
+  //island setttings
   island = new IslandSettings();
   islandLocations: NameAlias[] = this.island.locations;
   islandFeatureFormFields= this.island.featureFormFields.map(field=>this.appendOptions(this.island,field));
   islandActivityFormFields= this.island.activityFormFields.map(field=>this.appendOptions(this.island,field)); 
   islandColors= this.island.color;
 
+  //heartland setttings
   heartland = new HeartlandSettings();
   heartlandLocations: NameAlias[] = this.heartland.locations;
-  heartlandFormFields= this.heartland.featureFormFields.map(field=>this.appendOptions(this.heartland,field)); 
+  heartlandFeatureFormFields= this.heartland.featureFormFields.map(field=>this.appendOptions(this.heartland,field)); 
   heartlandActivityFormFields= this.heartland.activityFormFields.map(field=>this.appendOptions(this.heartland,field)); 
   heartlandColors= this.heartland.color;
+  
 
+  //selected locations store either island or heartland data
   selectedLocations = [];
   selectedFeature: Selector = { value:null, visibility: null, loading:false};
   selectedActivity: Selector = { value:null, visibility: null, loading:false};
-
   currentTab: Tab = "Island"; //default
-
-  fc = new FeatureCollection;
 
   constructor(private databaseService: DatabaseService) {}
 
@@ -76,7 +78,6 @@ export class ViewExploreVisControlsComponent implements OnInit {
       case "feature": selected=this.selectedFeature;break;
       case "activity": selected=this.selectedActivity;break;
     }
-
     if (selected != null) {
       selected.visibility = visibility;
     }
@@ -121,6 +122,7 @@ export class ViewExploreVisControlsComponent implements OnInit {
 
   getFeatureSelectorLoading() {return this.selectedFeature.loading;}
 
+  //this reconcile the naming convention with database naming convention  
   private getDatabaseCategory(currentTab: string): panoCategory{
     switch (currentTab) {
       case "Island": return "panoObject";
@@ -128,27 +130,29 @@ export class ViewExploreVisControlsComponent implements OnInit {
     }
   }
 
-  private appendOptions(mode,field: NameAlias) {//selects the corresponding option list and adds to the object
+  //selects the corresponding option list and adds to the object
+  private appendOptions(mode,field: NameAlias) {
     field["var_options"] = mode[field.var_name];
     return field;
+  
   }
 
   private addToMap(tab: Tab, type: panoType, location) {
     
     let category =this.getDatabaseCategory(tab);
 
-    if(type=="parkActivities"){this.selectedActivity.loading=true;}
-    if(type=="parkFeatures"){this.selectedFeature.loading=true;}
+    if(type=="parkActivities") this.selectedActivity.loading=true;
+    if(type=="parkFeatures") this.selectedFeature.loading=true;
 
     let dataSrc: Promise<Line[]> = this.databaseService.fetchData(category,type,location).then(data =>{
 
-      if(type=="parkFeatures"){this.selectedFeature.loading=false;}
-      if(type=="parkActivities"){this.selectedActivity.loading=false;}
-
+      if(type=="parkFeatures") this.selectedFeature.loading=false;
+      if(type=="parkActivities") this.selectedActivity.loading=false;
+      
       if (this.selectedActivity.value != null)
         this.stats.emit([data,this.selectedActivity.value.activities.var_name]);//emit to stats viewer test
-
-      return data;});
+      return data;
+    });
 
     let color;
 
@@ -167,9 +171,7 @@ export class ViewExploreVisControlsComponent implements OnInit {
           this.selectedFeature.visibility);
         break;
       case "parkActivities":
-        //additional datasrc transformation for activity selection
-        dataSrc = this.activityDataModifier(dataSrc);
-
+        dataSrc = this.activityDataModifier(dataSrc);//additional datasrc transformation for activity selection
         this.mapService.addToRender(
           dataSrc,
           this.selectedActivity.value['activities'].var_name,
@@ -187,19 +189,19 @@ export class ViewExploreVisControlsComponent implements OnInit {
   private activityDataModifier(data: Promise<Line[]>): Promise<Line[]>  {
     let value = this.selectedActivity.value;
 
-    if (value.timeOfWeek == undefined && value.timeOfDay == undefined) {
+    if (value.timeOfWeek == undefined && value.timeOfDay == undefined) 
       return data.then(d=>this.fc.filterByActivity(d));
-    }
-    else if (value.timeOfWeek != undefined && value.timeOfDay != undefined) {
+  
+    if (value.timeOfWeek != undefined && value.timeOfDay != undefined) {
       let period = value.timeOfWeek.var_name+value.timeOfDay.var_name;
       return data.then(d=>this.fc.filterByPeriod(d,period));
     }
-    else if (value.timeOfWeek != undefined && value.timeOfDay == undefined) {
-      return data.then(d=>this.fc.filterByWeek(d,value.timeOfWeek.var_name));
-    }
-    else if (value.timeOfWeek == undefined && value.timeOfDay != undefined) {
-      return data.then(d=>this.fc.filterByDay(d,value.timeOfDay.var_name));
-    }
-  }
 
+    if (value.timeOfWeek != undefined && value.timeOfDay == undefined)
+      return data.then(d=>this.fc.filterByWeek(d,value.timeOfWeek.var_name));
+    
+    if (value.timeOfWeek == undefined && value.timeOfDay != undefined) 
+      return data.then(d=>this.fc.filterByDay(d,value.timeOfDay.var_name));
+    
+  }
 }

@@ -54,7 +54,7 @@ export class HeartlandSettings extends MasterSettings{
         {var_name:"activities",var_alias:"Activity"},
         {var_name:"timeOfWeek",var_alias:"Time of Week"},
         {var_name:"timeOfDay",var_alias:"Time of Day"},
-        /* {var_name:"timeslot",var_alias:"Timeslot"} */  
+        {var_name:"timeslot",var_alias:"Timeslot"}  
     ];
     featureFormFields: NameAlias[] = [
         {var_name:"features",var_alias:"Features"}
@@ -67,12 +67,12 @@ export class HeartlandSettings extends MasterSettings{
         {var_name:"m",var_alias:"Morning"},
         {var_name:"e",var_alias:"Evening"},
     ];
-/*     timeslot1 = {
+    timeslot1 = {
         "Morning" : ["0700-0745","0745-0830","0830-0915","0915-1000","1000-1045"],
         "Evening" : ["1530-1620","1620-1710","1710-1800","1800-1850","1850-1940","1940-2030"]}; 
     timeslot2 = { //for punggol & alexandra
         "Morning" : ["0700-0800","0800-0900","0900-1000","1000-1100",],
-        "Evening" : ["1530-1630","1630-1730","1730-1830","1830-1930",]}; */ //flatten all timeslots into a single NameAlias[]
+        "Evening" : ["1530-1630","1630-1730","1730-1830","1830-1930",]};  //flatten all timeslots into a single NameAlias[]
 }
 
 export class IslandSettings extends MasterSettings{

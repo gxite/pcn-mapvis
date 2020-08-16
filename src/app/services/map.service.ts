@@ -84,30 +84,22 @@ export class MapService {
   }
 
   private LineHeightMultiplier(feature: string): number {
-    if (feature === "people" || feature === "people_active" || feature === "people_static") {
-      return 50;
-    }
-    else if (feature === "facilities_25m" || feature === "facilities_50m") {
-      return 50;
-    }
-    else if (feature === "carpark_lots_100m" || feature === "carpark_lots_200m") {
-      return 1;
-    }
-    else {
-      return 1000;
-    }   
+    if (feature === "people" || feature === "people_active" || feature === "people_static") return 50;
+    else if (feature === "facilities_25m" || feature === "facilities_50m") return 50;
+    else if (feature === "carpark_lots_100m" || feature === "carpark_lots_200m") return 1;
+    else return 1000;  
   }
 
   public render(): void {
     let newLayers=[];
     Object.keys(this.layersState).forEach(key=> {
       newLayers.push(this.createLineLayer(
-        this.layersState[key][0],
-        this.layersState[key][1],
-        this.layersState[key][2],
-        this.layersState[key][3],
-        this.layersState[key][4],
-        this.layersState[key][5])) 
+        this.layersState[key][0], //layerId
+        this.layersState[key][1], //dataSrc
+        this.layersState[key][2], //color
+        this.layersState[key][3], //lineWidth
+        this.layersState[key][4], //selected
+        this.layersState[key][5])) //isVisible
     });
     this.deck.setProps({layers: newLayers});
   }

@@ -12,8 +12,11 @@ export class SelectorTilesComponent implements OnInit {
   @ViewChildren(MatButtonToggle) toggles: QueryList<MatButtonToggle>;
 
   @Input() tileList: [];
+  @Input() allowMultiple: boolean;
 
   @Output() selected = new EventEmitter();
+
+  checked;
 
   constructor() { }
 
@@ -26,17 +29,22 @@ export class SelectorTilesComponent implements OnInit {
     });
   }
 
+  setChecked(checked: boolean) {
+    this.checked = checked;
+  }
+
   isChecked(checked: boolean) {
-    if (checked) {
+    if (checked) 
       this.toggles.forEach(toggle => {toggle.checked = toggle.checked ? true : true});
-    }
-    else {
+    else 
       this.toggles.forEach(toggle => {toggle.checked = toggle.checked ? false : false});
-    }
   }
 
   update(selection: string[]) {
-    this.selected.emit(selection);
+    if (!Array.isArray(selection)) 
+      this.selected.emit([selection]);
+    else 
+      this.selected.emit(selection);
   }
 
   reset() {
