@@ -36,6 +36,11 @@ export class FeatureCollection {
     let filtered = data.filter(d=>d["period"]===period);
     return this.peopleSum(filtered,period,null);
   }
+
+  public filterByTimeslot(data: Line[], period: Period, timeslot: string) {
+    let filtered = data.filter(d=>d["period"]===period && d["timeslot"]===timeslot);
+    return this.peopleSum(filtered,period,timeslot);
+  }
   
   private peopleSum(line: Line[], period: string, timeslot: string): Line[] {
     let aggregate = new Object; //id:[start,properties,period,timeslot]

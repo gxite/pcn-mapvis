@@ -67,12 +67,35 @@ export class HeartlandSettings extends MasterSettings{
         {var_name:"m",var_alias:"Morning"},
         {var_name:"e",var_alias:"Evening"},
     ];
+    timeslot: NameAlias[] = [
+        {var_name:"0700-0745",var_alias:"0700-0745"},
+        {var_name:"0745-0830",var_alias:"0745-0830"},
+        {var_name:"0830-0915",var_alias:"0830-0915"},
+        {var_name:"0915-1000",var_alias:"0915-1000"},
+        {var_name:"1000-1045",var_alias:"1000-1045"},
+        {var_name:"1530-1620",var_alias:"1530-1620"},
+        {var_name:"1620-1710",var_alias:"1620-1710"},
+        {var_name:"1710-1800",var_alias:"1710-1800"},
+        {var_name:"1800-1850",var_alias:"1800-1850"},
+        {var_name:"1850-1940",var_alias:"1850-1940"},
+        {var_name:"1940-2030",var_alias:"1940-2030"},
+        {var_name:"0700-0800",var_alias:"0700-0800"},
+        {var_name:"0800-0900",var_alias:"0800-0900"},
+        {var_name:"0900-1000",var_alias:"0900-1000"},
+        {var_name:"1000-1100",var_alias:"1000-1100"},
+        {var_name:"1530-1630",var_alias:"1530-1630"},
+        {var_name:"1630-1730",var_alias:"1630-1730"},
+        {var_name:"1730-1830",var_alias:"1730-1830"},
+        {var_name:"1830-1930",var_alias:"1830-1930"},
+    ];
     timeslot1 = {
         "Morning" : ["0700-0745","0745-0830","0830-0915","0915-1000","1000-1045"],
-        "Evening" : ["1530-1620","1620-1710","1710-1800","1800-1850","1850-1940","1940-2030"]}; 
+        "Evening" : ["1530-1620","1620-1710","1710-1800","1800-1850","1850-1940","1940-2030"]
+    }; 
     timeslot2 = { //for punggol & alexandra
         "Morning" : ["0700-0800","0800-0900","0900-1000","1000-1100",],
-        "Evening" : ["1530-1630","1630-1730","1730-1830","1830-1930",]};  //flatten all timeslots into a single NameAlias[]
+        "Evening" : ["1530-1630","1630-1730","1730-1830","1830-1930",]
+    };  //flatten all timeslots into a single NameAlias[]
 }
 
 export class IslandSettings extends MasterSettings{

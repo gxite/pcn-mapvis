@@ -21,7 +21,7 @@ export class ViewExploreVisControlsComponent implements OnInit {
   @ViewChildren('selectorExpPanel') children_selectorExpPanel: QueryList<SelectorExpPanelComponent>;
 
   @Input() mapService; 
-  @Output() stats = new EventEmitter();
+/*   @Output() stats = new EventEmitter(); */
 
   fc = new FeatureCollection;
 
@@ -134,7 +134,6 @@ export class ViewExploreVisControlsComponent implements OnInit {
   private appendOptions(mode,field: NameAlias) {
     field["var_options"] = mode[field.var_name];
     return field;
-  
   }
 
   private addToMap(tab: Tab, type: panoType, location) {
@@ -149,8 +148,9 @@ export class ViewExploreVisControlsComponent implements OnInit {
       if(type=="parkFeatures") this.selectedFeature.loading=false;
       if(type=="parkActivities") this.selectedActivity.loading=false;
       
-      if (this.selectedActivity.value != null)
-        this.stats.emit([data,this.selectedActivity.value.activities.var_name]);//emit to stats viewer test
+/*       if (this.selectedActivity.value != null)
+        this.stats.emit([data,this.selectedActivity.value.activities.var_name]);//emit to stats viewer test */
+
       return data;
     });
 
@@ -191,17 +191,21 @@ export class ViewExploreVisControlsComponent implements OnInit {
 
     if (value.timeOfWeek == undefined && value.timeOfDay == undefined) 
       return data.then(d=>this.fc.filterByActivity(d));
-  
-    if (value.timeOfWeek != undefined && value.timeOfDay != undefined) {
-      let period = value.timeOfWeek.var_name+value.timeOfDay.var_name;
-      return data.then(d=>this.fc.filterByPeriod(d,period));
-    }
 
-    if (value.timeOfWeek != undefined && value.timeOfDay == undefined)
+    else if (value.timeOfWeek != undefined && value.timeOfDay == undefined)
       return data.then(d=>this.fc.filterByWeek(d,value.timeOfWeek.var_name));
     
-    if (value.timeOfWeek == undefined && value.timeOfDay != undefined) 
+    else if (value.timeOfWeek == undefined && value.timeOfDay != undefined) 
       return data.then(d=>this.fc.filterByDay(d,value.timeOfDay.var_name));
+
+    else if (value.timeOfWeek != undefined && value.timeOfDay != undefined && value.timeslot == undefined ) {
+        let period = value.timeOfWeek.var_name+value.timeOfDay.var_name;
+        return data.then(d=>this.fc.filterByPeriod(d,period));
+    }
+    else if (value.timeOfWeek != undefined && value.timeOfDay != undefined && value.timeslot != undefined ) {
+      let period = value.timeOfWeek.var_name+value.timeOfDay.var_name;
+      return data.then(d=>this.fc.filterByTimeslot(d,period,value.timeslot.var_name));
+    }
     
   }
 }
