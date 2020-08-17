@@ -15,7 +15,7 @@
         <mat-label>{{field.var_alias}}</mat-label>
         <mat-select #selection [(value)]="selectedValues[field.var_name]" (selectionChange)="setSelectedChanged();setColor(field.var_name);setAlias(field.var_name);update()">
             <mat-option>None</mat-option>
-            <mat-option [value]="option" *ngFor="let option of field.var_options">{{option.var_alias}}</mat-option>
+            <mat-option [value]="option" *ngFor="let option of setTimeslotFieldOptions(field.var_name,field.var_options)">{{option.var_alias}}</mat-option>
         </mat-select>
     </mat-form-field>
 </mat-expansion-panel>

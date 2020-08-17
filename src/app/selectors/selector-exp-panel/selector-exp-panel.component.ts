@@ -1,4 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { SelectionService } from 'src/app/services/selection.service';
+import { HeartlandSettings } from 'src/app/panoSettings';
 
 @Component({
   selector: 'app-selector-exp-panel',
@@ -21,9 +23,13 @@ export class SelectorExpPanelComponent implements OnInit {
   @Output() selected = new EventEmitter();
   @Output() visible = new EventEmitter();
 
-  constructor() { }
+  heartland = new HeartlandSettings();
+  locationList: string[];
+
+  constructor(private selectionService: SelectionService) { }
 
   ngOnInit() {
+    this.selectionService.currentLocation.subscribe(locations => this.locationList = locations);
   }
 
   isVisible() {
@@ -59,6 +65,34 @@ export class SelectorExpPanelComponent implements OnInit {
     }
   }
 
+  setTimeslotFieldOptions(field: string, options) {
+    if (field != "timeslot") return options;
+    if (!this.selectedValues["timeOfDay"]) return;
+
+    let validTimeslots;
+
+    if (this.locationList[0] == "punggol" || this.locationList[0] == "alexandra"){
+      if (this.selectedValues["timeOfDay"].var_name == "m"){
+        validTimeslots = this.heartland.timeslot2.Morning;
+        return options.filter(timeslot => validTimeslots.includes(timeslot.var_name));
+      }
+      if (this.selectedValues["timeOfDay"].var_name == "e"){
+        validTimeslots = this.heartland.timeslot2.Evening;
+        return options.filter(timeslot => validTimeslots.includes(timeslot.var_name));
+      }
+    }
+    else{
+      if (this.selectedValues["timeOfDay"].var_name == "m"){
+        validTimeslots = this.heartland.timeslot1.Morning;
+        return options.filter(timeslot => validTimeslots.includes(timeslot.var_name));
+      }
+      if (this.selectedValues["timeOfDay"].var_name == "e"){
+        validTimeslots = this.heartland.timeslot1.Evening;
+        return options.filter(timeslot => validTimeslots.includes(timeslot.var_name));
+      }
+    }
+  }
+
   private flushUndefinedValues() {
     Object.keys(this.selectedValues).forEach(key=> {if(this.selectedValues[key] == undefined){delete this.selectedValues[key]}});
   }
@@ -74,8 +108,8 @@ export class SelectorExpPanelComponent implements OnInit {
         this.visible.emit(this.visibility);
         this.visibilityChanged = false;
       }
-
-    }else {
+    }
+    else {
       this.selected.emit(null);
     }
   }

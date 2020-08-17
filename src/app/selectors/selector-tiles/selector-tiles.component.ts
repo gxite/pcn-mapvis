@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, ViewChild, ViewChildren, QueryList, EventEmitter } from '@angular/core';
 import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material';
+import { SelectionService } from 'src/app/services/selection.service';
 
 @Component({
   selector: 'app-selector-tiles',
@@ -16,11 +17,13 @@ export class SelectorTilesComponent implements OnInit {
 
   @Output() selected = new EventEmitter();
 
-  checked;
+  locationList: string[];
+  checked: boolean;
 
-  constructor() { }
+  constructor(private selectionService: SelectionService) { }
 
   ngOnInit() {
+    this.selectionService.currentLocation.subscribe(locations => this.locationList = locations);
   }
 
   ngAfterViewInit() {
@@ -41,10 +44,14 @@ export class SelectorTilesComponent implements OnInit {
   }
 
   update(selection: string[]) {
-    if (!Array.isArray(selection)) 
+    if (!Array.isArray(selection)) {
       this.selected.emit([selection]);
-    else 
+      this.selectionService.setHeartlandLocation([selection]);
+    }
+    else {
       this.selected.emit(selection);
+      this.selectionService.setHeartlandLocation(selection);
+    }
   }
 
   reset() {

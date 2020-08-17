@@ -6,12 +6,19 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class SelectionService {
 
-  private heartlandLocation = new BehaviorSubject(null);
-  currentHeartlandLocation = this.heartlandLocation.asObservable();
+  private locations = new BehaviorSubject([]);
+  currentLocation = this.locations.asObservable();
+
+  private timeOfDay = new BehaviorSubject("");
+  currentTimeOfDay = this.timeOfDay.asObservable();
 
   constructor() { }
 
-  setHeartlandLocation(location: string) {
-    this.heartlandLocation.next(location);
+  setHeartlandLocation(locations: string[]) {
+    this.locations.next(locations);
+  }
+
+  setCurrentTimeOfDay(timeOfDay: string) {
+    this.timeOfDay.next(timeOfDay);
   }
 }
