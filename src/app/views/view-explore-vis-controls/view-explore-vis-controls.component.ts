@@ -8,7 +8,7 @@ import { SelectorExpPanelComponent } from 'src/app/selectors/selector-exp-panel/
 
 type Tab = "Island" | "Heartland";
 type SelectorType = "feature" | "activity";
-interface Selector { value: any; visibility: boolean; loading:boolean};
+interface Selector { value: any; visibility: boolean; lineScale: number; loading:boolean};
 
 @Component({
   selector: 'app-view-explore-vis-controls',
@@ -42,8 +42,8 @@ export class ViewExploreVisControlsComponent implements OnInit {
 
   //selected locations store either island or heartland data
   selectedLocations = [];
-  selectedFeature: Selector = { value:null, visibility: null, loading:false};
-  selectedActivity: Selector = { value:null, visibility: null, loading:false};
+  selectedFeature: Selector = { value:null, visibility: null, lineScale:null, loading:false};
+  selectedActivity: Selector = { value:null, visibility: null, lineScale:null, loading:false};
   currentTab: Tab = "Island"; //default
 
   constructor(private databaseService: DatabaseService) {}
@@ -88,6 +88,22 @@ export class ViewExploreVisControlsComponent implements OnInit {
     this.update();
   }
 
+  setLineScale(type: SelectorType, lineScale: number) {
+    let selected;
+    switch(type) {
+      case "feature": selected=this.selectedFeature;break;
+      case "activity": selected=this.selectedActivity;break;
+    }
+    if (selected != null) {
+      selected.lineScale = lineScale;
+    }
+    else {
+      this.mapService.clearLayerState();
+      this.mapService.render();
+    }
+    this.update();
+  }
+
   toggleMode(selectedIndex: number) {
     switch (selectedIndex) {
       case 0: this.currentTab = "Island"; break;
@@ -97,8 +113,8 @@ export class ViewExploreVisControlsComponent implements OnInit {
     //resets all children components & selections
     this.children_selectorTiles.forEach(c=>c.reset());
     this.children_selectorExpPanel.forEach(c=>c.reset());
-    this.selectedFeature = { value:null, visibility: null, loading:false};
-    this.selectedActivity = { value:null, visibility: null, loading:false};
+    this.selectedFeature = { value:null, visibility: null, lineScale: null, loading:false};
+    this.selectedActivity = { value:null, visibility: null, lineScale: null, loading:false};
   }
 
   clearSelectedLocations() {
@@ -137,7 +153,7 @@ export class ViewExploreVisControlsComponent implements OnInit {
   }
 
   private addToMap(tab: Tab, type: panoType, location) {
-    
+
     let category =this.getDatabaseCategory(tab);
 
     if(type=="parkActivities") this.selectedActivity.loading=true;
@@ -168,7 +184,8 @@ export class ViewExploreVisControlsComponent implements OnInit {
           this.selectedFeature.value['features'].var_name,
           color[this.selectedFeature.value['features'].var_name],
           this.generateID(location,"features"),
-          this.selectedFeature.visibility);
+          this.selectedFeature.visibility,
+          this.selectedFeature.lineScale);//linescale
         break;
       case "parkActivities":
         dataSrc = this.activityDataModifier(dataSrc);//additional datasrc transformation for activity selection
@@ -177,7 +194,8 @@ export class ViewExploreVisControlsComponent implements OnInit {
           this.selectedActivity.value['activities'].var_name,
           color[this.selectedActivity.value['activities'].var_name],
           this.generateID(location,"activities"),
-          this.selectedActivity.visibility);
+          this.selectedActivity.visibility,
+          this.selectedActivity.lineScale);
         break;
     }
   }

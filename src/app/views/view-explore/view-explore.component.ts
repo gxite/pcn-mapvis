@@ -34,4 +34,8 @@ export class ViewExploreComponent implements OnInit {
     let data = line.map(d=>d.properties[selection]);
     this.statsViewer.setHistPanel(data);
   }
+
+  resetMap() {
+/*     this.mapService.resetMapState(); */
+  }
 }

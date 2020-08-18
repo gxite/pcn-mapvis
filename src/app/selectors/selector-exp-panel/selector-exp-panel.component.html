@@ -1,14 +1,25 @@
 <mat-expansion-panel hideToggle=true [(expanded)]="expanded">
     <mat-expansion-panel-header>
         <mat-panel-title>
-            <mat-icon  [ngStyle]="{'color':selectedColor,'transform':'scale(0.9)'}">brightness_1</mat-icon>
-            <button mat-icon-button 
-                [ngStyle]="{'color':selectedColor,'margin-left': '5px'}" 
-                disableRipple=true 
-                (click)="toggleVisibility();$event.stopPropagation();update()">
-                <mat-icon>{{isVisible()}}</mat-icon>
-              </button>
-            {{selectedValueAlias}}
+            <span id="indicators">          
+                <button mat-icon-button 
+                    [ngStyle]="{'color':selectedColor,'margin-left': '5px'}" 
+                    disableRipple=true 
+                    (click)="toggleVisibility();$event.stopPropagation();update()">
+                    <mat-icon>{{isVisible()}}</mat-icon>
+                  </button>
+                {{selectedValueAlias}}
+            </span>
+            <span id="scaleSlider">
+                <mat-slider title="Adjusts scale of extrusion"
+                [max]="scaleMax"
+                [min]="scaleMin"
+                [step]="scaleStep"
+                [(ngModel)]="scaleValue"
+                (change)="setScaleChanged();update();"
+                (click)="$event.stopPropagation()">
+            </mat-slider>
+            </span>
         </mat-panel-title>
     </mat-expansion-panel-header>
     <mat-form-field *ngFor="let field of formFields">
@@ -18,4 +29,11 @@
             <mat-option [value]="option" *ngFor="let option of setTimeslotFieldOptions(field.var_name,field.var_options)">{{option.var_alias}}</mat-option>
         </mat-select>
     </mat-form-field>
+    <div class="clear">
+        <button mat-icon-button 
+            disableRipple=true 
+            (click)="clearFields();$event.stopPropagation();update()">
+            <mat-icon>clear</mat-icon>
+        </button>
+    </div>
 </mat-expansion-panel>

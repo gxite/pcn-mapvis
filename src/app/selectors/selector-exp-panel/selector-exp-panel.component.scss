@@ -12,6 +12,27 @@ $app-theme: mat-light-theme($app-primary, $app-accent);
   :host ::ng-deep .mat-expansion-panel {
     background-color: rgba($color: #303030, $alpha: 1.0);
   }
+
+  :host ::ng-deep .mat-slider-horizontal {
+    min-width: 100px;
+  }
+
+  :host ::ng-deep .mat-slider-track-fill {
+    background-color: rgba($color: #555555, $alpha: 1);
+  }
+
+  :host ::ng-deep .mat-slider-thumb {
+    background-color: rgba($color: #555555, $alpha: 1);
+  }
+
+  :host ::ng-deep .mat-expansion-panel-header {
+    padding: 12px;
+  }
+
+  :host ::ng-deep .mat-expansion-panel-header-title {
+    margin-right: 5px;
+  }
+
 }
 
 // Include the mixin
@@ -20,8 +41,20 @@ $app-theme: mat-light-theme($app-primary, $app-accent);
 mat-panel-title {
     display:flex;
     align-items: center;
+    justify-content: space-between;
+}
+
+#indicators{
+  display:flex;
+  align-items: center;
 }
 
 .mat-expansion-panel:not([class*='mat-elevation-z']) {
   box-shadow: none;
+}
+
+.clear {
+  display: flex;
+  justify-content: flex-end;
+  color: rgba($color: #555555, $alpha: 1);
 }

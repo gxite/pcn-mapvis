@@ -31,6 +31,53 @@ export class MapService {
     this.createDeckGl(deckID);
   }
 
+  public clearLayerState() {
+    this.layersState = {};
+  }
+
+  public updateLayerStates(type: string, featureLayerNum: number): void {
+    const length = Object.keys(this.layersState).length;
+    for (let i=length; i>featureLayerNum; i--) {
+      delete this.layersState[type+"_"+i.toString()];
+    }
+  }
+  
+  public addToRender(
+    dataSrc: Promise<Line[]>, 
+    selected: string, 
+    color: ColorPair, 
+    selectorID: string, 
+    isVisible: boolean,
+    linescale: number): void {
+
+    this.layersState[selectorID] = [selectorID, dataSrc, color.rgb, 5,selected,isVisible,linescale]
+  }
+
+  public render(): void {
+    let newLayers=[];
+    Object.keys(this.layersState).forEach(key=> {
+      newLayers.push(this.createLineLayer(
+        this.layersState[key][0], //layerId
+        this.layersState[key][1], //dataSrc
+        this.layersState[key][2], //color
+        this.layersState[key][3], //lineWidth
+        this.layersState[key][4], //selected
+        this.layersState[key][5], //isVisible
+        this.layersState[key][6])) //linescale
+    });
+    this.deck.setProps({layers: newLayers});
+  }
+
+/*   public resetMapState() {
+    //reset to initial map state
+    this.map.flyTo({
+      center: [this.env.viewState.longitude, this.env.viewState.latitude],
+      zoom: this.env.viewState.zoom,
+      bearing: this.env.viewState.bearing,
+      pitch: this.env.viewState.pitch
+    });
+  } */     //doesnt quite work.....need to do it through deck.gl
+
   private createMapbox(containerID : string): void {
     this.map = new mapboxgl.Map({
       container: containerID,
@@ -62,14 +109,22 @@ export class MapService {
     });
   }
 
-  private createLineLayer(layerId: string, dataSrc: Promise<Line[]>, color: number[], lineWidth: number,selected: string,isVisible: boolean): LineLayer {
+  private createLineLayer(
+    layerId: string, 
+    dataSrc: Promise<Line[]>, 
+    color: number[], 
+    lineWidth: number,
+    selected: string,
+    isVisible: boolean,
+    lineScale: number): LineLayer {
+
     return  new LineLayer({
       id: layerId,
       data: dataSrc,
       opacity: 0.5,
       getSourcePosition: d => d.start,
       getTargetPosition: 
-        d => [d.start[0],d.start[1],d.properties[selected]*this.LineHeightMultiplier(selected)],
+        d => [d.start[0],d.start[1],this.mapToLineHeight(selected,d.properties[selected])*lineScale],
       getColor: color,
       getWidth: lineWidth,
       pickable: true,
@@ -77,45 +132,26 @@ export class MapService {
       visible:isVisible,
       onHover: info => TooltipComponent.setTooltip(info.object,info.x,info.y,selected),
       updateTriggers: {
-        getTargetPosition: selected,
+        getTargetPosition: [selected,lineScale],
         data: dataSrc
       }
     }) 
   }
 
-  private LineHeightMultiplier(feature: string): number {
-    if (feature === "people" || feature === "people_active" || feature === "people_static") return 50;
-    else if (feature === "facilities_25m" || feature === "facilities_50m") return 50;
-    else if (feature === "carpark_lots_100m" || feature === "carpark_lots_200m") return 1;
-    else return 1000;  
+  private mapToLineHeight(selected: string,value: number) {
+    if (value < 1 && this.isSemanticSegmentationFeature(selected)) return value*1000;
+    return value*10;
   }
 
-  public render(): void {
-    let newLayers=[];
-    Object.keys(this.layersState).forEach(key=> {
-      newLayers.push(this.createLineLayer(
-        this.layersState[key][0], //layerId
-        this.layersState[key][1], //dataSrc
-        this.layersState[key][2], //color
-        this.layersState[key][3], //lineWidth
-        this.layersState[key][4], //selected
-        this.layersState[key][5])) //isVisible
-    });
-    this.deck.setProps({layers: newLayers});
-  }
-
-  public clearLayerState() {
-    this.layersState = {};
-  }
-
-  public updateLayerStates(type: string, featureLayerNum: number): void {
-    const length = Object.keys(this.layersState).length;
-    for (let i=length; i>featureLayerNum; i--) {
-      delete this.layersState[type+"_"+i.toString()];
-    }
-  }
-  
-  public addToRender(dataSrc: Promise<Line[]>, selected: string, color: ColorPair, selectorID: string, isVisible: boolean): void {
-    this.layersState[selectorID] = [selectorID, dataSrc, color.rgb, 5,selected,isVisible]
+  private isSemanticSegmentationFeature(selected: string): boolean {
+    switch(selected) {
+      case "Tree_Palm": return true;break;
+      case "Grass_Field": return true;break;
+      case "Plants_Flower": return true;break;
+      case "Sky": return true;break;
+      case "Path_Floor": return true;break;
+      case "Built-up_Area": return true;break;
+      default: return false;
+    } 
   }
 }

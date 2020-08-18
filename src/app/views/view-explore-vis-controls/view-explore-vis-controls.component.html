@@ -19,6 +19,7 @@
             [formFields]="islandFeatureFormFields"
             (selected)="setSelector('feature',$event)"
             (visible)="setVisibility('feature',$event)"
+            (lineScale)="setLineScale('feature',$event)"
             [colors]="islandColors">
         </app-selector-exp-panel>
         <div class="subtitle">Pick an Activity</div> 
@@ -29,6 +30,7 @@
             [formFields]="islandActivityFormFields"
             (selected)="setSelector('activity',$event)"
             (visible)="setVisibility('activity',$event)"
+            (lineScale)="setLineScale('activity',$event)"
             [colors]="islandColors">
         </app-selector-exp-panel>
     </mat-tab>
@@ -49,6 +51,7 @@
             [formFields]="heartlandFeatureFormFields"
             (selected)="setSelector('feature',$event)"
             (visible)="setVisibility('feature',$event)"
+            (lineScale)="setLineScale('feature',$event)"
             [colors]="heartlandColors">
         </app-selector-exp-panel>
         <div class="subtitle">Pick an Activity</div> 
@@ -59,6 +62,7 @@
             [formFields]="heartlandActivityFormFields"
             (selected)="setSelector('activity',$event)"
             (visible)="setVisibility('activity',$event)"
+            (lineScale)="setLineScale('activity',$event)"
             [colors]="heartlandColors">
         </app-selector-exp-panel>
     </mat-tab>

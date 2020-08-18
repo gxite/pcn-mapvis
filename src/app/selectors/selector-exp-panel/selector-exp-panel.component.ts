@@ -1,4 +1,5 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter,ViewChildren, QueryList } from '@angular/core';
+import { MatSelect } from '@angular/material';
 import { SelectionService } from 'src/app/services/selection.service';
 import { HeartlandSettings } from 'src/app/panoSettings';
 
@@ -11,17 +12,27 @@ export class SelectorExpPanelComponent implements OnInit {
 
   selectedColor;
   selectedValues = {};
+  selectedValueAlias: string;
+  selectedChanged: boolean = true;
 
-  selectedValueAlias;
   visibility: boolean = true;
   visibilityChanged = true; //starter case
-  selectedChanged = true;
-  expanded;
+
+  scaleValue: number = 1;
+  scaleMin: number = 0.2;
+  scaleMax: number = 3;
+  scaleStep: number = 0.1;
+  scaleChanged: boolean = true;
+
+  expanded: boolean;
 
   @Input() formFields;
   @Input() colors;
   @Output() selected = new EventEmitter();
   @Output() visible = new EventEmitter();
+  @Output() lineScale = new EventEmitter();
+
+  @ViewChildren(MatSelect) selectDropdowns: QueryList<MatSelect>;
 
   heartland = new HeartlandSettings();
   locationList: string[];
@@ -42,8 +53,18 @@ export class SelectorExpPanelComponent implements OnInit {
     this.visibilityChanged = true;
   }
 
+  clearFields() {
+    this.selectDropdowns.forEach(select=> select.value = null);
+    this.selectedValueAlias = null;
+    this.selectedColor=null;
+  }
+
   setSelectedChanged() {
     this.selectedChanged = true;
+  }
+
+  setScaleChanged() {
+    this.scaleChanged = true;
   }
   
   setColor(value: string) {
@@ -52,8 +73,8 @@ export class SelectorExpPanelComponent implements OnInit {
         this.selectedColor = this.colors[this.selectedValues[value].var_name].hex;
       }
     } else {
-      this.selectedColor="";
-      this.selectedValueAlias="";
+      this.selectedColor=null;
+      this.selectedValueAlias=null;
     }
   }
 
@@ -107,6 +128,10 @@ export class SelectorExpPanelComponent implements OnInit {
       if (this.visibilityChanged) {
         this.visible.emit(this.visibility);
         this.visibilityChanged = false;
+      }
+      if (this.scaleChanged) {
+        this.lineScale.emit(this.scaleValue);
+        this.scaleChanged = false;
       }
     }
     else {
