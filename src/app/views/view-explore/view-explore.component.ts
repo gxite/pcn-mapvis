@@ -36,6 +36,6 @@ export class ViewExploreComponent implements OnInit {
   }
 
   resetMap() {
-/*     this.mapService.resetMapState(); */
+    this.mapService.resetMapState();
   }
 }

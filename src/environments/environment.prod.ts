@@ -11,7 +11,7 @@ export const environment = {
     longitude: 103.80844116210938,
     zoom: window.innerWidth < INNER_WIDTH_THRESHOLD ? 9 : 11,
     bearing: 0,
-    pitch: 30
+    pitch: 30,
   },
   firebaseConfig: {
     apiKey: "AIzaSyCszwy5ieqgj370oJbtGUQVorIFdaQGHe0",

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import * as mapboxgl from 'mapbox-gl';
-import { Deck } from '@deck.gl/core';
+import { Deck, FlyToInterpolator } from '@deck.gl/core';
 import { LineLayer } from '@deck.gl/layers';
 import { ColorPair } from 'src/app/panoSettings';
 import { Line, FeatureCollection } from "src/app/panoFeatureCollection";
@@ -68,15 +68,18 @@ export class MapService {
     this.deck.setProps({layers: newLayers});
   }
 
-/*   public resetMapState() {
+  public resetMapState() {
     //reset to initial map state
-    this.map.flyTo({
-      center: [this.env.viewState.longitude, this.env.viewState.latitude],
-      zoom: this.env.viewState.zoom,
-      bearing: this.env.viewState.bearing,
-      pitch: this.env.viewState.pitch
+    this.deck.setProps({
+      initialViewState: {
+        longitude: this.env.viewState.longitude,
+        latitude: this.env.viewState.latitude,
+        zoom: this.env.viewState.zoom,
+        transitionInterpolator: new FlyToInterpolator({speed: 1.5}),
+        transitionDuration: 'auto'
+      }
     });
-  } */     //doesnt quite work.....need to do it through deck.gl
+  } 
 
   private createMapbox(containerID : string): void {
     this.map = new mapboxgl.Map({
