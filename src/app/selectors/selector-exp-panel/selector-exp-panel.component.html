@@ -12,13 +12,13 @@
             </span>
             <span id="scaleSlider">
                 <mat-slider title="Adjusts scale of extrusion"
-                [max]="scaleMax"
-                [min]="scaleMin"
-                [step]="scaleStep"
-                [(ngModel)]="scaleValue"
-                (change)="setScaleChanged();update();"
-                (click)="$event.stopPropagation()">
-            </mat-slider>
+                    [max]="scaleMax"
+                    [min]="scaleMin"
+                    [step]="scaleStep"
+                    [(ngModel)]="scaleValue"
+                    (change)="setScaleChanged();update();"
+                    (click)="$event.stopPropagation()">
+                </mat-slider>
             </span>
         </mat-panel-title>
     </mat-expansion-panel-header>
@@ -29,11 +29,12 @@
             <mat-option [value]="option" *ngFor="let option of setTimeslotFieldOptions(field.var_name,field.var_options)">{{option.var_alias}}</mat-option>
         </mat-select>
     </mat-form-field>
-    <div class="clear">
+    <span class="clear">
         <button mat-icon-button 
             disableRipple=true 
+            [ngStyle]="{'transform':'scale(0.9)'}" 
             (click)="clearFields();$event.stopPropagation();update()">
             <mat-icon>clear</mat-icon>
         </button>
-    </div>
+    </span>
 </mat-expansion-panel>

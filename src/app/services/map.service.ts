@@ -70,15 +70,16 @@ export class MapService {
 
   public resetMapState() {
     //reset to initial map state
-    this.deck.setProps({
-      initialViewState: {
+/*     this.deck.setProps({
+      viewState: {
         longitude: this.env.viewState.longitude,
         latitude: this.env.viewState.latitude,
         zoom: this.env.viewState.zoom,
         transitionInterpolator: new FlyToInterpolator({speed: 1.5}),
         transitionDuration: 'auto'
-      }
-    });
+      },
+      layers: newLayers
+    }); */
   } 
 
   private createMapbox(containerID : string): void {
