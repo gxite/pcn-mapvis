@@ -57,6 +57,8 @@ export class SelectorExpPanelComponent implements OnInit {
     this.selectDropdowns.forEach(select=> select.value = null);
     this.selectedValueAlias = null;
     this.selectedColor=null;
+    this.selectedValues={};
+    this.update();
   }
 
   setSelectedChanged() {
