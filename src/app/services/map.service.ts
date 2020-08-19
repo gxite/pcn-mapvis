@@ -20,6 +20,7 @@ export class MapService {
 
   layersState = {};
   fc =new FeatureCollection;
+  temp;
 
   constructor() {
     this.env = environment;
@@ -27,6 +28,7 @@ export class MapService {
   }
 
   public buildMap(containerID : string, deckID :string): void {
+    this.temp = deckID
     this.createMapbox(containerID);
     this.createDeckGl(deckID);
   }
@@ -70,16 +72,16 @@ export class MapService {
 
   public resetMapState() {
     //reset to initial map state
-/*     this.deck.setProps({
-      viewState: {
+    this.deck.setProps({
+      initialViewState: {
         longitude: this.env.viewState.longitude,
         latitude: this.env.viewState.latitude,
         zoom: this.env.viewState.zoom,
+        pitch: this.env.viewState.pitch,
         transitionInterpolator: new FlyToInterpolator({speed: 1.5}),
         transitionDuration: 'auto'
       },
-      layers: newLayers
-    }); */
+    });
   } 
 
   private createMapbox(containerID : string): void {
