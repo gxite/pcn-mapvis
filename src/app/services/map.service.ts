@@ -84,6 +84,33 @@ export class MapService {
     });
   } 
 
+  public flyTo(data: Line[]): void {
+    this.flyToLocation(this.getCenterCoordinate(data));
+  }
+
+  //takes in number[] in the form [long,lat]
+  private flyToLocation(coord: number[]): void {
+    //reset to initial map state
+    this.deck.setProps({
+      initialViewState: {
+        longitude: coord[0],
+        latitude: coord[1],
+        zoom: 15,
+        pitch: 30,
+        transitionInterpolator: new FlyToInterpolator({speed: 1.5}),
+        transitionDuration: 'auto'
+      },
+    });
+  }
+
+  private getCenterCoordinate(data: Line[]): number[] {
+    let length = data.length;
+    let longitude = data.reduce((sum,line)=>sum+line.start[0],0) / length;
+    let latitude = data.reduce((sum,line)=>sum+line.start[1],0) / length;
+
+    return [longitude,latitude]
+  }
+
   private createMapbox(containerID : string): void {
     this.map = new mapboxgl.Map({
       container: containerID,
