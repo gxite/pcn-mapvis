@@ -37,12 +37,18 @@ export class FeatureCollection {
     return this.peopleSum(filtered,period,null);
   }
 
-  public filterByTimeslot(data: Line[], period: Period, timeslot: string) {
+  public filterByTimeslot(data: Line[], period: Period, timeslot: string): Line[] {
     let filtered = data.filter(d=>d["period"]===period && d["timeslot"]===timeslot);
     return this.peopleSum(filtered,period,timeslot);
+  }s
+
+  public filterByTimeslotAndTimeOfDay(data: Line[],day: Day,timeslot: string): Line[] {
+    let filtered = data.filter(d=>((d["period"]==="wd"+day) || (d["period"]==="we"+day)) && d["timeslot"]===timeslot);
+    return this.peopleSum(filtered,null,timeslot);
   }
   
   private peopleSum(line: Line[], period: string, timeslot: string): Line[] {
+    console.log(line)
     let aggregate = new Object; //id:[start,properties,period,timeslot]
     line.forEach(data=> {
       if (!aggregate[data.id]) {
