@@ -8,6 +8,12 @@ mat-toolbar {
     box-shadow: 0px 3px 10px 2px #202020;
 }
 
+@media (max-height:700px) {
+    mat-toolbar{
+        max-height: 50px;
+    }
+}
+
 #logo {
     display: flex;
     align-items: center;
