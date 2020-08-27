@@ -224,8 +224,11 @@ export class ViewExploreVisControlsComponent implements OnInit {
     else if (value.timeOfWeek != undefined && value.timeOfDay == undefined)
       return data.then(d=>this.fc.filterByWeek(d,value.timeOfWeek.var_name));
     
-    else if (value.timeOfWeek == undefined && value.timeOfDay != undefined) 
+    else if (value.timeOfWeek == undefined && value.timeOfDay != undefined && value.timeslot == undefined) 
       return data.then(d=>this.fc.filterByDay(d,value.timeOfDay.var_name));
+
+    else if (value.timeOfWeek == undefined && value.timeOfDay != undefined && value.timeslot != undefined)  
+      return data.then(d=>this.fc.filterByTimeslotAndTimeOfDay(d,value.timeOfDay.var_name,value.timeslot.var_name));
 
     else if (value.timeOfWeek != undefined && value.timeOfDay != undefined && value.timeslot == undefined ) {
         let period = value.timeOfWeek.var_name+value.timeOfDay.var_name;
