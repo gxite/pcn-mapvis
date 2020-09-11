@@ -1,5 +1,12 @@
+/* Description: Keeps track the current menu selection states. 
+                Contains methods to access and set states.
+*/
+
 import { Injectable } from '@angular/core';
+
 import { BehaviorSubject } from 'rxjs';
+import { NameAlias } from '../panoSettings';
+import { ExploreStateService } from './explore-state.service';
 
 @Injectable({
   providedIn: 'root'
@@ -7,12 +14,18 @@ import { BehaviorSubject } from 'rxjs';
 export class SelectionService {
 
   private locations = new BehaviorSubject([]);
-  currentLocation = this.locations.asObservable();
-
   private timeOfDay = new BehaviorSubject("");
+
+  private timeOfWeek = new BehaviorSubject("");
+
+  currentLocation = this.locations.asObservable();
   currentTimeOfDay = this.timeOfDay.asObservable();
 
-  constructor() { }
+  currentExploreState: NameAlias;
+
+  constructor(private exploreState: ExploreStateService) {
+    this.exploreState.currentState.subscribe(state => this.currentExploreState = state);
+   }
 
   setHeartlandLocation(locations: string[]) {
     this.locations.next(locations);

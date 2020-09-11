@@ -44,14 +44,10 @@ export class SelectorTilesComponent implements OnInit {
   }
 
   update(selection: string[]) {
-    if (!Array.isArray(selection)) {
-      this.selected.emit([selection]);
+    if (!Array.isArray(selection)) 
       this.selectionService.setHeartlandLocation([selection]);
-    }
-    else {
-      this.selected.emit(selection);
+    else 
       this.selectionService.setHeartlandLocation(selection);
-    }
   }
 
   reset() {

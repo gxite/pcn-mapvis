@@ -71,8 +71,8 @@ export class SelectorExpPanelComponent implements OnInit {
   
   setColor(value: string) {
     if(this.selectedValues[value]!=undefined) { 
-      if (this.colors[this.selectedValues[value].var_name]) {
-        this.selectedColor = this.colors[this.selectedValues[value].var_name].hex;
+      if (this.colors[this.selectedValues[value].name]) {
+        this.selectedColor = this.colors[this.selectedValues[value].name].hex;
       }
     } else {
       this.selectedColor=null;
@@ -83,7 +83,7 @@ export class SelectorExpPanelComponent implements OnInit {
   setAlias(value: string) {
     if (value == "activities" || value == "features") {
       if(this.selectedValues[value]!=undefined) {
-        this.selectedValueAlias = this.selectedValues[value].var_alias;
+        this.selectedValueAlias = this.selectedValues[value].alias;
       }
     }
   }
@@ -95,23 +95,23 @@ export class SelectorExpPanelComponent implements OnInit {
     let validTimeslots;
 
     if (this.locationList[0] == "punggol" || this.locationList[0] == "alexandra"){
-      if (this.selectedValues["timeOfDay"].var_name == "m"){
+      if (this.selectedValues["timeOfDay"].name == "m"){
         validTimeslots = this.heartland.timeslot2.Morning;
-        return options.filter(timeslot => validTimeslots.includes(timeslot.var_name));
+        return options.filter(timeslot => validTimeslots.includes(timeslot.name));
       }
-      if (this.selectedValues["timeOfDay"].var_name == "e"){
+      if (this.selectedValues["timeOfDay"].name == "e"){
         validTimeslots = this.heartland.timeslot2.Evening;
-        return options.filter(timeslot => validTimeslots.includes(timeslot.var_name));
+        return options.filter(timeslot => validTimeslots.includes(timeslot.name));
       }
     }
     else{
-      if (this.selectedValues["timeOfDay"].var_name == "m"){
+      if (this.selectedValues["timeOfDay"].name == "m"){
         validTimeslots = this.heartland.timeslot1.Morning;
-        return options.filter(timeslot => validTimeslots.includes(timeslot.var_name));
+        return options.filter(timeslot => validTimeslots.includes(timeslot.name));
       }
-      if (this.selectedValues["timeOfDay"].var_name == "e"){
+      if (this.selectedValues["timeOfDay"].name == "e"){
         validTimeslots = this.heartland.timeslot1.Evening;
-        return options.filter(timeslot => validTimeslots.includes(timeslot.var_name));
+        return options.filter(timeslot => validTimeslots.includes(timeslot.name));
       }
     }
   }

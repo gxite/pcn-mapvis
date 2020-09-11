@@ -5,7 +5,7 @@ import { DatabaseService, panoCategory, panoType } from 'src/app/services/databa
 import { FeatureCollection, Line} from "src/app/panoFeatureCollection";
 import { SelectorTilesComponent } from 'src/app/selectors/selector-tiles/selector-tiles.component';
 import { SelectorExpPanelComponent } from 'src/app/selectors/selector-exp-panel/selector-exp-panel.component';
-import { ThrowStmt } from '@angular/compiler';
+import { SelectionService } from 'src/app/services/selection.service';
 
 type Tab = "Island" | "Heartland";
 type SelectorType = "feature" | "activity";
@@ -50,13 +50,12 @@ export class ViewExploreVisControlsComponent implements OnInit {
   zoom: boolean = false;
   color = {};
 
-  constructor(private databaseService: DatabaseService) {}
+  constructor(
+    private databaseService: DatabaseService,
+    private selection: SelectionService) {}
 
-  ngOnInit(){}
-
-  setLocations(selection: string[]) {
-    this.selectedLocations = selection;
-    this.update();
+  ngOnInit(){
+    this.selection.currentLocation.subscribe(l=> {this.selectedLocations=l;this.update()});
   }
 
   setSelector(type: SelectorType, value: Object) {
@@ -151,7 +150,7 @@ export class ViewExploreVisControlsComponent implements OnInit {
 
   //selects the corresponding option list and adds to the object
   private appendOptions(mode,field: NameAlias) {
-    field["var_options"] = mode[field.var_name];
+    field["var_options"] = mode[field.name];
     return field;
   }
 
@@ -183,7 +182,7 @@ export class ViewExploreVisControlsComponent implements OnInit {
       }
 
 /*       if (this.selectedActivity.value != null)
-        this.stats.emit([data,this.selectedActivity.value.activities.var_name]);//emit to stats viewer test */
+        this.stats.emit([data,this.selectedActivity.value.activities.name]);//emit to stats viewer test */
 
       return data;
     });
@@ -192,8 +191,8 @@ export class ViewExploreVisControlsComponent implements OnInit {
       case "parkFeatures":
         this.mapService.addToRender(
           dataSrc,
-          this.selectedFeature.value['features'].var_name,
-          this.color[this.selectedFeature.value['features'].var_name],
+          this.selectedFeature.value['features'].name,
+          this.color[this.selectedFeature.value['features'].name],
           this.generateID(location,"features"),
           this.selectedFeature.visibility,
           this.selectedFeature.lineScale);//linescale
@@ -202,8 +201,8 @@ export class ViewExploreVisControlsComponent implements OnInit {
         dataSrc = this.activityDataModifier(dataSrc);//additional datasrc transformation for activity selection
         this.mapService.addToRender(
           dataSrc,
-          this.selectedActivity.value['activities'].var_name,
-          this.color[this.selectedActivity.value['activities'].var_name],
+          this.selectedActivity.value['activities'].name,
+          this.color[this.selectedActivity.value['activities'].name],
           this.generateID(location,"activities"),
           this.selectedActivity.visibility,
           this.selectedActivity.lineScale);
@@ -222,21 +221,21 @@ export class ViewExploreVisControlsComponent implements OnInit {
       return data.then(d=>this.fc.filterByActivity(d));
 
     else if (value.timeOfWeek != undefined && value.timeOfDay == undefined)
-      return data.then(d=>this.fc.filterByWeek(d,value.timeOfWeek.var_name));
+      return data.then(d=>this.fc.filterByWeek(d,value.timeOfWeek.name));
     
     else if (value.timeOfWeek == undefined && value.timeOfDay != undefined && value.timeslot == undefined) 
-      return data.then(d=>this.fc.filterByDay(d,value.timeOfDay.var_name));
+      return data.then(d=>this.fc.filterByDay(d,value.timeOfDay.name));
 
     else if (value.timeOfWeek == undefined && value.timeOfDay != undefined && value.timeslot != undefined)  
-      return data.then(d=>this.fc.filterByTimeslotAndTimeOfDay(d,value.timeOfDay.var_name,value.timeslot.var_name));
+      return data.then(d=>this.fc.filterByTimeslotAndTimeOfDay(d,value.timeOfDay.name,value.timeslot.name));
 
     else if (value.timeOfWeek != undefined && value.timeOfDay != undefined && value.timeslot == undefined ) {
-        let period = value.timeOfWeek.var_name+value.timeOfDay.var_name;
+        let period = value.timeOfWeek.name+value.timeOfDay.name;
         return data.then(d=>this.fc.filterByPeriod(d,period));
     }
     else if (value.timeOfWeek != undefined && value.timeOfDay != undefined && value.timeslot != undefined ) {
-      let period = value.timeOfWeek.var_name+value.timeOfDay.var_name;
-      return data.then(d=>this.fc.filterByTimeslot(d,period,value.timeslot.var_name));
+      let period = value.timeOfWeek.name+value.timeOfDay.name;
+      return data.then(d=>this.fc.filterByTimeslot(d,period,value.timeslot.name));
     }
     
   }

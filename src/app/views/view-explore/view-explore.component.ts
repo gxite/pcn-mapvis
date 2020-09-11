@@ -30,7 +30,7 @@ export class ViewExploreComponent implements OnInit {
   onSelection($event) {
     let line =$event[0]; 
     let selection = $event[1];
-    let data = line.map(d=>d.properties[selection]);
+    //let data = line.map(d=>d.properties[selection]);
     //this.statsViewer.setHistPanel(data);
   }
 

@@ -1,6 +1,6 @@
 <mat-grid-list cols="2" rowHeight="3:1">
     <mat-grid-tile *ngFor="let tile of tileList">
-        <mat-button-toggle (change)="setChecked(false)" value={{tile.var_name}}>{{tile.var_alias}}</mat-button-toggle>
+        <mat-button-toggle (change)="setChecked(false)" value={{tile.name}}>{{tile.alias}}</mat-button-toggle>
     </mat-grid-tile>
     <mat-button-toggle-group 
         #group="matButtonToggleGroup" 

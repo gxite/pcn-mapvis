@@ -6,7 +6,6 @@
     <mat-tab #island label="Island">
         <div class="subtitle">Select Locations</div> 
         <app-selector-tiles #selectorTiles
-            (selected)="setLocations($event)" 
             [tileList]="islandLocations"
             [allowMultiple]=true>
         </app-selector-tiles>
@@ -38,7 +37,6 @@
     <mat-tab #heartland label="Heartland">
         <div class="subtitle">Select Locations</div> 
         <app-selector-tiles #selectorTiles
-            (selected)="setLocations($event);update()" 
             [tileList]="heartlandLocations"
             [allowMultiple]=false>
         </app-selector-tiles>

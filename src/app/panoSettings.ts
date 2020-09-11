@@ -1,39 +1,48 @@
 export const INNER_WIDTH_THRESHOLD = 420;
-export interface NameAlias { var_name: string; var_alias: string;}
+export interface NameAlias { name: string; alias: string;}
 export interface ColorPair { rgb: number[]; hex: string;}
 
 export class MasterSettings {
     layerTypes: NameAlias[] = [
-        {var_name:"parkActivities",var_alias:"Activity"},
-        {var_name:"parkFeatures",var_alias:"Feature"}];
+        {name:"parkActivities",alias:"Activity"},
+        {name:"parkFeatures",alias:"Feature"}];
+    static exploreStates: NameAlias[] = [
+        {name:"island",alias:"Island"},
+        {name:"heartland",alias:"Heartland"}];
+    timeOfWeek: NameAlias[] = [
+        {name:"wd",alias:"Weekday"},
+        {name:"we",alias:"Weekend"}];
+    timeOfDay: NameAlias[] = [
+        {name:"m",alias:"Morning"},
+        {name:"e",alias:"Evening"},];
 }
 
 export class HeartlandSettings extends MasterSettings{
     locations: NameAlias[] = [
-        {var_name:"ecp1",var_alias:"East Coast Park 1"},
-        {var_name:"ecp2",var_alias:"East Coast Park 2"},
-        {var_name:"wcp",var_alias:"West Coast Park"},
-        {var_name:"mbs1",var_alias:"Marina Bay Sands"},
-        {var_name:"gardens",var_alias:"Gardens by the Bay"},
-        {var_name:"alexandra",var_alias:"Alexandra Canal"},
-        {var_name:"punggol",var_alias:"Punggol Canal"}
+        {name:"ecp1",alias:"East Coast Park 1"},
+        {name:"ecp2",alias:"East Coast Park 2"},
+        {name:"wcp",alias:"West Coast Park"},
+        {name:"mbs1",alias:"Marina Bay Sands"},
+        {name:"gardens",alias:"Gardens by the Bay"},
+        {name:"alexandra",alias:"Alexandra Canal"},
+        {name:"punggol",alias:"Punggol Canal"}
     ];
     features: NameAlias[] = [
-        {var_name:"Tree_Palm",var_alias:"Tree & Palm"},
-        {var_name:"Grass_Field",var_alias:"Grassfields"},
-        {var_name:"Plants_Flower",var_alias:"Plants & Hedges"},
-        {var_name:"Sky",var_alias:"Sky"},
-        {var_name:"Path_Floor",var_alias:"Path & Open Spaces"},
-        {var_name:"Built-up_Area",var_alias:"Built-up Area"},
-        {var_name:"carpark_lots_100m",var_alias:"Carpark lots within 100m"},
-        {var_name:"carpark_lots_200m",var_alias:"Carpark lots within 200m"},
-        {var_name:"facilities_25m",var_alias:"Facilities within 25m"},
-        {var_name:"facilities_50m",var_alias:"Facilities within 50m"}
+        {name:"Tree_Palm",alias:"Tree & Palm"},
+        {name:"Grass_Field",alias:"Grassfields"},
+        {name:"Plants_Flower",alias:"Plants & Hedges"},
+        {name:"Sky",alias:"Sky"},
+        {name:"Path_Floor",alias:"Path & Open Spaces"},
+        {name:"Built-up_Area",alias:"Built-up Area"},
+        {name:"carpark_lots_100m",alias:"Carpark lots within 100m"},
+        {name:"carpark_lots_200m",alias:"Carpark lots within 200m"},
+        {name:"facilities_25m",alias:"Facilities within 25m"},
+        {name:"facilities_50m",alias:"Facilities within 50m"}
     ];
     activities: NameAlias[] = [
-        {var_name:"people",var_alias:"People"},
-        {var_name:"people_active",var_alias:"People Active"},
-        {var_name:"people_static",var_alias:"People Static"}
+        {name:"people",alias:"People"},
+        {name:"people_active",alias:"People Active"},
+        {name:"people_static",alias:"People Static"}
     ];
     color = {
         "Tree_Palm": {"rgb":[9, 232, 94], "hex":"#09e85e"},
@@ -51,42 +60,34 @@ export class HeartlandSettings extends MasterSettings{
         "people_static": {"rgb":[143,33,207],"hex":"#8f21cf"}
     };
     activityFormFields: NameAlias[] = [
-        {var_name:"activities",var_alias:"Activity"},
-        {var_name:"timeOfWeek",var_alias:"Time of Week"},
-        {var_name:"timeOfDay",var_alias:"Time of Day"},
-        {var_name:"timeslot",var_alias:"Timeslot"}  
+        {name:"activities",alias:"Activity"},
+        {name:"timeOfWeek",alias:"Time of Week"},
+        {name:"timeOfDay",alias:"Time of Day"},
+        {name:"timeslot",alias:"Timeslot"}  
     ];
     featureFormFields: NameAlias[] = [
-        {var_name:"features",var_alias:"Features"}
-    ];
-    timeOfWeek: NameAlias[] = [
-        {var_name:"wd",var_alias:"Weekday"},
-        {var_name:"we",var_alias:"Weekend"}
-    ];
-    timeOfDay: NameAlias[] = [
-        {var_name:"m",var_alias:"Morning"},
-        {var_name:"e",var_alias:"Evening"},
+        {name:"features",alias:"Features"}
     ];
     timeslot: NameAlias[] = [
-        {var_name:"0700-0745",var_alias:"0700-0745"},
-        {var_name:"0745-0830",var_alias:"0745-0830"},
-        {var_name:"0830-0915",var_alias:"0830-0915"},
-        {var_name:"0915-1000",var_alias:"0915-1000"},
-        {var_name:"1000-1045",var_alias:"1000-1045"},
-        {var_name:"1530-1620",var_alias:"1530-1620"},
-        {var_name:"1620-1710",var_alias:"1620-1710"},
-        {var_name:"1710-1800",var_alias:"1710-1800"},
-        {var_name:"1800-1850",var_alias:"1800-1850"},
-        {var_name:"1850-1940",var_alias:"1850-1940"},
-        {var_name:"1940-2030",var_alias:"1940-2030"},
-        {var_name:"0700-0800",var_alias:"0700-0800"},
-        {var_name:"0800-0900",var_alias:"0800-0900"},
-        {var_name:"0900-1000",var_alias:"0900-1000"},
-        {var_name:"1000-1100",var_alias:"1000-1100"},
-        {var_name:"1530-1630",var_alias:"1530-1630"},
-        {var_name:"1630-1730",var_alias:"1630-1730"},
-        {var_name:"1730-1830",var_alias:"1730-1830"},
-        {var_name:"1830-1930",var_alias:"1830-1930"},
+        {name:"0700-0745",alias:"0700-0745"},
+        {name:"0745-0830",alias:"0745-0830"},
+        {name:"0830-0915",alias:"0830-0915"},
+        {name:"0915-1000",alias:"0915-1000"},
+        {name:"1000-1045",alias:"1000-1045"},
+        {name:"1530-1620",alias:"1530-1620"},
+        {name:"1620-1710",alias:"1620-1710"},
+        {name:"1710-1800",alias:"1710-1800"},
+        {name:"1800-1850",alias:"1800-1850"},
+        {name:"1850-1940",alias:"1850-1940"},
+        {name:"1940-2030",alias:"1940-2030"},
+        {name:"0700-0800",alias:"0700-0800"},
+        {name:"0800-0900",alias:"0800-0900"},
+        {name:"0900-1000",alias:"0900-1000"},
+        {name:"1000-1100",alias:"1000-1100"},
+        {name:"1530-1630",alias:"1530-1630"},
+        {name:"1630-1730",alias:"1630-1730"},
+        {name:"1730-1830",alias:"1730-1830"},
+        {name:"1830-1930",alias:"1830-1930"},
     ];
     timeslot1 = {
         "Morning" : ["0700-0745","0745-0830","0830-0915","0915-1000","1000-1045"],
@@ -100,26 +101,26 @@ export class HeartlandSettings extends MasterSettings{
 
 export class IslandSettings extends MasterSettings{
     locations: NameAlias[] = [
-        {var_name:"central_urban",var_alias:"Central Urban"},
-        {var_name:"eastern_coastal",var_alias:"Eastern Coastal"},
-        {var_name:"northern_explorer",var_alias:"Northern Explorer"},
-        {var_name:"north_eastern_riverine",var_alias:"N.Eastern Riverine"},
-        {var_name:"southern_ridges",var_alias:"Southern Ridges"},
-        {var_name:"western_adventure",var_alias:"Western Adventure"},
-        {var_name:"downtown",var_alias:"Downtown"}
+        {name:"central_urban",alias:"Central Urban"},
+        {name:"eastern_coastal",alias:"Eastern Coastal"},
+        {name:"northern_explorer",alias:"Northern Explorer"},
+        {name:"north_eastern_riverine",alias:"N.Eastern Riverine"},
+        {name:"southern_ridges",alias:"Southern Ridges"},
+        {name:"western_adventure",alias:"Western Adventure"},
+        {name:"downtown",alias:"Downtown"}
     ];
     features: NameAlias[] = [
-        {var_name:"Tree_Palm",var_alias:"Tree & Palm"},
-        {var_name:"Grass_Field",var_alias:"Grassfields"},
-        {var_name:"Plants_Flower",var_alias:"Plants & Hedges"},
-        {var_name:"Sky",var_alias:"Sky"},
-        {var_name:"Path_Floor",var_alias:"Path & Open Spaces"},
-        {var_name:"Built-up_Area",var_alias:"Built-up Area"}
+        {name:"Tree_Palm",alias:"Tree & Palm"},
+        {name:"Grass_Field",alias:"Grassfields"},
+        {name:"Plants_Flower",alias:"Plants & Hedges"},
+        {name:"Sky",alias:"Sky"},
+        {name:"Path_Floor",alias:"Path & Open Spaces"},
+        {name:"Built-up_Area",alias:"Built-up Area"}
     ];
     activities: NameAlias[] = [
-        {var_name:"people",var_alias:"People"},
-        {var_name:"bicycles",var_alias:"Bicycles"},
-        {var_name:"vehicles",var_alias:"Vehicles"}
+        {name:"people",alias:"People"},
+        {name:"bicycles",alias:"Bicycles"},
+        {name:"vehicles",alias:"Vehicles"}
     ];  
     color = {
         "Tree_Palm": {"rgb":[9, 232, 94], "hex":"#09e85e"},
@@ -133,20 +134,12 @@ export class IslandSettings extends MasterSettings{
         "vehicles": {"rgb":[143,33,207],"hex":"#8f21cf"}
     };
     activityFormFields: NameAlias[] = [
-        {var_name:"activities",var_alias:"Activity"},
-        {var_name:"timeOfWeek",var_alias:"Time of Week"},
-        {var_name:"timeOfDay",var_alias:"Time of Day"},
+        {name:"activities",alias:"Activity"},
+        {name:"timeOfWeek",alias:"Time of Week"},
+        {name:"timeOfDay",alias:"Time of Day"},
     ];
     featureFormFields: NameAlias[] = [
-        {var_name:"features",var_alias:"Features"}
-    ]; 
-    timeOfWeek: NameAlias[] = [
-        {var_name:"wd",var_alias:"Weekday"},
-        {var_name:"we",var_alias:"Weekend"}
-    ];
-    timeOfDay: NameAlias[] = [
-        {var_name:"m",var_alias:"Morning"},
-        {var_name:"e",var_alias:"Evening"},
-    ];     
+        {name:"features",alias:"Features"}
+    ];      
 }
 
