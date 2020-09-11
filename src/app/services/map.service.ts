@@ -1,8 +1,11 @@
+/* Description: Contains methods that handles map creation and navigation */
+
 import { Injectable } from '@angular/core';
 
 import * as mapboxgl from 'mapbox-gl';
 import { Deck, FlyToInterpolator } from '@deck.gl/core';
 import { LineLayer } from '@deck.gl/layers';
+
 import { ColorPair } from 'src/app/panoSettings';
 import { Line, FeatureCollection } from "src/app/panoFeatureCollection";
 import { environment } from 'src/environments/environment';

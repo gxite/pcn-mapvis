@@ -1,13 +1,14 @@
-import { Injectable } from '@angular/core';
+/* Description: Contains methods that handles backend access and communications */
+
+import { Injectable } from '@angular/core'
+
+import * as firebase from "firebase/app"; // Firebase App (the core Firebase SDK) is always required and must be listed first
+import "firebase/database";
 
 import { environment } from '../../environments/environment';
 import { FeatureCollection, Line } from "../panoFeatureCollection";
 
-// Firebase App (the core Firebase SDK) is always required and must be listed first
-import * as firebase from "firebase/app";
-import "firebase/database";
-import "firebase/firestore";
-
+/*The types are defined based on the labels and hierarchy used in the firebase realtime database */
 export type panoCategory = "panoAction" | "panoObject";
 export type panoType = "parkActivities" | "parkFeatures";
 
@@ -32,7 +33,6 @@ export class DatabaseService {
   
   public fetchData(category: panoCategory, type: panoType, location: string): Promise<Line[]> {
     let id = this.generateCacheId(category,type,location);
-    //return this.firebaseFetch(id).then(d=>this.fc.transformToLine(d));
     
     if (!this.isCached(id)) {
       this.setCache(id);
@@ -57,7 +57,6 @@ export class DatabaseService {
     return new Promise<FeatureCollection>((resolve,reject) => {
       this.firebase.ref(this.getDatabaseAddress(id)).on('value',(snapshot)=> {
         resolve(snapshot.val());
-        console.log("Fetched Successful.");
       })
     });
   }
