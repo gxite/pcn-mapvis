@@ -48,21 +48,32 @@ export class FeatureCollection {
   }
   
   private peopleSum(line: Line[], period: string, timeslot: string): Line[] {
-    console.log(line)
-    let aggregate = new Object; //id:[start,properties,period,timeslot]
+
+    let aggregate = new Object; //id:[start,properties,period,timeslot,count]
     line.forEach(data=> {
       if (!aggregate[data.id]) {
         aggregate[data.id] = {
         "start": data.start,
         "properties": this.returnNewObject(data.properties),
         "period": period,
-        "timeslot": timeslot};
+        "timeslot": timeslot,
+        "count": 1 };
       }
       else {
         aggregate[data.id].properties.people += data.properties.people;
         aggregate[data.id].properties.people_static += data.properties.people_static;
         aggregate[data.id].properties.people_active += data.properties.people_active;
+        aggregate[data.id].count += 1;
       }});
+
+    //take average
+    Object.values(aggregate).forEach(l=> {
+      l.properties.people /=  l.count;
+      l.properties.people_static /= l.count;
+      l.properties.people_active /= l.count;
+      delete l.count; //ensure Line[] is returned
+    });
+
     return Object.values(aggregate);
   }
 

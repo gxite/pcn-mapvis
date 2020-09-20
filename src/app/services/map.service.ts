@@ -39,13 +39,6 @@ export class MapService {
   public clearLayerState() {
     this.layersState = {};
   }
-
-  public updateLayerStates(type: string, featureLayerNum: number): void {
-    const length = Object.keys(this.layersState).length;
-    for (let i=length; i>featureLayerNum; i--) {
-      delete this.layersState[type+"_"+i.toString()];
-    }
-  }
   
   public addToRender(
     dataSrc: Promise<Line[]>, 
@@ -176,7 +169,7 @@ export class MapService {
 
   private mapToLineHeight(selected: string,value: number) {
     if (value < 1 && this.isSemanticSegmentationFeature(selected)) return value*1000;
-    return value*10;
+    return value*100;
   }
 
   private isSemanticSegmentationFeature(selected: string): boolean {
