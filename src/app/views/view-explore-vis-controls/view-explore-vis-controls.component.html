@@ -1,7 +1,7 @@
 <mat-tab-group #matTabGroup  
     mat-align-tabs="center" 
     animationDuration="0ms" 
-    (selectedTabChange)="clearSelectedLocations();toggleMode(matTabGroup.selectedIndex);update()">
+    (selectedTabChange)="clearSelectedLocations();toggleExploreState(matTabGroup.selectedIndex);update()">
     
     <mat-tab #island label="Island">
         <div class="subtitle">Select Locations</div> 
@@ -16,6 +16,7 @@
             mode="indeterminate" ></mat-progress-bar>
         <app-selector-exp-panel #selectorExpPanel
             [formFields]="islandFeatureFormFields"
+            selectorType="features"
             (selected)="setSelector('feature',$event)"
             (visible)="setVisibility('feature',$event)"
             (lineScale)="setLineScale('feature',$event)"
@@ -27,6 +28,7 @@
             mode="indeterminate" ></mat-progress-bar>
         <app-selector-exp-panel #selectorExpPanel
             [formFields]="islandActivityFormFields"
+            selectorType="activities"
             (selected)="setSelector('activity',$event)"
             (visible)="setVisibility('activity',$event)"
             (lineScale)="setLineScale('activity',$event)"
@@ -47,6 +49,7 @@
             mode="indeterminate" ></mat-progress-bar>
         <app-selector-exp-panel #selectorExpPanel
             [formFields]="heartlandFeatureFormFields"
+            selectorType="activities"
             (selected)="setSelector('feature',$event)"
             (visible)="setVisibility('feature',$event)"
             (lineScale)="setLineScale('feature',$event)"
@@ -58,6 +61,7 @@
             mode="indeterminate" ></mat-progress-bar>
         <app-selector-exp-panel #selectorExpPanel
             [formFields]="heartlandActivityFormFields"
+            selectorType="activities"
             (selected)="setSelector('activity',$event)"
             (visible)="setVisibility('activity',$event)"
             (lineScale)="setLineScale('activity',$event)"

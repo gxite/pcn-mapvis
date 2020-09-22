@@ -40,7 +40,7 @@ export class MapService {
     this.layersState = {};
   }
   
-  public addToRender(
+  public addToLayersStateList(
     dataSrc: Promise<Line[]>, 
     selected: string, 
     color: ColorPair, 

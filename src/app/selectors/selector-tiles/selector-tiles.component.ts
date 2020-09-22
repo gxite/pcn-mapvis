@@ -17,13 +17,13 @@ export class SelectorTilesComponent implements OnInit {
 
   @Output() selected = new EventEmitter();
 
-  locationList: string[];
+  currentLocations: string[];
   checked: boolean;
 
   constructor(private selectionService: SelectionService) { }
 
   ngOnInit() {
-    this.selectionService.currentLocation.subscribe(locations => this.locationList = locations);
+    this.selectionService.currentLocations.subscribe(locations => this.currentLocations = locations);
   }
 
   ngAfterViewInit() {
@@ -45,9 +45,9 @@ export class SelectorTilesComponent implements OnInit {
 
   update(selection: string[]) {
     if (!Array.isArray(selection)) 
-      this.selectionService.setHeartlandLocation([selection]);
+      this.selectionService.setLocations([selection]);
     else 
-      this.selectionService.setHeartlandLocation(selection);
+      this.selectionService.setLocations(selection);
   }
 
   reset() {

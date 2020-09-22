@@ -11,7 +11,6 @@ import { FeatureCollection, Line } from "../panoFeatureCollection";
 /*The types are defined based on the labels and hierarchy used in the firebase realtime database */
 export type panoCategory = "panoAction" | "panoObject";
 export type panoType = "parkActivities" | "parkFeatures";
-
 interface cacheId {category: panoCategory;type: panoType;location: string}
 
 @Injectable({
@@ -39,6 +38,14 @@ export class DatabaseService {
       return this.getCache(id);
     }
     return this.getCache(id);
+  }
+
+  //this reconcile the naming convention with database naming convention  
+  public getDatabaseCategory(currentExploreState: string): panoCategory{
+      switch (currentExploreState) {
+        case "island": return "panoObject";
+        case "heartland": return "panoAction";
+      }
   }
 
   private isCached(id: cacheId) {

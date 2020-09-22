@@ -8,8 +8,7 @@ import { MasterSettings,NameAlias } from 'src/app/panoSettings'
 })
 export class ExploreStateService {
 
-  private exploreStates: NameAlias[] = MasterSettings.exploreStates;
-  private state = new BehaviorSubject(this.exploreStates[0]); //default
+  private state = new BehaviorSubject( MasterSettings.exploreStates[0]); //default
 
   currentState = this.state.asObservable();
 

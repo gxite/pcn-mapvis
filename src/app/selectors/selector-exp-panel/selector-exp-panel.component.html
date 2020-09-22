@@ -3,7 +3,7 @@
         <mat-panel-title>
             <span id="indicators">          
                 <button mat-icon-button 
-                    [ngStyle]="{'color':selectedColor,'margin-left': '5px'}" 
+                    [ngStyle]="{'color':selectedColorHex,'margin-left': '5px'}" 
                     disableRipple=true 
                     (click)="toggleVisibility();$event.stopPropagation();update()">
                     <mat-icon>{{isVisible()}}</mat-icon>
@@ -24,7 +24,7 @@
     </mat-expansion-panel-header>
     <mat-form-field *ngFor="let field of formFields">
         <mat-label>{{field.alias}}</mat-label>
-        <mat-select #selection [(value)]="selectedValues[field.name]" (selectionChange)="setSelectedChanged();setColor(field.name);setAlias(field.name);update()">
+        <mat-select #selection [(value)]="selectedValuesList[field.name]" (selectionChange)="setSelectedChanged();setColor(field.name);setAlias(field.name);update()">
             <mat-option>None</mat-option>
             <mat-option [value]="option" *ngFor="let option of setTimeslotFieldOptions(field.name,field.var_options)">{{option.alias}}</mat-option>
         </mat-select>
@@ -33,7 +33,7 @@
         <button mat-icon-button 
             disableRipple=true 
             [ngStyle]="{'transform':'scale(0.9)'}" 
-            (click)="clearFields();$event.stopPropagation();update()">
+            (click)="reset();$event.stopPropagation();update()">
             <mat-icon>clear</mat-icon>
         </button>
     </span>

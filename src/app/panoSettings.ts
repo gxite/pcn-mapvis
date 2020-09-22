@@ -3,9 +3,6 @@ export interface NameAlias { name: string; alias: string;}
 export interface ColorPair { rgb: number[]; hex: string;}
 
 export class MasterSettings {
-    layerTypes: NameAlias[] = [
-        {name:"parkActivities",alias:"Activity"},
-        {name:"parkFeatures",alias:"Feature"}];
     static exploreStates: NameAlias[] = [
         {name:"island",alias:"Island"},
         {name:"heartland",alias:"Heartland"}];
