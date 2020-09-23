@@ -19,16 +19,13 @@ export class SelectorExpPanelComponent implements OnInit {
 
   selectedValuesList = {};
   selectedValueAlias: string;
-  selectedChanged: boolean = true;
 
-  visibility: boolean = true;
-  visibilityChanged = true; //starter case
+  visibility: boolean = true;e
 
   scaleValue: number = 1;
   scaleMin: number = 0.2;
   scaleMax: number = 3;
   scaleStep: number = 0.1;
-  scaleChanged: boolean = true;
 
   expanded: boolean;
 
@@ -62,26 +59,16 @@ export class SelectorExpPanelComponent implements OnInit {
 
   toggleVisibility() {
     this.visibility = !this.visibility;
-    this.visibilityChanged = true;
   }
 
   reset() {
     this.selectDropdowns.forEach(select=> select.value = null);
     this.expanded = false;
-    this.visibilityChanged = true;
     this.selectedValueAlias = null;
     this.selectedColorHex = null;
     this.selectedColorRGB = null;
     this.selectedValuesList={};
     this.update();
-  }
-
-  setSelectedChanged() {
-    this.selectedChanged = true;
-  }
-
-  setScaleChanged() {
-    this.scaleChanged = true;
   }
   
   setColor(fieldName: string) {
@@ -100,11 +87,9 @@ export class SelectorExpPanelComponent implements OnInit {
   }
 
   setAlias(value: string) {
-    if (value == "activities" || value == "features") {
-      if(this.selectedValuesList[value]!=undefined) {
-        this.selectedValueAlias = this.selectedValuesList[value].alias;
-      }
-    }
+    if (value != "activities" && value != "features") return
+    if(this.selectedValuesList[value]!=undefined) 
+      this.selectedValueAlias = this.selectedValuesList[value].alias;
   }
 
   setTimeslotFieldOptions(field: string, options) {
@@ -140,38 +125,26 @@ export class SelectorExpPanelComponent implements OnInit {
   }
 
   private setSelections(): void {
-    let selected: Selector = {value: this.selectedValuesList, visibility: this.visibility, lineScale: this.scaleValue, loading:null};
-
     let layerSelections: Layer;
-
+    console.log(this.selectorType)
     switch(this.selectorType){
       case"features":
         layerSelections = {value: this.selectedValuesList, layerType: "parkFeatures", color: this.selectedColorRGB, visibility: this.visibility, lineScale: this.scaleValue, loading:null}; 
-        this.selectionService.setFeatures(layerSelections );break;
+        this.selectionService.setFeatures(layerSelections);break;
       case "activities": 
         layerSelections = {value: this.selectedValuesList, layerType: "parkActivities", color: this.selectedColorRGB, visibility: this.visibility, lineScale: this.scaleValue, loading:null}; 
-        this.selectionService.setActivities(selected);break;
+        this.selectionService.setActivities(layerSelections);break;
     } 
   }
 
   update() {
     this.flushUndefinedValues();
     if(Object.keys(this.selectedValuesList).length !== 0 && this.selectedValuesList.constructor === Object) {
-      if (this.selectedChanged) {
-        this.selected.emit(this.selectedValuesList);// to be removed
-        this.setSelections();
-        this.selectedChanged = false;
-      }
-      if (this.visibilityChanged) {
-        this.visible.emit(this.visibility); // to be removed
-        this.setSelections();
-        this.visibilityChanged = false;
-      }
-      if (this.scaleChanged) {
-        this.lineScale.emit(this.scaleValue); // to be removed 
-        this.setSelections();
-        this.scaleChanged = false;
-      }
+
+      this.selected.emit(this.selectedValuesList);
+      this.visible.emit(this.visibility); 
+      this.lineScale.emit(this.scaleValue);
+      //this.setSelections();
     }
     else {
       this.selected.emit(null);

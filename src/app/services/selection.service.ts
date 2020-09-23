@@ -18,8 +18,8 @@ import { MapService } from './map.service';
 export class SelectionService {
 
   private locations = new BehaviorSubject<string[]>([]);
-  private features = new BehaviorSubject<Selector>({value: null, visibility: null, lineScale: null, loading:null});
-  private activities = new BehaviorSubject<Selector>({value: null, visibility: null, lineScale: null, loading:null});
+  private features = new BehaviorSubject<Layer>({value: null, layerType: null, color: null, visibility: null, lineScale: null, loading:null});
+  private activities = new BehaviorSubject<Layer>({value: null, layerType: null, color: null, visibility: null, lineScale: null, loading:null});
 
   currentLocations = this.locations.asObservable();
   currentFeatures = this.features.asObservable();
@@ -41,34 +41,32 @@ export class SelectionService {
     this.locations.next(locations);
   }
 
-  setFeatures(features: Selector) {
+  setFeatures(features: Layer) {
     this.features.next(features);
+    //this.updateLayerStates();
   }
 
-  setActivities(activities: Selector) {
-    console.log(this.activities.value)
+  setActivities(activities: Layer) {
     this.activities.next(activities);
+    //this.updateLayerStates();
   }
 
   private updateLayerStates(){
+    if(this.locations.value == []) return
+
     //runs every user interaction to check and update state
     //***this is to be optimised later to only update the changed layersState 
     //instead of clearing all and repopulate
-
     this.mapService.clearLayerState();
 
     //for every location in locations
     this.locations.value.map(location=>{
-
-        
         if (this.features.value != null) {
-          this.fetchAndPush(this.databaseCategory,"parkFeatures",location);
+          this.fetchAndPush(this.databaseCategory,this.features.value.layerType,location);
         }
         if (this.activities.value != null) {
-          this.fetchAndPush(this.databaseCategory,"parkActivities",location);
+          this.fetchAndPush(this.databaseCategory,this.activities.value.layerType,location);
         }
-        
-
       })
 
 
@@ -80,8 +78,10 @@ export class SelectionService {
     let dataSrc: Promise<Line[]> = this.databaseService.fetchData(category,type,location).then(data =>{
       //loading controls
       //viewport zoom controls
+      console.log(data)
       return data;
     });
+    
     //then push to the layersState list within MapService
 /*     this.mapService.addToLayersStateList(
       dataSrc,

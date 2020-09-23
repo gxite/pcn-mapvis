@@ -16,7 +16,7 @@
                     [min]="scaleMin"
                     [step]="scaleStep"
                     [(ngModel)]="scaleValue"
-                    (change)="setScaleChanged();update();"
+                    (change)="update();"
                     (click)="$event.stopPropagation()">
                 </mat-slider>
             </span>
@@ -24,7 +24,7 @@
     </mat-expansion-panel-header>
     <mat-form-field *ngFor="let field of formFields">
         <mat-label>{{field.alias}}</mat-label>
-        <mat-select #selection [(value)]="selectedValuesList[field.name]" (selectionChange)="setSelectedChanged();setColor(field.name);setAlias(field.name);update()">
+        <mat-select #selection [(value)]="selectedValuesList[field.name]" (selectionChange)="setColor(field.name);setAlias(field.name);update()">
             <mat-option>None</mat-option>
             <mat-option [value]="option" *ngFor="let option of setTimeslotFieldOptions(field.name,field.var_options)">{{option.alias}}</mat-option>
         </mat-select>
