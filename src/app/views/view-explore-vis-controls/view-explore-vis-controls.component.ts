@@ -7,7 +7,7 @@ import { SelectorTilesComponent } from 'src/app/selectors/selector-tiles/selecto
 import { SelectorExpPanelComponent } from 'src/app/selectors/selector-exp-panel/selector-exp-panel.component';
 
 import { SelectionService, Selector } from 'src/app/services/selection.service';
-import { DatabaseService, panoCategory, panoType } from 'src/app/services/database.service';
+import { DatabaseService, dbCategory, dbType, localCategory } from 'src/app/services/database.service';
 import { ExploreStateService } from "src/app/services/explore-state.service";
 
 type SelectorType = "feature" | "activity"; // to be removed later
@@ -47,7 +47,7 @@ export class ViewExploreVisControlsComponent implements OnInit {
   selectedActivity: Selector = { value:null, visibility: null, lineScale:1, loading:false};
   
 
-  currentExploreState: NameAlias;
+  currentExploreState: localCategory;
 
   zoom: boolean = false;
   color = {};
@@ -112,14 +112,13 @@ export class ViewExploreVisControlsComponent implements OnInit {
     this.update();
   }
 
-
   //------------------
 
   toggleExploreState(selectedIndex: number) {
     switch (selectedIndex) {
-      case 0: this.exploreStateService.setExploreState({name:"island",alias:"Island"});
+      case 0: this.exploreStateService.setExploreState("island");
               break;
-      case 1: this.exploreStateService.setExploreState({name:"heartland",alias:"Heartland"}); 
+      case 1: this.exploreStateService.setExploreState("heartland"); 
               break;
     }
     this.update();
@@ -129,23 +128,29 @@ export class ViewExploreVisControlsComponent implements OnInit {
   resetAllStates() {
     this.children_selectorTiles.forEach(c=>c.reset());
     this.children_selectorExpPanel.forEach(c=>c.reset());
+    //-- to remove
     this.selectedFeature = { value:null, visibility: null, lineScale: 1, loading:false};
     this.selectedActivity = { value:null, visibility: null, lineScale: 1, loading:false};
+    //-- 
+    this.selectionService.clearSelections();
     this.mapService.resetMapState();
   }
 
+  //--- to remove
   clearSelectedLocations() {
     this.selectedLocations = [];
   }
-
+  //
+  
   update() { //to migrate this to selection service
     //runs every user interaction to check and update state
     this.mapService.clearLayerState();
+
     if (this.selectedFeature.value != null) {
-      this.selectedLocations.map(location=>this.addToMap(this.currentExploreState.name,"parkFeatures",location));
+      this.selectedLocations.map(location=>this.addToMap(this.currentExploreState,"parkFeatures",location));
     }
     if (this.selectedActivity.value != null) {
-      this.selectedLocations.map(location=>this.addToMap(this.currentExploreState.name,"parkActivities",location));
+      this.selectedLocations.map(location=>this.addToMap(this.currentExploreState,"parkActivities",location));
     }
     this.mapService.render();
   }
@@ -156,7 +161,7 @@ export class ViewExploreVisControlsComponent implements OnInit {
 
   //to be removed 
   //this reconcile the naming convention with database naming convention  
-  private getDatabaseCategory(currentExploreState: string): panoCategory{
+  private getDatabaseCategory(currentExploreState: string): dbCategory{
     switch (currentExploreState) {
       case "island": return "panoObject";
       case "heartland": return "panoAction";
@@ -169,14 +174,14 @@ export class ViewExploreVisControlsComponent implements OnInit {
     return field;
   }
 
-  private addToMap(tab , type: panoType, location) {
+  private addToMap(tab , type: dbType, location) {
 
     let category =this.getDatabaseCategory(tab);
 
     if(type=="parkActivities") this.selectedActivity.loading=true;
     if(type=="parkFeatures") this.selectedFeature.loading=true;
 
-    switch(this.currentExploreState.name){
+    switch(this.currentExploreState){
       case "island": 
         this.color = this.island.color; 
         this.zoom = false; break;
@@ -204,7 +209,7 @@ export class ViewExploreVisControlsComponent implements OnInit {
         this.mapService.addToLayersStateList(
           dataSrc,
           this.selectedFeature.value['features'].name,
-          this.color[this.selectedFeature.value['features'].name],
+          this.color[this.selectedFeature.value['features'].name].rgb,
           this.generateID(location,"features"),
           this.selectedFeature.visibility,
           this.selectedFeature.lineScale);//linescale
@@ -214,7 +219,7 @@ export class ViewExploreVisControlsComponent implements OnInit {
         this.mapService.addToLayersStateList(
           dataSrc,
           this.selectedActivity.value['activities'].name,
-          this.color[this.selectedActivity.value['activities'].name],
+          this.color[this.selectedActivity.value['activities'].name].rgb,
           this.generateID(location,"activities"),
           this.selectedActivity.visibility,
           this.selectedActivity.lineScale);
@@ -222,10 +227,14 @@ export class ViewExploreVisControlsComponent implements OnInit {
     }
   }
 
+  //---
   private generateID(location: string,selection: string) {
     return location+selection;
   }
 
+//---
+
+//--- to be moved to selection service
   private activityDataModifier(data: Promise<Line[]>): Promise<Line[]>  {
     let value = this.selectedActivity.value;
 
@@ -249,6 +258,5 @@ export class ViewExploreVisControlsComponent implements OnInit {
       let period = value.timeOfWeek.name+value.timeOfDay.name;
       return data.then(d=>this.fc.filterByTimeslot(d,period,value.timeslot.name));
     }
-    
   }
 }

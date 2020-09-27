@@ -1,11 +1,10 @@
 import { Component, Input, OnInit, Output, EventEmitter,ViewChildren, QueryList } from '@angular/core';
 import { MatSelect } from '@angular/material';
 
-import { SelectionService, Selector, Layer} from 'src/app/services/selection.service';
-import { ExploreStateService } from 'src/app/services/explore-state.service';
-import { HeartlandSettings, NameAlias } from 'src/app/panoSettings';
+import { SelectionService, Layer} from 'src/app/services/selection.service';
+import { HeartlandSettings,} from 'src/app/panoSettings';
+import { localType } from 'src/app/services/database.service';
 
-import { panoCategory } from 'src/app/services/database.service';
 
 @Component({
   selector: 'app-selector-exp-panel',
@@ -14,13 +13,13 @@ import { panoCategory } from 'src/app/services/database.service';
 })
 export class SelectorExpPanelComponent implements OnInit {
 
-  selectedColorHex;
-  selectedColorRGB;
+  selectedColorHex: string;
+  selectedColorRGB: number[];
 
   selectedValuesList = {};
   selectedValueAlias: string;
 
-  visibility: boolean = true;e
+  visibility: boolean = true;
 
   scaleValue: number = 1;
   scaleMin: number = 0.2;
@@ -28,15 +27,17 @@ export class SelectorExpPanelComponent implements OnInit {
   scaleStep: number = 0.1;
 
   expanded: boolean;
+  disabled: boolean = true;
 
   @Input() formFields;
   @Input() colors; //colour list
-  @Input() selectorType; //activities or features
+  @Input() selectorType: localType; //activities or features
 
   //to be removed
   @Output() selected = new EventEmitter();
   @Output() visible = new EventEmitter();
   @Output() lineScale = new EventEmitter();
+  //-----------------------
 
   //provides access to all MatSelects
   @ViewChildren(MatSelect) selectDropdowns: QueryList<MatSelect>;
@@ -44,13 +45,19 @@ export class SelectorExpPanelComponent implements OnInit {
   heartland = new HeartlandSettings();
 
   currentLocations: string[]
+  layer;
 
   constructor(
     private selectionService: SelectionService,) { 
       this.selectionService.currentLocations.subscribe(locations => this.currentLocations = locations);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    switch(this.selectorType) {
+      case "activities": this.selectionService.currentActivities.subscribe(layer=> this.layer = layer);break;
+      case "features": this.selectionService.currentFeatures.subscribe(layer=> this.layer = layer);break;
+    }
+  }
 
   isVisible() {
     if (this.visibility) {return "visibility";}
@@ -92,9 +99,11 @@ export class SelectorExpPanelComponent implements OnInit {
       this.selectedValueAlias = this.selectedValuesList[value].alias;
   }
 
+  //to be migrated to another class
   setTimeslotFieldOptions(field: string, options) {
     if (field != "timeslot") return options;
     if (!this.selectedValuesList["timeOfDay"]) return;
+    if (this.currentLocations == []) return;
 
     let validTimeslots;
 
@@ -120,19 +129,28 @@ export class SelectorExpPanelComponent implements OnInit {
     }
   }
 
+  isDisabled(fieldName:string): boolean{
+    if (fieldName == "features" || fieldName == "activities" ) return false;
+    if (!this.selectedValuesList["activities"]) return true;
+  }
+
+  checkIfLoading() {
+    if (!this.layer) return false;
+    return this.layer.loading;
+  }
+
   private flushUndefinedValues() {
     Object.keys(this.selectedValuesList).forEach(key=> {if(this.selectedValuesList[key] == undefined){delete this.selectedValuesList[key]}});
   }
 
   private setSelections(): void {
     let layerSelections: Layer;
-    console.log(this.selectorType)
     switch(this.selectorType){
       case"features":
-        layerSelections = {value: this.selectedValuesList, layerType: "parkFeatures", color: this.selectedColorRGB, visibility: this.visibility, lineScale: this.scaleValue, loading:null}; 
+        layerSelections = {value: this.selectedValuesList, layerType: "features", color: this.selectedColorRGB, visibility: this.visibility, lineScale: this.scaleValue, loading:null}; 
         this.selectionService.setFeatures(layerSelections);break;
       case "activities": 
-        layerSelections = {value: this.selectedValuesList, layerType: "parkActivities", color: this.selectedColorRGB, visibility: this.visibility, lineScale: this.scaleValue, loading:null}; 
+        layerSelections = {value: this.selectedValuesList, layerType: "activities", color: this.selectedColorRGB, visibility: this.visibility, lineScale: this.scaleValue, loading:null}; 
         this.selectionService.setActivities(layerSelections);break;
     } 
   }

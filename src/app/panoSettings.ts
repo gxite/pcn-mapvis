@@ -3,9 +3,6 @@ export interface NameAlias { name: string; alias: string;}
 export interface ColorPair { rgb: number[]; hex: string;}
 
 export class MasterSettings {
-    static exploreStates: NameAlias[] = [
-        {name:"island",alias:"Island"},
-        {name:"heartland",alias:"Heartland"}];
     timeOfWeek: NameAlias[] = [
         {name:"wd",alias:"Weekday"},
         {name:"we",alias:"Weekend"}];

@@ -25,6 +25,8 @@ export class MapService {
   fc =new FeatureCollection;
   temp;
 
+  LINEWIDTH = 5;
+
   constructor() {
     this.env = environment;
     mapboxgl.accessToken = this.env.mapboxConfig.accessToken;
@@ -42,13 +44,14 @@ export class MapService {
   
   public addToLayersStateList(
     dataSrc: Promise<Line[]>, 
-    selected: string, 
-    color: ColorPair, 
+    selectionName: string, 
+    lineColor: number[], 
     selectorID: string, 
     isVisible: boolean,
     linescale: number): void {
 
-    this.layersState[selectorID] = [selectorID, dataSrc, color.rgb, 5,selected,isVisible,linescale]
+    this.layersState[selectorID] = [selectorID, dataSrc, lineColor, this.LINEWIDTH,selectionName,isVisible,linescale];
+
   }
 
   public render(): void {
@@ -67,6 +70,7 @@ export class MapService {
   }
 
   public resetMapState() {
+    this.clearLayerState();
     //reset to initial map state
     this.deck.setProps({
       initialViewState: {

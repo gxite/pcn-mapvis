@@ -9,9 +9,12 @@ import { environment } from '../../environments/environment';
 import { FeatureCollection, Line } from "../panoFeatureCollection";
 
 /*The types are defined based on the labels and hierarchy used in the firebase realtime database */
-export type panoCategory = "panoAction" | "panoObject";
-export type panoType = "parkActivities" | "parkFeatures";
-interface cacheId {category: panoCategory;type: panoType;location: string}
+export type dbCategory = "panoAction" | "panoObject";
+export type dbType = "parkActivities" | "parkFeatures";
+export type localCategory = "island" | "heartland";
+export type localType = "activities" | "features";
+
+interface cacheId {category: dbCategory;type: dbType;location: string}
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +33,7 @@ export class DatabaseService {
     this.fc = new FeatureCollection;
   }
   
-  public fetchData(category: panoCategory, type: panoType, location: string): Promise<Line[]> {
+  public fetchData(category: dbCategory, type: dbType, location: string): Promise<Line[]> {
     let id = this.generateCacheId(category,type,location);
     
     if (!this.isCached(id)) {
@@ -40,13 +43,22 @@ export class DatabaseService {
     return this.getCache(id);
   }
 
-  //this reconcile the naming convention with database naming convention  
-  public getDatabaseCategory(currentExploreState: string): panoCategory{
-      switch (currentExploreState) {
-        case "island": return "panoObject";
-        case "heartland": return "panoAction";
-      }
+  //---these functions reconciles the local naming convention with database naming convention 
+  public getDatabaseCategory(lc: localCategory): dbCategory{
+    switch (lc) {
+      case "island": return "panoObject";
+      case "heartland": return "panoAction";
+    }
   }
+
+  public getDatabaseType(lt: localType): dbType{
+    switch (lt) {
+      case "activities": return "parkActivities";
+      case "features": return "parkFeatures"; 
+    }
+  }
+
+  //---
 
   private isCached(id: cacheId) {
     return this.cache[id.category][id.type][id.location]; 
@@ -72,7 +84,7 @@ export class DatabaseService {
     return id.category+"/"+id.type+"/"+id.location;
   }
 
-  private generateCacheId(category: panoCategory, type: panoType, location: string): cacheId{
+  private generateCacheId(category: dbCategory, type: dbType, location: string): cacheId{
     return {category,type,location};
   }
 }
