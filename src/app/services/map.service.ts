@@ -6,10 +6,11 @@ import * as mapboxgl from 'mapbox-gl';
 import { Deck, FlyToInterpolator } from '@deck.gl/core';
 import { LineLayer } from '@deck.gl/layers';
 
-import { ColorPair } from 'src/app/panoSettings';
 import { Line, FeatureCollection } from "src/app/panoFeatureCollection";
 import { environment } from 'src/environments/environment';
 import { TooltipComponent } from 'src/app/tooltip/tooltip.component';
+import { ExploreStateService } from './explore-state.service';
+import { localCategory } from './database.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,15 +22,20 @@ export class MapService {
   deck: Deck;
   env; 
 
+  //explore state
+  currentState: localCategory;
+
   layersState = {};
   fc =new FeatureCollection;
   temp;
 
   LINEWIDTH = 5;
 
-  constructor() {
-    this.env = environment;
-    mapboxgl.accessToken = this.env.mapboxConfig.accessToken;
+  constructor(
+    private exploreStateService: ExploreStateService) {
+      this.env = environment;
+      mapboxgl.accessToken = this.env.mapboxConfig.accessToken;
+      this.exploreStateService.currentState.subscribe(state=>this.currentState=state);
   }
 
   public buildMap(containerID : string, deckID :string): void {
@@ -84,18 +90,20 @@ export class MapService {
     });
   } 
 
-  public flyTo(data: Line[]): void {
-    this.flyToLocation(this.getCenterCoordinate(data));
+  public flyToSingle(data: Line[]): void {
+    switch(this.currentState) {
+      case "heartland": this.flyToLocation(this.getCenterCoordinate(data),15);break;
+      case "island": this.flyToLocation(this.getCenterCoordinate(data),13);break;
+    }  
   }
 
   //takes in number[] in the form [long,lat]
-  private flyToLocation(coord: number[]): void {
-    //reset to initial map state
+  private flyToLocation(coord: number[],zoom: number=15): void {
     this.deck.setProps({
       initialViewState: {
         longitude: coord[0],
         latitude: coord[1],
-        zoom: 15,
+        zoom: zoom,
         pitch: 30,
         transitionInterpolator: new FlyToInterpolator({speed: 1.5}),
         transitionDuration: 'auto'

@@ -15,10 +15,10 @@
             </span>
             <span id="scaleSlider">
                 <mat-slider title="Adjusts scale of extrusion"
-                    [max]="scaleMax"
-                    [min]="scaleMin"
-                    [step]="scaleStep"
-                    [(ngModel)]="scaleValue"
+                    [max]="slider['max']"
+                    [min]="slider['min']"
+                    [step]="slider['step']"
+                    [(ngModel)]="slider['value']"
                     (change)="update();"
                     (click)="$event.stopPropagation()">
                 </mat-slider>

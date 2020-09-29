@@ -5,8 +5,9 @@ export class FeatureCollection {
   features: GeoJson[];
 
   public transformToLine(fc :FeatureCollection) :Line[] {
-    const features = fc.features;
-    return features.map((data)=>{
+    if (fc == null) return;
+  
+    return fc.features.map((data)=>{
       let out = {
         "start":[data.geometry.coordinates[0],data.geometry.coordinates[1],0],
         "id": data.geometry.coordinates[0].toString() + data.geometry.coordinates[1].toString(),
@@ -18,8 +19,7 @@ export class FeatureCollection {
   } 
 
   public filterByActivity(data: Line[]): Line[] {
-    let out =this.peopleSum(data,null,null) 
-    return out;
+    return this.peopleSum(data,null,null) ;
   }
 
   public filterByWeek(data: Line[], week: Week): Line[] {

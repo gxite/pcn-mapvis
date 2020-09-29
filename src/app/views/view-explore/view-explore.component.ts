@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MapService } from 'src/app/services/map.service';
 import { INNER_WIDTH_THRESHOLD } from 'src/app/panoSettings';
-
+import { SelectionService } from 'src/app/services/selection.service';
+import { ViewExploreVisControlsComponent} from '../view-explore-vis-controls/view-explore-vis-controls.component';
 @Component({
   selector: 'app-view-explore',
   templateUrl: './view-explore.component.html',
@@ -11,20 +12,25 @@ export class ViewExploreComponent implements OnInit {
 
   mapboxSelector: string = "map";
   deckSelector: string = "deck-canvas";
-  mapService: MapService; //variable to allow the mapService instance to be bounded and passed to child 
 
-  constructor(private ms: MapService) { }
+  leftDrawerOpened: boolean = false;;
+  rightDrawerOpened: boolean = false;
+
+  @ViewChild('visControls',null) visControl: ViewExploreVisControlsComponent;
+
+  constructor(private mapService: MapService,private selectionService: SelectionService) { }
 
   ngOnInit() {
-    this.mapService = this.ms;
     this.mapService.buildMap(this.mapboxSelector,this.deckSelector); 
   }
 
-  toHide() {
-    return window.innerWidth < INNER_WIDTH_THRESHOLD ? true : false;
+  isMobile() {
+    return (window.innerWidth < INNER_WIDTH_THRESHOLD ? true : false) 
   }
 
   resetMap() {
     this.mapService.resetMapState();
+    this.selectionService.clearSelections(); 
+    this.visControl.resetAllStates();
   }
 }

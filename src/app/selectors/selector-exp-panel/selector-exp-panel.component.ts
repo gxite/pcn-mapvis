@@ -1,10 +1,9 @@
-import { Component, Input, OnInit, Output, EventEmitter,ViewChildren, QueryList } from '@angular/core';
+import { Component, Input, OnInit, ViewChildren, QueryList } from '@angular/core';
 import { MatSelect } from '@angular/material';
 
 import { SelectionService, Layer} from 'src/app/services/selection.service';
 import { HeartlandSettings,} from 'src/app/panoSettings';
 import { localType } from 'src/app/services/database.service';
-
 
 @Component({
   selector: 'app-selector-exp-panel',
@@ -15,44 +14,33 @@ export class SelectorExpPanelComponent implements OnInit {
 
   selectedColorHex: string;
   selectedColorRGB: number[];
-
-  selectedValuesList = {};
+  selectedValuesList: Object = {};
   selectedValueAlias: string;
+  heartland = new HeartlandSettings();
 
+  //states
+  expanded: boolean = false;
+  slider: Object = {value: 1, min: 0.2,max:3,step:0.1};
   visibility: boolean = true;
-
-  scaleValue: number = 1;
-  scaleMin: number = 0.2;
-  scaleMax: number = 3;
-  scaleStep: number = 0.1;
-
-  expanded: boolean;
   disabled: boolean = true;
+
+  //subscriptions
+  currentLocations: string[]
+  layer;
 
   @Input() formFields;
   @Input() colors; //colour list
   @Input() selectorType: localType; //activities or features
 
-  //to be removed
-  @Output() selected = new EventEmitter();
-  @Output() visible = new EventEmitter();
-  @Output() lineScale = new EventEmitter();
-  //-----------------------
-
   //provides access to all MatSelects
   @ViewChildren(MatSelect) selectDropdowns: QueryList<MatSelect>;
 
-  heartland = new HeartlandSettings();
-
-  currentLocations: string[]
-  layer;
-
   constructor(
-    private selectionService: SelectionService,) { 
-      this.selectionService.currentLocations.subscribe(locations => this.currentLocations = locations);
-  }
+    private selectionService: SelectionService,) {}
 
   ngOnInit() {
+    this.selectionService.currentLocations.subscribe(locations => this.currentLocations = locations);
+
     switch(this.selectorType) {
       case "activities": this.selectionService.currentActivities.subscribe(layer=> this.layer = layer);break;
       case "features": this.selectionService.currentFeatures.subscribe(layer=> this.layer = layer);break;
@@ -79,14 +67,17 @@ export class SelectorExpPanelComponent implements OnInit {
   }
   
   setColor(fieldName: string) {
-    if (fieldName != "activities" && fieldName != "features") return; //setColor takes in other fieldNames when configured as activities selectorType 
+    //setColor takes in other fieldNames when configured as activities selectorType
+    if (fieldName != "activities" && fieldName != "features") return; 
+
     if(this.selectedValuesList[fieldName]!=undefined) { 
       if (this.colors[this.selectedValuesList[fieldName].name]) {
         let selectedColor = this.colors[this.selectedValuesList[fieldName].name];
         this.selectedColorHex = selectedColor.hex;
         this.selectedColorRGB = selectedColor.rgb;
       }
-    } else {
+    } 
+    else {
       this.selectedColorHex = null;
       this.selectedColorRGB = null;
       this.selectedValueAlias=null;
@@ -99,7 +90,6 @@ export class SelectorExpPanelComponent implements OnInit {
       this.selectedValueAlias = this.selectedValuesList[value].alias;
   }
 
-  //to be migrated to another class
   setTimeslotFieldOptions(field: string, options) {
     if (field != "timeslot") return options;
     if (!this.selectedValuesList["timeOfDay"]) return;
@@ -139,33 +129,40 @@ export class SelectorExpPanelComponent implements OnInit {
     return this.layer.loading;
   }
 
+  update() {
+    this.flushUndefinedValues();
+    this.setSelections();
+  }
+
   private flushUndefinedValues() {
-    Object.keys(this.selectedValuesList).forEach(key=> {if(this.selectedValuesList[key] == undefined){delete this.selectedValuesList[key]}});
+    Object.keys(this.selectedValuesList).forEach(
+      key => {
+        if(this.selectedValuesList[key] == undefined)
+          delete this.selectedValuesList[key];
+      }
+    );
   }
 
   private setSelections(): void {
     let layerSelections: Layer;
     switch(this.selectorType){
       case"features":
-        layerSelections = {value: this.selectedValuesList, layerType: "features", color: this.selectedColorRGB, visibility: this.visibility, lineScale: this.scaleValue, loading:null}; 
+        layerSelections= this.buildLayerSelection("features"); 
         this.selectionService.setFeatures(layerSelections);break;
       case "activities": 
-        layerSelections = {value: this.selectedValuesList, layerType: "activities", color: this.selectedColorRGB, visibility: this.visibility, lineScale: this.scaleValue, loading:null}; 
+        layerSelections= this.buildLayerSelection("activities"); 
         this.selectionService.setActivities(layerSelections);break;
     } 
   }
 
-  update() {
-    this.flushUndefinedValues();
-    if(Object.keys(this.selectedValuesList).length !== 0 && this.selectedValuesList.constructor === Object) {
-
-      this.selected.emit(this.selectedValuesList);
-      this.visible.emit(this.visibility); 
-      this.lineScale.emit(this.scaleValue);
-      //this.setSelections();
-    }
-    else {
-      this.selected.emit(null);
-    }
+  private buildLayerSelection(layerType: localType): Layer {
+    return {
+      value: this.selectedValuesList, 
+      layerType: layerType, 
+      color: this.selectedColorRGB, 
+      visibility: this.visibility, 
+      lineScale: this.slider["value"], 
+      loading:null
+    };
   }
 }

@@ -25,7 +25,8 @@ export class DatabaseService {
 
   cache= {
     panoAction:{parkActivities:{},parkFeatures:{}},
-    panoObject:{parkActivities:{},parkFeatures:{}}};
+    panoObject:{parkActivities:{},parkFeatures:{}}
+  };
 
   constructor() {
     firebase.initializeApp(environment.firebaseConfig);
@@ -43,7 +44,15 @@ export class DatabaseService {
     return this.getCache(id);
   }
 
-  //---these functions reconciles the local naming convention with database naming convention 
+  public clearCache(): void {
+    this.cache= {
+      panoAction:{parkActivities:{},parkFeatures:{}},
+      panoObject:{parkActivities:{},parkFeatures:{}}
+    };
+    
+  }
+
+  //reconciles the local naming convention with database naming convention 
   public getDatabaseCategory(lc: localCategory): dbCategory{
     switch (lc) {
       case "island": return "panoObject";
@@ -51,14 +60,13 @@ export class DatabaseService {
     }
   }
 
+  //reconciles the local naming convention with database naming convention 
   public getDatabaseType(lt: localType): dbType{
     switch (lt) {
       case "activities": return "parkActivities";
       case "features": return "parkFeatures"; 
     }
   }
-
-  //---
 
   private isCached(id: cacheId) {
     return this.cache[id.category][id.type][id.location]; 

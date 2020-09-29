@@ -11,6 +11,8 @@ import { ExploreStateService } from './explore-state.service';
 import { DatabaseService,localType, dbCategory } from 'src/app/services/database.service';
 import { MapService } from './map.service';
 
+export interface Layer {value: Object; layerType: localType; color: number[]; visibility: boolean; lineScale: number; loading:boolean};
+
 @Injectable({
   providedIn: 'root'
 })
@@ -25,6 +27,10 @@ export class SelectionService {
   currentFeatures = this.features.asObservable();
   currentActivities = this.activities.asObservable();
 
+  //state
+  isNewLocation: boolean = true;
+
+  //subscription
   databaseCategory: dbCategory;
   
   constructor(
@@ -36,6 +42,7 @@ export class SelectionService {
    }
 
   setLocations(locations: string[]) {
+    this.isNewLocation = !(this.locations.value == locations);
     this.locations.next(locations);
     this.updateLayerStates();
   }
@@ -57,23 +64,27 @@ export class SelectionService {
   }
 
   private updateLayerStates(){
-    if(this.locations.value == null) return
-    
+    if(this.locations.value == null) return;
+    if(this.activities.value == null && this.features.value == null) return;
+
     //runs every user interaction to check and update state
-    //***this is to be optimised later to only update the changed layersState 
-    //instead of clearing all and repopulate
+    //***this is to be optimised later to only update the changed layersState instead of clearing all and repopulate
     this.mapService.clearLayerState();
 
     //for every location in locations
     this.locations.value.map(location=>{
-        if (this.features.value != null && this.features.value.value != {}) {
+        if (this.features.value != null && !this.isEmpty(this.features.value)) {
           this.fetchAndPush(this.databaseCategory,"features",location,this.features);
         }
-        if (this.activities.value!= null && this.activities.value.value != {}) {
+        if (this.activities.value!= null && !this.isEmpty(this.activities.value)) {
           this.fetchAndPush(this.databaseCategory,"activities",location, this.activities);
         }
       })
     this.mapService.render();
+  }
+
+  private isEmpty(layer: Layer): boolean {
+    return Object.keys(layer.value).length == 0;
   }
 
   private generateID(location: string, layer:Layer) {
@@ -89,25 +100,25 @@ export class SelectionService {
     let layer = layerSubject.value;
     let layerValue = layer.value
     let selectionName = layerValue[localType].name;
-
     let dbType = this.databaseService.getDatabaseType(localType);
-
-    //set loading when fetching
-    layer.loading = true;
+    
+    layer.loading = true;//set loading when fetching
 
     //fetch the data from the DatabaseService
     let dataSrc: Promise<Line[]> = this.databaseService.fetchData(category,dbType,location).then(data =>{
-      //reset loading once fetched
-      layer.loading=false;
-      //viewport zoom controls
-      if (category=="panoAction") this.mapService.flyTo(data);
 
+      layer.loading=false;//reset loading once fetched
+
+      if (category=="panoAction" && this.isNewLocation) {
+        this.mapService.flyToSingle(data);//viewport zoom controls
+        this.isNewLocation = false;
+      }
       return data;
     });
 
     //this enables the filtering of TimeOfWeek aand TimeOfDay
     if (localType=="activities") dataSrc = this.activitySelectionFilter(dataSrc);
-    
+
     //then push to the layersState list within MapService
     this.mapService.addToLayersStateList(
       dataSrc,
@@ -149,11 +160,7 @@ export class SelectionService {
   private isUndefined(value: string): boolean {
     return value == undefined;
   }
-
 }
 
-export interface Layer {value: Object; layerType: localType; color: number[]; visibility: boolean; lineScale: number; loading:boolean};
 
-//to be removed ----
-export interface Selector {value: any; visibility: boolean; lineScale: number; loading:boolean};
-//---------------
+

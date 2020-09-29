@@ -1,7 +1,7 @@
 <mat-tab-group #matTabGroup  
     mat-align-tabs="center" 
     animationDuration="0ms" 
-    (selectedTabChange)="clearSelectedLocations();toggleExploreState(matTabGroup.selectedIndex);update()">
+    (selectedTabChange)="toggleExploreState(matTabGroup.selectedIndex)">
     
     <mat-tab #island label="Island">
         <div class="subtitle">Select Locations</div> 
@@ -11,27 +11,15 @@
         </app-selector-tiles>
         <mat-divider></mat-divider>
         <div class="subtitle">Pick a Feature</div> 
-        <mat-progress-bar 
-            [ngStyle]="{'visibility':getFeatureSelectorLoading()?'visible':'hidden'}"
-            mode="indeterminate" ></mat-progress-bar>
         <app-selector-exp-panel #selectorExpPanel
             [formFields]="islandFeatureFormFields"
             selectorType="features"
-            (selected)="setSelector('feature',$event)"
-            (visible)="setVisibility('feature',$event)"
-            (lineScale)="setLineScale('feature',$event)"
             [colors]="islandColors">
         </app-selector-exp-panel>
         <div class="subtitle">Pick an Activity</div> 
-        <mat-progress-bar 
-            [ngStyle]="{'visibility':getActivitySelectorLoading()?'visible':'hidden'}"
-            mode="indeterminate" ></mat-progress-bar>
         <app-selector-exp-panel #selectorExpPanel
             [formFields]="islandActivityFormFields"
             selectorType="activities"
-            (selected)="setSelector('activity',$event)"
-            (visible)="setVisibility('activity',$event)"
-            (lineScale)="setLineScale('activity',$event)"
             [colors]="islandColors">
         </app-selector-exp-panel>
     </mat-tab>
@@ -43,28 +31,16 @@
             [allowMultiple]=false>
         </app-selector-tiles>
         <mat-divider></mat-divider>
-        <div class="subtitle">Pick a Feature</div> 
-        <mat-progress-bar 
-            [ngStyle]="{'visibility':getFeatureSelectorLoading()?'visible':'hidden'}"
-            mode="indeterminate" ></mat-progress-bar>
+        <div class="subtitle">Select a Feature</div> 
         <app-selector-exp-panel #selectorExpPanel
             [formFields]="heartlandFeatureFormFields"
             selectorType="features"
-            (selected)="setSelector('feature',$event)"
-            (visible)="setVisibility('feature',$event)"
-            (lineScale)="setLineScale('feature',$event)"
             [colors]="heartlandColors">
         </app-selector-exp-panel>
-        <div class="subtitle">Pick an Activity</div> 
-        <mat-progress-bar 
-            [ngStyle]="{'visibility':getActivitySelectorLoading()?'visible':'hidden'}"
-            mode="indeterminate" ></mat-progress-bar>
+        <div class="subtitle">Select an Activity</div> 
         <app-selector-exp-panel #selectorExpPanel
             [formFields]="heartlandActivityFormFields"
             selectorType="activities"
-            (selected)="setSelector('activity',$event)"
-            (visible)="setVisibility('activity',$event)"
-            (lineScale)="setLineScale('activity',$event)"
             [colors]="heartlandColors">
         </app-selector-exp-panel>
     </mat-tab>

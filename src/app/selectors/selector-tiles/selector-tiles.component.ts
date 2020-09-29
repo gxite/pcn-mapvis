@@ -44,10 +44,11 @@ export class SelectorTilesComponent implements OnInit {
   }
 
   update(selection: string[]) {
-    if (!Array.isArray(selection)) 
-      this.selectionService.setLocations([selection]);
-    else 
-      this.selectionService.setLocations(selection);
+    if (!Array.isArray(selection)) {
+      if (selection == null) this.selectionService.setLocations([]); 
+      else this.selectionService.setLocations([selection]);
+    }
+    else this.selectionService.setLocations(selection);
   }
 
   reset() {
