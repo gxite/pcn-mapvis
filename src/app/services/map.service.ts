@@ -91,6 +91,8 @@ export class MapService {
   } 
 
   public flyToSingle(data: Line[]): void {
+    if (data == null) return;
+
     switch(this.currentState) {
       case "heartland": this.flyToLocation(this.getCenterCoordinate(data),15);break;
       case "island": this.flyToLocation(this.getCenterCoordinate(data),13);break;

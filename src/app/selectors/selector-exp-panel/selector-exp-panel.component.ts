@@ -121,7 +121,9 @@ export class SelectorExpPanelComponent implements OnInit {
 
   isDisabled(fieldName:string): boolean{
     if (fieldName == "features" || fieldName == "activities" ) return false;
-    if (!this.selectedValuesList["activities"]) return true;
+    if (this.currentLocations == [] || this.currentLocations == null) return true;
+    if (fieldName == "timeslot" && !this.selectedValuesList["timeOfDay"]) return true;
+    if (!this.selectedValuesList["activities"])  return true;
   }
 
   checkIfLoading() {
@@ -134,7 +136,9 @@ export class SelectorExpPanelComponent implements OnInit {
     this.setSelections();
   }
 
-  private flushUndefinedValues() {
+  private flushUndefinedValues(): void {
+    if (!this.selectedValuesList) return;
+
     Object.keys(this.selectedValuesList).forEach(
       key => {
         if(this.selectedValuesList[key] == undefined)
