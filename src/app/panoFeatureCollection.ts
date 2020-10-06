@@ -19,35 +19,42 @@ export class FeatureCollection {
   } 
 
   public filterByActivity(data: Line[]): Line[] {
+    if (data==null) return;
     return this.peopleSum(data,null,null) ;
   }
 
   public filterByWeek(data: Line[], week: Week): Line[] {
+    if (data==null) return;
     let filtered = data.filter(d=>(d["period"]===week+"m") || (d["period"]===week+"e"));
     return this.peopleSum(filtered,null,null);
   }
 
   public filterByDay(data: Line[], day: Day): Line[] {
+    if (data==null) return;
     let filtered = data.filter(d=>(d["period"]==="wd"+day) || (d["period"]==="we"+day));
     return this.peopleSum(filtered,null,null);    
   }
  
   public filterByPeriod(data: Line[], period: Period): Line[] {
+    if (data==null) return;
     let filtered = data.filter(d=>d["period"]===period);
     return this.peopleSum(filtered,period,null);
   }
 
   public filterByTimeslot(data: Line[], period: Period, timeslot: string): Line[] {
+    if (data==null) return;
     let filtered = data.filter(d=>d["period"]===period && d["timeslot"]===timeslot);
     return this.peopleSum(filtered,period,timeslot);
   }s
 
   public filterByTimeslotAndTimeOfDay(data: Line[],day: Day,timeslot: string): Line[] {
+    if (data==null) return;
     let filtered = data.filter(d=>((d["period"]==="wd"+day) || (d["period"]==="we"+day)) && d["timeslot"]===timeslot);
     return this.peopleSum(filtered,null,timeslot);
   }
   
   private peopleSum(line: Line[], period: string, timeslot: string): Line[] {
+    if (line==null) return;
 
     let aggregate = new Object; //id:[start,properties,period,timeslot,count]
     line.forEach(data=> {

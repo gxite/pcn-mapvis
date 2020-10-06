@@ -4,6 +4,7 @@ import { MatSelect } from '@angular/material';
 import { SelectionService, Layer} from 'src/app/services/selection.service';
 import { HeartlandSettings,} from 'src/app/panoSettings';
 import { localType } from 'src/app/services/database.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-selector-exp-panel',
@@ -25,6 +26,10 @@ export class SelectorExpPanelComponent implements OnInit {
   disabled: boolean = true;
 
   //subscriptions
+  s_location: Subscription;
+  s_layer: Subscription;
+
+  //data from subscriptions
   currentLocations: string[]
   layer;
 
@@ -35,16 +40,23 @@ export class SelectorExpPanelComponent implements OnInit {
   //provides access to all MatSelects
   @ViewChildren(MatSelect) selectDropdowns: QueryList<MatSelect>;
 
-  constructor(
-    private selectionService: SelectionService,) {}
+  constructor(private selectionService: SelectionService) {}
 
   ngOnInit() {
-    this.selectionService.currentLocations.subscribe(locations => this.currentLocations = locations);
-
+    this.s_location = this.selectionService.currentLocations.subscribe(locations => this.currentLocations = locations);
+    
     switch(this.selectorType) {
-      case "activities": this.selectionService.currentActivities.subscribe(layer=> this.layer = layer);break;
-      case "features": this.selectionService.currentFeatures.subscribe(layer=> this.layer = layer);break;
+      case "activities": 
+        this.s_layer = this.selectionService.currentActivities.subscribe(layer=> this.layer = layer);break;
+      case "features": 
+        this.s_layer = this.selectionService.currentFeatures.subscribe(layer=> this.layer = layer);break;
     }
+  } 
+
+  onDestroy() {
+    console.log("SelectorExpPanel unsubscribing from SelectionService");
+    this.s_location.unsubscribe();
+    this.s_layer.unsubscribe();
   }
 
   isVisible() {

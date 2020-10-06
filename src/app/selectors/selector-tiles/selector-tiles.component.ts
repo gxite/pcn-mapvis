@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, ViewChild, ViewChildren, QueryList, EventEmitter } from '@angular/core';
 import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material';
+import { Subscription } from 'rxjs';
 import { SelectionService } from 'src/app/services/selection.service';
 
 @Component({
@@ -17,13 +18,23 @@ export class SelectorTilesComponent implements OnInit {
 
   @Output() selected = new EventEmitter();
 
+  //subscription
+  s_location: Subscription;
+
+  //subsscription data
   currentLocations: string[];
+
   checked: boolean;
 
   constructor(private selectionService: SelectionService) { }
 
   ngOnInit() {
-    this.selectionService.currentLocations.subscribe(locations => this.currentLocations = locations);
+    this.s_location = this.selectionService.currentLocations.subscribe(locations => this.currentLocations = locations);
+  }
+
+  ngOnDestroy() {
+    console.log("SelectorTiles unsubscribing from SelectionService");
+    this.s_location.unsubscribe();
   }
 
   ngAfterViewInit() {

@@ -4,7 +4,7 @@
 
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { FeatureCollection, Line} from "src/app/panoFeatureCollection";
 
 import { ExploreStateService } from './explore-state.service';
@@ -30,16 +30,24 @@ export class SelectionService {
   //state
   isNewLocation: boolean = true;
 
-  //subscription
+  //subscription 
+  s_exploreState: Subscription;
+
+  //subscription data
   databaseCategory: dbCategory;
   
   constructor(
     private exploreStateService: ExploreStateService,
     private mapService: MapService,
     private databaseService: DatabaseService) {
-      this.exploreStateService.currentState.subscribe(state => 
-        this.databaseCategory  = this.databaseService.getDatabaseCategory(state))
+      this.s_exploreState = this.exploreStateService.currentState.subscribe(
+        state => this.databaseCategory  = this.databaseService.getDatabaseCategory(state));
    }
+
+  ngOnDestroy() {
+    console.log("SelectionService unsubscribing from ExploreStateService");
+    this.s_exploreState.unsubscribe();
+  } 
 
   setLocations(locations: string[]) {
     this.isNewLocation = !(this.locations.value == locations);
