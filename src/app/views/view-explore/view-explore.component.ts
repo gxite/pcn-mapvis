@@ -13,7 +13,7 @@ export class ViewExploreComponent implements OnInit {
   mapboxSelector: string = "map";
   deckSelector: string = "deck-canvas";
 
-  leftDrawerOpened: boolean = false;;
+  leftDrawerOpened: boolean = true;
   rightDrawerOpened: boolean = false;
 
   @ViewChild('visControls',null) visControl: ViewExploreVisControlsComponent;
