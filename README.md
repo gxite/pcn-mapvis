@@ -11,7 +11,8 @@ ___
 - Currently allows for 2 layers of data to be overlayed.
 
 ## Work in progress:
-1. About Page 
+1. About Page
+1. Bounding box selections
 1. Interactive descriptive statistics panel.
 
 ___
