@@ -81,8 +81,8 @@ export class DatabaseService {
   }
 
   private firebaseFetch(id: cacheId): Promise<FeatureCollection> {
-    return new Promise<FeatureCollection>((resolve,reject) => {
-      this.firebase.ref(this.getDatabaseAddress(id)).on('value',(snapshot)=> {
+    return new Promise<FeatureCollection>((resolve) => {
+      this.firebase.ref(this.getDatabaseAddress(id)).once('value',(snapshot)=> {
         resolve(snapshot.val());
       })
     });

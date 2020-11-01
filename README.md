@@ -7,8 +7,10 @@ ___
 
 ## Main Features:
 
-- Visualizes location data in a 3D map environment.
-- Currently allows for 2 layers of data to be overlayed.
+- Visualizes the distribution of spatial data in a 3D map environment.
+- Values are shown as an extruded lines along the z-axis.
+- Current configuration allows *Feature data* to be overlayed against *Activiy data*.
+
 
 ## Work in progress:
 1. About Page 
@@ -38,4 +40,30 @@ The following diagram shows how the existing components are related. The diagram
 
 ### Services Overview
 
-This section will provide a reference to the angular services. (Coming Soon) 
+This following are the current services within the project.
+
+- DatabaseService
+    
+    Handles all database related processes. Currently contains methods to read from database and a rudimentary cache implemented with objects.  
+
+- MapService
+
+    Handles map creation, graphics and navigation. Provides methods that interfaces with Mapbox JS and deck.gl APIs. 
+
+- SelectionService 
+    
+    Keeps track of the current menu selection. Contains methods to access and set selection states. (ie location+feature, location+activity).
+
+- ExploreStateService
+
+    Maintains an observable that keeps track of the current explore state. 
+
+### Other Support Classes
+
+- panoSettings.ts
+    
+    Contains all the configuration settings for the 2 explore states.
+
+- panoFeatureCollection.ts
+
+    Contains the classes and methods to modify research data. 
