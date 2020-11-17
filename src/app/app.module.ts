@@ -32,11 +32,12 @@ import { SelectorExpPanelComponent } from 'src/app/selectors/selector-exp-panel/
 import { StatisticsModule } from 'src/app/statistics/statistics.module';
 import { ViewExploreStatisticViewerComponent } from './views/view-explore-statistic-viewer/view-explore-statistic-viewer.component';
 import { DisplayHistogramExpPanelComponent } from './display-histogram-exp-panel/display-histogram-exp-panel.component';
+import { TogglePanComponent } from './toggle-pan/toggle-pan.component';
 
 const appRoutes: Routes = [
   { path: 'view-about', component: ViewAboutComponent },
   { path: 'view-explore', component: ViewExploreComponent },
-  { path: '',   redirectTo: '/view-explore', pathMatch: 'full' },
+  { path: '',   redirectTo: '/view-about', pathMatch: 'full' },
 ];
 
 @NgModule({
@@ -51,6 +52,7 @@ const appRoutes: Routes = [
     SelectorExpPanelComponent,
     ViewExploreStatisticViewerComponent,
     DisplayHistogramExpPanelComponent,
+    TogglePanComponent,
   ],
   imports: [
     BrowserModule,
